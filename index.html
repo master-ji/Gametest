@@ -1,0 +1,3859 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#05060d">
+<title>Thôn Phệ Tinh Không — Community Edition</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  :root{--neon:#39d0ff;--purple:#b06bff;--gold:#ffd24a;--red:#ff3b5c;--green:#00ffa3;--stone:#7fffd4}
+  html,body{height:100%;overflow:hidden}
+  body{background:#02030a;color:#cfe9ff;font-family:'Segoe UI',system-ui,Roboto,sans-serif;
+    display:flex;justify-content:center;user-select:none}
+  #app{position:relative;width:100%;max-width:480px;height:100vh;display:flex;flex-direction:column;
+    overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#0b1836 0%,#05060d 65%,#02030a 100%);
+    transition:background .6s;box-shadow:0 0 60px rgba(57,208,255,.08)}
+  #app.devour{background:radial-gradient(ellipse at 50% 35%,#5a0a12 0%,#1a0206 60%,#080002 100%)}
+  @keyframes shake{
+   0%,100%{transform:translate(0,0)}
+   20%{transform:translate(-6px,4px)}
+   40%{transform:translate(6px,-4px)}
+   60%{transform:translate(-4px,-3px)}
+   80%{transform:translate(4px,4px)}
+  }
+  #shakeInner{
+   position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden
+  }
+  #stars{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .star{position:absolute;width:2px;height:2px;background:#dff0ff;border-radius:50%;
+    animation:twinkle 3.5s infinite ease-in-out}
+  @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
+  #flashLayer{position:absolute;inset:0;z-index:18;pointer-events:none;opacity:0}
+  #flashLayer.red{background:radial-gradient(circle at 50% 60%,rgba(255,20,60,.7),rgba(80,0,10,.3) 60%,transparent);animation:flashFade .5s ease-out}
+  #flashLayer.white{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.95),rgba(176,107,255,.5) 45%,transparent 80%);animation:flashFade .55s ease-out}
+  #flashLayer.gold{background:radial-gradient(circle at 50% 50%,rgba(255,210,74,.7),rgba(255,140,0,.25) 55%,transparent 85%);animation:flashFade .55s ease-out}
+  @keyframes flashFade{0%{opacity:1}100%{opacity:0}}
+
+  /* Ẩn game UI khi chưa login */
+  body.not-logged #hud,
+  body.not-logged #mainWrap,
+  body.not-logged #logBox,
+  body.not-logged #controls{display:none!important}
+
+  .auth-overlay{position:absolute;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+    background-color:#02030a;
+    background-image:radial-gradient(ellipse at 50% 30%,#0b1836 0%,#02030a 70%);
+    padding:16px;overflow-y:auto}
+  .auth-overlay.on{display:flex}
+  .auth-box{width:100%;max-width:400px;background:linear-gradient(180deg,#0a1a38,#050912);
+    border:1px solid rgba(57,208,255,.5);border-radius:16px;padding:20px 16px;
+    box-shadow:0 0 60px rgba(57,208,255,.35);animation:modalBoxIn .4s cubic-bezier(.2,.8,.3,1.2)}
+  .auth-logo{text-align:center;font-size:24px;font-weight:900;letter-spacing:6px;
+    background:linear-gradient(90deg,#39d0ff,#b06bff,#ffd24a);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 30px rgba(57,208,255,.5);margin-bottom:4px}
+  .auth-sub{text-align:center;font-size:10px;letter-spacing:3px;color:#8bb8d8;margin-bottom:16px}
+  .auth-tabs{display:flex;gap:6px;margin-bottom:14px}
+  .auth-tabs button{flex:1;padding:9px;border-radius:9px;border:1px solid rgba(57,208,255,.3);
+    background:rgba(57,208,255,.05);color:#8bb8d8;font-family:inherit;
+    font-size:11px;font-weight:900;letter-spacing:1.5px;cursor:pointer;transition:all .15s}
+  .auth-tabs button.active{background:linear-gradient(180deg,rgba(57,208,255,.28),rgba(57,208,255,.08));
+    color:#fff;border-color:rgba(57,208,255,.7);box-shadow:0 0 14px rgba(57,208,255,.4)}
+  .auth-input{width:100%;padding:11px 12px;border-radius:9px;
+    background:rgba(57,208,255,.06);border:1px solid rgba(57,208,255,.3);
+    color:#fff;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.5px;
+    margin-bottom:10px;outline:none}
+  .auth-input:focus{border-color:rgba(57,208,255,.8);box-shadow:0 0 12px rgba(57,208,255,.35)}
+  .auth-label{font-size:9.5px;letter-spacing:1.5px;color:#8bb8d8;margin-bottom:5px;
+    text-transform:uppercase;font-weight:800}
+  .auth-btn{width:100%;padding:12px;border-radius:10px;border:none;cursor:pointer;
+    font-family:inherit;font-size:12.5px;font-weight:900;letter-spacing:1.5px;
+    background:linear-gradient(180deg,#7fe8ff,#39d0ff);color:#031018;
+    box-shadow:0 0 20px rgba(57,208,255,.5);margin-top:6px;transition:all .15s}
+  .auth-btn:active{transform:scale(.97);filter:brightness(1.3)}
+  .auth-msg{margin-top:10px;padding:8px 10px;border-radius:8px;font-size:10.5px;
+    text-align:center;display:none}
+  .auth-msg.on{display:block}
+  .auth-msg.err{background:rgba(255,59,92,.15);color:#ff8fa3;border:1px solid rgba(255,59,92,.4)}
+  .auth-msg.ok{background:rgba(0,255,163,.12);color:#7fffd4;border:1px solid rgba(0,255,163,.4)}
+
+  .class-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .class-card{position:relative;padding:10px 8px;border-radius:10px;
+    background:rgba(57,208,255,.05);border:1px solid rgba(57,208,255,.25);
+    cursor:pointer;transition:all .15s;text-align:center}
+  .class-card:active{transform:scale(.96)}
+  .class-card.active{border-color:rgba(255,210,74,.8);
+    background:linear-gradient(180deg,rgba(255,210,74,.15),rgba(255,210,74,.03));
+    box-shadow:0 0 16px rgba(255,210,74,.5)}
+  .class-card .cc-icon{font-size:26px;line-height:1}
+  .class-card .cc-name{font-size:11px;font-weight:900;color:#fff;letter-spacing:.5px;margin-top:4px}
+  .class-card .cc-desc{font-size:9px;color:#8bb8d8;margin-top:2px;line-height:1.35}
+  .class-card.active .cc-name{color:#ffd24a}
+
+  #hud{position:relative;z-index:3;flex:0 0 auto;padding:8px 10px 7px;
+    background:linear-gradient(180deg,rgba(10,25,60,.95),rgba(5,8,20,.55));
+    border-bottom:1px solid rgba(57,208,255,.28);box-shadow:0 4px 20px rgba(0,0,0,.6)}
+  .hud-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .realm-box .label{font-size:8px;letter-spacing:2px;color:#6fa8d6}
+  .realm-box .value{font-size:15px;font-weight:800;letter-spacing:.5px;color:#fff;
+    text-shadow:0 0 8px var(--neon);transition:all .4s}
+  .realm-box .value.levelup{animation:levelPulse 1.2s ease-out}
+  @keyframes levelPulse{0%{text-shadow:0 0 8px var(--neon)}
+    30%{color:#ffd24a;text-shadow:0 0 30px #ffd24a,0 0 60px #ffd24a,0 0 90px #ff8a00;transform:scale(1.18)}
+    100%{text-shadow:0 0 8px var(--neon)}}
+  .cur-box{display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+  .cur{font-size:12px;font-weight:700;color:var(--gold);text-shadow:0 0 6px rgba(255,210,74,.5)}
+  .cur.cry{color:var(--purple);text-shadow:0 0 6px rgba(176,107,255,.6)}
+  .cur.stone{color:var(--stone);text-shadow:0 0 6px rgba(127,255,212,.6)}
+  .cur.bump{animation:curBump .35s ease-out}
+  @keyframes curBump{0%{transform:scale(1)}50%{transform:scale(1.3);color:#fff}100%{transform:scale(1)}}
+  .bp-line{margin-top:5px;font-size:11px;font-weight:800;letter-spacing:1px;color:var(--neon);
+    text-shadow:0 0 8px rgba(57,208,255,.55);display:flex;justify-content:space-between;align-items:center;gap:6px}
+  .bp-line .buffs{font-size:9.5px;color:#ffd24a;font-weight:800}
+  #devourTag{display:none;font-size:10px;color:#ff6b6b;text-shadow:0 0 10px #ff2d2d;
+    animation:pulse .6s infinite alternate}
+  #devourTag.on{display:inline}
+  @keyframes pulse{from{opacity:.5}to{opacity:1}}
+  .bar{position:relative;height:12px;border-radius:7px;margin-top:4px;background:rgba(255,255,255,.07);
+    overflow:hidden;border:1px solid rgba(57,208,255,.22)}
+  .bar .fill{height:100%;width:100%;transition:width .18s cubic-bezier(.2,.7,.3,1);border-radius:6px}
+  .hp-bar .fill{background:linear-gradient(90deg,#00ffa3,#39d0ff);box-shadow:0 0 12px rgba(0,255,163,.7)}
+  .hp-bar.low .fill{background:linear-gradient(90deg,#ff3b5c,#ff8a3b);
+    box-shadow:0 0 12px rgba(255,59,92,.8);animation:lowHP 1s infinite alternate}
+  @keyframes lowHP{from{filter:brightness(1)}to{filter:brightness(1.5)}}
+  .bar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:9px;font-weight:800;letter-spacing:.5px;color:#fff;text-shadow:0 0 4px #000,0 0 8px #000}
+
+  #questMini{position:relative;z-index:3;margin-top:4px;padding:4px 8px;border-radius:8px;
+    background:rgba(176,107,255,.12);border:1px solid rgba(176,107,255,.4);
+    font-size:10px;display:none;align-items:center;gap:6px}
+  #questMini.on{display:flex}
+  #questMini .qm-icon{font-size:13px}
+  #questMini .qm-text{flex:1;color:#dcc9ff;font-weight:700}
+  #questMini .qm-bar{height:4px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden;flex:0 0 50px}
+  #questMini .qm-fill{height:100%;background:linear-gradient(90deg,#b06bff,#ffd24a);
+    box-shadow:0 0 8px #b06bff;transition:width .3s}
+
+  #mainWrap{position:relative;z-index:2;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  .screen{position:absolute;inset:0;display:none;flex-direction:column;
+    padding:10px;overflow-y:auto;scrollbar-width:thin;animation:screenIn .3s ease-out}
+  .screen.active{display:flex}
+  @keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .screen::-webkit-scrollbar{width:4px}
+  .screen::-webkit-scrollbar-thumb{background:rgba(57,208,255,.4);border-radius:4px}
+
+  #screenCombat{padding:6px 10px 4px;overflow:hidden}
+  #arena{position:relative;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
+    align-items:center;padding:6px 0 4px;transition:box-shadow .15s;overflow:hidden}
+  #arena.hurt{box-shadow:inset 0 0 60px rgba(255,0,60,.75)}
+  #arena.devourAura::after{content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 50% 80%,rgba(255,59,92,.28),transparent 60%);
+    animation:auraBreath 1.6s infinite alternate}
+  #arena.realmAura{box-shadow:inset 0 0 80px rgba(176,107,255,.6)}
+  #arena.realmAura::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+    background:radial-gradient(circle at 50% 40%,rgba(176,107,255,.18),transparent 70%);
+    animation:realmBreath 2s infinite alternate}
+  @keyframes realmBreath{from{opacity:.5}to{opacity:1}}
+  @keyframes auraBreath{from{opacity:.4}to{opacity:1}}
+
+  .zone-bar{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;
+    margin-bottom:4px;position:relative;z-index:2}
+  .zone-bar button{background:rgba(57,208,255,.1);border:1px solid rgba(57,208,255,.35);
+    color:var(--neon);width:30px;height:26px;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer}
+  .zone-bar button:active{background:rgba(57,208,255,.3);transform:scale(.92)}
+  .zone-bar button:disabled{opacity:.25}
+  #zoneName{flex:1;text-align:center;font-size:11px;font-weight:800;letter-spacing:1.5px;
+    color:#9fd8ff;text-shadow:0 0 8px rgba(57,208,255,.5)}
+  #zoneName.warp{animation:warpText .5s ease-out}
+  @keyframes warpText{0%{letter-spacing:8px;opacity:0;transform:scale(.7)}100%{letter-spacing:1.5px;opacity:1;transform:scale(1)}}
+
+  #bossTimerWrap{width:100%;display:none;margin-bottom:4px}
+  #bossTimerWrap.on{display:block}
+  .timer-bar{position:relative;height:16px;border-radius:8px;overflow:hidden;
+    background:rgba(255,0,60,.12);border:1px solid rgba(255,59,92,.6)}
+  .timer-bar .fill{height:100%;width:100%;background:linear-gradient(90deg,#ff3b5c,#ff8a3b);
+    box-shadow:0 0 14px rgba(255,59,92,.9);transition:width .1s linear}
+  .timer-bar.danger .fill{animation:dangerFlash .4s infinite alternate}
+  @keyframes dangerFlash{from{filter:brightness(1)}to{filter:brightness(2)}}
+  .timer-bar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:9px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 0 5px #000}
+  .timer-bar.realm{background:rgba(176,107,255,.15);border-color:rgba(176,107,255,.7)}
+  .timer-bar.realm .fill{background:linear-gradient(90deg,#b06bff,#ffd24a);
+    box-shadow:0 0 14px rgba(176,107,255,.9)}
+
+  #enemyWrap{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    width:100%;min-height:0;gap:2px;position:relative}
+  #playerWrap{position:absolute;left:6px;bottom:6px;z-index:4;pointer-events:none;
+    filter:drop-shadow(0 0 12px rgba(57,208,255,.7))}
+  #playerSprite{font-size:44px;line-height:1;animation:playerIdle 2.2s ease-in-out infinite;
+    display:block;transform-origin:50% 90%}
+  @keyframes playerIdle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px) rotate(-2deg)}}
+  #playerSprite.attack{animation:playerAttack .28s ease-out}
+  @keyframes playerAttack{0%{transform:translate(0,0) rotate(0)}
+    35%{transform:translate(28px,-14px) rotate(-25deg) scale(1.15)}
+    70%{transform:translate(18px,-6px) rotate(-10deg) scale(1.05)}
+    100%{transform:translate(0,0) rotate(0)}}
+  #playerSprite.hurt{animation:playerHurt .35s ease-out}
+  @keyframes playerHurt{0%{transform:translate(0,0)}
+    30%{transform:translate(-8px,4px) rotate(8deg);filter:brightness(2) sepia(1) hue-rotate(-30deg)}
+    100%{transform:translate(0,0)}}
+  #playerSprite.dead{animation:playerDead 1s forwards ease-in}
+  @keyframes playerDead{0%{transform:rotate(0) translateY(0)}
+    40%{transform:rotate(-90deg) translateY(10px)}100%{transform:rotate(-90deg) translateY(30px);opacity:.3}}
+  #playerWrap.devour::before{content:'';position:absolute;left:50%;top:50%;width:80px;height:80px;
+    transform:translate(-50%,-50%);border-radius:50%;
+    background:radial-gradient(circle,rgba(255,59,92,.7) 0%,rgba(176,0,40,.3) 45%,transparent 70%);
+    animation:devourGlow 1s infinite alternate;z-index:-1}
+  @keyframes devourGlow{from{transform:translate(-50%,-50%) scale(.9);opacity:.6}
+    to{transform:translate(-50%,-50%) scale(1.25);opacity:1}}
+
+  #enemySprite{font-size:64px;line-height:1;cursor:pointer;
+    filter:drop-shadow(0 0 18px rgba(57,208,255,.75));animation:bob 2.6s ease-in-out infinite;
+    transition:transform .08s;position:relative;z-index:3}
+  #enemySprite:active{transform:scale(.92)}
+  #enemySprite.boss{font-size:86px;filter:drop-shadow(0 0 26px rgba(255,59,92,.95));
+    animation:bob 2.6s ease-in-out infinite,bossAura 1.5s infinite alternate}
+  @keyframes bossAura{from{filter:drop-shadow(0 0 26px rgba(255,59,92,.95))}
+    to{filter:drop-shadow(0 0 40px rgba(255,59,92,1)) drop-shadow(0 0 60px rgba(255,59,92,.6))}}
+  #enemySprite.realm{filter:drop-shadow(0 0 30px rgba(176,107,255,1));
+    animation:bob 2s ease-in-out infinite,realmAura 1s infinite alternate}
+  @keyframes realmAura{from{filter:drop-shadow(0 0 30px rgba(176,107,255,1))}
+    to{filter:drop-shadow(0 0 50px rgba(255,210,74,1)) drop-shadow(0 0 80px rgba(176,107,255,.7))}}
+  #enemySprite.flash{animation:flashHit .16s ease-out}
+  @keyframes flashHit{0%{filter:brightness(4) drop-shadow(0 0 34px #fff)}100%{filter:brightness(1)}}
+  #enemySprite.lunge{animation:enemyLunge .4s ease-out}
+  @keyframes enemyLunge{0%{transform:translate(0,0) scale(1)}
+    40%{transform:translate(-40px,30px) scale(1.2);filter:brightness(1.6) hue-rotate(-40deg)}
+    100%{transform:translate(0,0) scale(1)}}
+  #enemySprite.dying{animation:enemyDie .6s ease-out forwards}
+  @keyframes enemyDie{0%{transform:scale(1) rotate(0);opacity:1}
+    40%{transform:scale(1.3) rotate(-8deg);filter:brightness(2.5)}
+    100%{transform:scale(0) rotate(180deg);opacity:0}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+  #enemyName{font-size:13px;font-weight:800;letter-spacing:.5px;color:#fff;
+    text-shadow:0 0 10px rgba(57,208,255,.7);margin-top:2px;text-align:center;position:relative;z-index:3}
+  #enemyName.boss{color:#ff8fa3;text-shadow:0 0 12px rgba(255,59,92,.9)}
+  #enemyName.realm{color:#e0c4ff;text-shadow:0 0 14px rgba(176,107,255,1)}
+  #enemyInfo{font-size:10px;color:#8bb8d8;letter-spacing:.5px;position:relative;z-index:3}
+  .warn{color:var(--red)!important;font-weight:800;animation:pulse .7s infinite alternate}
+  .e-hp{width:78%;max-width:300px;margin-top:5px;height:12px;position:relative;z-index:3}
+  .e-hp .fill{background:linear-gradient(90deg,#ff3b5c,#ff9f43);box-shadow:0 0 12px rgba(255,59,92,.7)}
+  .e-hp.realm .fill{background:linear-gradient(90deg,#b06bff,#ffd24a);box-shadow:0 0 14px rgba(176,107,255,.8)}
+  .e-hp.hit{animation:hpShake .25s}
+  @keyframes hpShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+
+  #combo{position:absolute;right:8px;top:56px;z-index:6;pointer-events:none;
+    font-size:34px;font-weight:900;letter-spacing:-1px;color:#ffd24a;
+    text-shadow:0 0 12px #ff8a00,0 0 24px #ff3b5c,0 3px 0 #7a4a00;
+    opacity:0;transform:scale(.5);transition:opacity .2s,transform .2s;font-style:italic}
+  #combo.on{opacity:1;transform:scale(1)}
+  #combo.hit{animation:comboHit .3s ease-out}
+  @keyframes comboHit{0%{transform:scale(1.5) rotate(-6deg)}100%{transform:scale(1) rotate(0)}}
+  #combo span{font-size:14px;color:#fff;text-shadow:0 0 8px #000;letter-spacing:1px}
+
+  #portalBtn{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:8;
+    padding:8px 14px;border-radius:20px;border:2px solid #b06bff;cursor:pointer;
+    background:linear-gradient(180deg,rgba(176,107,255,.5),rgba(90,30,160,.7));
+    color:#fff;font-family:inherit;font-size:11px;font-weight:900;letter-spacing:1.5px;
+    box-shadow:0 0 20px #b06bff,0 0 40px rgba(176,107,255,.5),inset 0 0 14px rgba(255,255,255,.3);
+    display:none;animation:portalPulse .8s infinite alternate}
+  #portalBtn.on{display:block}
+  #portalBtn:active{transform:translateX(-50%) scale(.92)}
+  @keyframes portalPulse{from{box-shadow:0 0 20px #b06bff,0 0 40px rgba(176,107,255,.5),inset 0 0 14px rgba(255,255,255,.3)}
+    to{box-shadow:0 0 30px #ffd24a,0 0 60px #b06bff,inset 0 0 20px rgba(255,255,255,.5);transform:translateX(-50%) scale(1.05)}}
+
+  #floatLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+  .knife{position:absolute;width:34px;height:34px;pointer-events:none;
+    animation:knifeFly .38s cubic-bezier(.3,0,.85,.5) forwards}
+  .knife::before{content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,#ffffff,#39d0ff 40%,#b06bff 100%);
+    clip-path:polygon(50% 0,100% 78%,50% 100%,0 78%);
+    box-shadow:0 0 14px #39d0ff,0 0 26px rgba(176,107,255,.8)}
+  .knife::after{content:'';position:absolute;left:50%;top:50%;width:70px;height:3px;
+    transform:translate(-50%,-50%);
+    background:linear-gradient(90deg,transparent,rgba(57,208,255,.95),rgba(176,107,255,.7),transparent);
+    filter:blur(2px)}
+  @keyframes knifeFly{0%{transform:translate(0,0) rotate(0) scale(.5);opacity:1}
+    60%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(1080deg) scale(1.2);opacity:0}}
+  .particle{position:absolute;width:6px;height:6px;border-radius:50%;pointer-events:none;
+    animation:particleFly .7s ease-out forwards}
+  @keyframes particleFly{0%{transform:translate(0,0) scale(1.2);opacity:1}
+    100%{transform:translate(var(--px),var(--py)) scale(0);opacity:0}}
+  .pop{position:absolute;font-size:15px;font-weight:900;letter-spacing:.5px;
+    transform:translate(-50%,-50%);white-space:nowrap;
+    text-shadow:0 0 6px #000,0 0 12px currentColor;
+    animation:popUp .9s cubic-bezier(.2,.7,.3,1) forwards;pointer-events:none}
+  @keyframes popUp{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-8deg)}
+    20%{opacity:1;transform:translate(-50%,-75%) scale(1.35) rotate(0)}
+    40%{transform:translate(-50%,-90%) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-180%) scale(.85)}}
+  .pop.dmg{color:#fff}
+  .pop.crit{color:#ffd24a;font-size:22px;
+    text-shadow:0 0 8px #ff8a00,0 0 18px #ff3b5c,0 2px 0 #6a3a00,0 0 3px #000;
+    animation:critPop .95s cubic-bezier(.2,.7,.3,1) forwards}
+  @keyframes critPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-15deg)}
+    15%{opacity:1;transform:translate(-50%,-70%) scale(1.7) rotate(8deg)}
+    30%{transform:translate(-50%,-90%) scale(1.15) rotate(-4deg)}
+    55%{transform:translate(-50%,-110%) scale(1.05) rotate(2deg)}
+    100%{opacity:0;transform:translate(-50%,-200%) scale(.9) rotate(0)}}
+  .pop.miss{color:#7f8fa6;font-size:16px;font-style:italic;animation:missPop .7s ease-out forwards}
+  @keyframes missPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.6) rotate(-6deg)}
+    30%{opacity:1;transform:translate(-50%,-70%) scale(1.15) rotate(2deg)}
+    100%{opacity:0;transform:translate(-50%,-130%) scale(1) rotate(0)}}
+  .pop.gold{color:#ffd24a;font-size:13px}
+  .pop.cry{color:#c98bff;font-size:14px}
+  .pop.stone{color:#7fffd4;font-size:14px;text-shadow:0 0 10px #7fffd4,0 0 3px #000}
+  .pop.hurt{color:#ff3b5c;font-size:16px;text-shadow:0 0 8px #ff0022,0 2px 0 #4a0010}
+  .pop.big{font-size:26px;color:#ff3b5c;font-weight:900;
+    text-shadow:0 0 12px #ff0022,0 0 24px #ff3b5c,0 0 40px #ff0022,0 3px 0 #4a0010}
+  .pop.heal{color:#00ffa3;font-size:15px;text-shadow:0 0 10px #00ffa3,0 2px 0 #004a30}
+  .pop.epic{color:#b06bff;font-size:22px;font-weight:900;font-style:italic;
+    text-shadow:0 0 12px #b06bff,0 0 24px #ffd24a,0 3px 0 #4a1a6a}
+  .pop.manual{color:#ffe27a;font-size:18px;font-weight:900;
+    text-shadow:0 0 12px #ffe27a,0 0 24px #ffd24a,0 3px 0 #5a3a00}
+
+  .shockwave{position:absolute;pointer-events:none;border:3px solid #ffd24a;border-radius:50%;
+    transform:translate(-50%,-50%);animation:shockwaveAnim .55s ease-out forwards;
+    box-shadow:0 0 20px #ffd24a,inset 0 0 12px #ff8a00}
+  @keyframes shockwaveAnim{0%{width:10px;height:10px;opacity:1;border-width:4px}
+    100%{width:220px;height:220px;opacity:0;border-width:1px}}
+  .shockwave.red{border-color:#ff3b5c;box-shadow:0 0 20px #ff3b5c,inset 0 0 12px #ff0022}
+  .shockwave.purple{border-color:#b06bff;box-shadow:0 0 20px #b06bff,inset 0 0 12px #6a1eb0}
+
+  .bolt{position:absolute;width:5px;pointer-events:none;z-index:14;
+    background:linear-gradient(180deg,#fff,#b06bff 50%,#6a1eb0);
+    box-shadow:0 0 14px #fff,0 0 30px #b06bff,0 0 50px #6a1eb0;
+    transform-origin:top center;animation:boltStrike .55s ease-out forwards;border-radius:3px}
+  @keyframes boltStrike{0%{opacity:0;transform:scaleY(.2) skewX(0)}
+    10%{opacity:1;transform:scaleY(.4) skewX(-6deg)}
+    20%{opacity:1;transform:scaleY(1) skewX(4deg)}
+    40%{opacity:1;transform:scaleY(1) skewX(-3deg)}
+    100%{opacity:0;transform:scaleY(1) skewX(0)}}
+  .boltSpark{position:absolute;width:8px;height:8px;border-radius:50%;background:#fff;
+    box-shadow:0 0 16px #fff,0 0 30px #b06bff;pointer-events:none;
+    animation:sparkFly .5s ease-out forwards}
+  @keyframes sparkFly{0%{opacity:1;transform:translate(0,0) scale(1.2)}
+    100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(0)}}
+  .auraBurst{position:absolute;width:14px;height:14px;border-radius:50%;border:4px solid #ffd24a;
+    pointer-events:none;transform:translate(-50%,-50%);
+    box-shadow:0 0 30px #ffd24a,0 0 60px #ff8a00,inset 0 0 20px #fff;
+    animation:auraBurst 1.1s ease-out forwards;z-index:12}
+  @keyframes auraBurst{0%{width:14px;height:14px;opacity:1;border-width:6px}
+    100%{width:420px;height:420px;opacity:0;border-width:1px}}
+  .auraRay{position:absolute;pointer-events:none;z-index:12;
+    background:linear-gradient(90deg,transparent,#ffd24a,#fff,#ffd24a,transparent);
+    height:3px;border-radius:2px;box-shadow:0 0 14px #ffd24a;transform-origin:center;
+    animation:auraRay .9s ease-out forwards}
+  @keyframes auraRay{0%{width:0;opacity:1}30%{width:300px;opacity:1}100%{width:500px;opacity:0}}
+  #bossIntro{position:absolute;inset:0;z-index:16;pointer-events:none;
+    display:flex;align-items:center;justify-content:center;opacity:0}
+  #bossIntro.on{animation:bossIntroAnim 1.6s ease-out forwards}
+  @keyframes bossIntroAnim{0%{opacity:0;transform:scale(1.4)}15%{opacity:1;transform:scale(1)}
+    70%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.95)}}
+  #bossIntro .introTxt{font-size:38px;font-weight:900;letter-spacing:4px;color:#ff3b5c;
+    text-shadow:0 0 20px #ff3b5c,0 0 40px #ff0022,0 0 60px #7a0010,0 4px 0 #4a0010;
+    transform:skewX(-8deg);animation:introShake .15s infinite alternate}
+  @keyframes introShake{from{transform:skewX(-8deg) translateX(-3px)}
+    to{transform:skewX(-8deg) translateX(3px)}}
+
+  .hitRing{position:absolute;border:2px solid #39d0ff;border-radius:50%;pointer-events:none;
+    transform:translate(-50%,-50%);animation:hitRing .4s ease-out forwards;box-shadow:0 0 14px #39d0ff}
+  @keyframes hitRing{0%{width:20px;height:20px;opacity:1;border-width:3px}
+    100%{width:100px;height:100px;opacity:0;border-width:1px}}
+
+  #combatTag{position:absolute;top:56px;left:8px;z-index:6;font-size:10px;font-weight:900;
+    letter-spacing:1.5px;color:#ff3b5c;text-shadow:0 0 8px #ff3b5c;opacity:0;transition:opacity .3s}
+  #combatTag.on{opacity:1}
+
+  #logBox{position:relative;z-index:3;flex:0 0 auto;height:44px;overflow-y:auto;
+    padding:4px 10px;font-size:10px;line-height:1.45;background:rgba(3,6,16,.85);
+    border-top:1px solid rgba(57,208,255,.15);scrollbar-width:none}
+  #logBox::-webkit-scrollbar{display:none}
+  .logline{color:#7fa8c9;animation:logIn .3s ease-out}
+  @keyframes logIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+  .logline.good{color:var(--green);text-shadow:0 0 6px rgba(0,255,163,.4)}
+  .logline.bad{color:var(--red);text-shadow:0 0 6px rgba(255,59,92,.5)}
+  .logline.epic{color:var(--purple);text-shadow:0 0 8px rgba(176,107,255,.6);font-weight:700}
+  .logline.quest{color:#ffe0a0;text-shadow:0 0 6px rgba(255,210,74,.6);font-weight:700}
+  .logline.stone{color:#7fffd4;text-shadow:0 0 6px rgba(127,255,212,.6);font-weight:700}
+  .logline.manual{color:#ffe27a;text-shadow:0 0 6px rgba(255,226,122,.6);font-weight:700}
+
+  #controls{position:relative;z-index:3;flex:0 0 auto;padding:7px 8px 10px;
+    background:linear-gradient(0deg,rgba(10,25,60,.95),rgba(5,8,20,.5));
+    border-top:1px solid rgba(57,208,255,.28);display:none;flex-direction:column;gap:6px}
+  #controls.on{display:flex}
+  .btn-row{display:flex;gap:6px}
+  .btn{flex:1;border:none;border-radius:9px;padding:10px 4px;font-family:inherit;font-size:11px;
+    font-weight:900;letter-spacing:.6px;color:#fff;cursor:pointer;position:relative;overflow:hidden;
+    background:linear-gradient(180deg,rgba(57,208,255,.28),rgba(57,208,255,.08));
+    border:1px solid rgba(57,208,255,.55);
+    box-shadow:0 0 12px rgba(57,208,255,.22),inset 0 1px 0 rgba(255,255,255,.15);
+    transition:transform .06s,filter .1s}
+  .btn:active{transform:scale(.96);filter:brightness(1.5)}
+  .btn:disabled{opacity:.35;filter:grayscale(.7);cursor:not-allowed}
+  .btn.small{flex:0 0 86px;font-size:10px}
+  .btn.attack{background:linear-gradient(180deg,rgba(0,255,163,.32),rgba(0,255,163,.08));
+    border-color:rgba(0,255,163,.6);box-shadow:0 0 14px rgba(0,255,163,.3);overflow:hidden}
+  .btn.attack::after{content:'';position:absolute;left:0;bottom:0;height:3px;
+    background:linear-gradient(90deg,#00ffa3,#39d0ff);width:0;transition:width .05s linear;
+    box-shadow:0 0 8px #00ffa3}
+  .btn.attack.cd::after{width:var(--cd,0%)}
+  .btn.devour{background:linear-gradient(180deg,rgba(255,59,92,.32),rgba(176,0,40,.1));
+    border-color:rgba(255,59,92,.6);box-shadow:0 0 14px rgba(255,59,92,.3)}
+  .btn.devour.active{animation:devourBtn 1s infinite alternate}
+  @keyframes devourBtn{from{box-shadow:0 0 14px rgba(255,59,92,.3)}
+    to{box-shadow:0 0 30px rgba(255,59,92,.9),0 0 50px rgba(255,0,40,.5)}}
+  .btn.boss{background:linear-gradient(180deg,rgba(176,107,255,.32),rgba(90,30,160,.1));
+    border-color:rgba(176,107,255,.65);box-shadow:0 0 14px rgba(176,107,255,.3)}
+  .btn.back{background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.02));
+    border-color:rgba(255,255,255,.3);flex:0 0 60px}
+
+  .screen-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex:0 0 auto}
+  .screen-header h2{flex:1;font-size:15px;font-weight:900;letter-spacing:2px;
+    color:var(--neon);text-shadow:0 0 14px rgba(57,208,255,.7);text-align:center}
+  .screen-header button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);
+    color:#fff;width:34px;height:34px;border-radius:8px;font-size:16px;font-weight:900;cursor:pointer}
+  .screen-header button:active{background:rgba(255,255,255,.2);transform:scale(.92)}
+  .screen-header .spacer{width:34px}
+
+  #screenLobby{padding:14px 12px}
+  .lobby-profile{display:flex;align-items:center;gap:12px;padding:12px;
+    border-radius:14px;background:linear-gradient(180deg,rgba(57,208,255,.12),rgba(176,107,255,.06));
+    border:1px solid rgba(57,208,255,.35);box-shadow:0 4px 20px rgba(0,0,0,.4);
+    margin-bottom:10px;flex:0 0 auto}
+  .avatar-box{position:relative;width:60px;height:60px;flex:0 0 auto;
+    border-radius:50%;border:2px solid rgba(57,208,255,.7);
+    background:radial-gradient(circle,rgba(57,208,255,.25),rgba(176,107,255,.1));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 20px rgba(57,208,255,.5),inset 0 0 20px rgba(57,208,255,.2)}
+  .avatar-box .avatar-icon{font-size:36px;line-height:1;
+    filter:drop-shadow(0 0 10px rgba(57,208,255,.7));
+    animation:heroFloat 3s ease-in-out infinite}
+  @keyframes heroFloat{0%,100%{transform:translateY(0) rotate(0)}
+    50%{transform:translateY(-6px) rotate(3deg)}}
+  .avatar-box .edit-tag{position:absolute;bottom:-4px;right:-4px;background:linear-gradient(180deg,#ffd24a,#ff8a00);
+    color:#2a1c00;width:20px;height:20px;border-radius:50%;font-size:11px;
+    display:flex;align-items:center;justify-content:center;font-weight:900;
+    box-shadow:0 0 8px rgba(255,210,74,.7)}
+  .lobby-profile-info{flex:1;min-width:0}
+  .lobby-profile-info .p-name{font-size:15px;font-weight:900;color:#fff;
+    letter-spacing:.5px;text-shadow:0 0 10px rgba(57,208,255,.6);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lobby-profile-info .p-realm{font-size:10.5px;color:var(--neon);font-weight:800;
+    letter-spacing:1px;margin-top:2px}
+  .lobby-profile-info .p-bp{font-size:10px;color:#8bb8d8;margin-top:2px}
+  .lobby-profile-info .p-classes{font-size:9.5px;color:#ffe27a;margin-top:2px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lobby-edit-btn{background:rgba(57,208,255,.15);border:1px solid rgba(57,208,255,.4);
+    color:var(--neon);padding:5px 8px;border-radius:7px;font-size:9.5px;font-weight:900;
+    cursor:pointer;font-family:inherit}
+  .lobby-edit-btn:active{background:rgba(57,208,255,.3);transform:scale(.94)}
+
+  .lobby-classes{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;padding:8px 10px;
+    background:rgba(255,210,74,.06);border:1px solid rgba(255,210,74,.28);border-radius:10px;
+    font-size:10px}
+  .lobby-classes .lc-label{color:#8bb8d8;font-weight:800;letter-spacing:1px;margin-right:4px}
+  .lobby-classes .lc-tag{padding:2px 7px;border-radius:6px;
+    background:linear-gradient(180deg,rgba(255,210,74,.25),rgba(255,210,74,.08));
+    color:#ffe27a;font-weight:800;border:1px solid rgba(255,210,74,.4)}
+
+  .lobby-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:0 0 auto}
+  .lobby-btn{position:relative;border:1px solid rgba(57,208,255,.45);border-radius:11px;
+    padding:12px 6px;font-family:inherit;cursor:pointer;
+    background:linear-gradient(180deg,rgba(57,208,255,.12),rgba(57,208,255,.03));
+    color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;
+    box-shadow:0 4px 14px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.1);
+    transition:transform .08s,filter .15s;overflow:hidden}
+  .lobby-btn:active{transform:scale(.94);filter:brightness(1.4)}
+  .lobby-btn.primary{grid-column:span 3;padding:14px 8px;
+    background:linear-gradient(180deg,rgba(0,255,163,.2),rgba(0,255,163,.05));
+    border-color:rgba(0,255,163,.7);
+    box-shadow:0 0 24px rgba(0,255,163,.3),inset 0 1px 0 rgba(255,255,255,.15)}
+  .lobby-btn.primary .lb-icon{font-size:28px}
+  .lobby-btn.primary .lb-name{font-size:14px;color:#c4ffe0}
+  .lobby-btn.breakout{grid-column:span 3;padding:14px 8px;
+    background:linear-gradient(180deg,rgba(255,210,74,.28),rgba(180,130,0,.08));
+    border-color:rgba(255,210,74,.75);
+    box-shadow:0 0 24px rgba(255,210,74,.35),inset 0 1px 0 rgba(255,255,255,.15)}
+  .lobby-btn.breakout .lb-icon{font-size:28px}
+  .lobby-btn.breakout .lb-name{font-size:14px;color:#ffe9a8}
+  .lobby-btn .lb-icon{font-size:22px;line-height:1;
+    filter:drop-shadow(0 0 8px rgba(57,208,255,.6))}
+  .lobby-btn .lb-name{font-size:10.5px;font-weight:900;letter-spacing:.8px;text-align:center}
+  .lobby-btn .lb-desc{font-size:8.5px;color:#8bb8d8;letter-spacing:.2px;text-align:center}
+  .lobby-btn.portal{grid-column:span 3;
+    background:linear-gradient(180deg,rgba(176,107,255,.25),rgba(90,30,160,.08));
+    border-color:rgba(176,107,255,.7);box-shadow:0 0 20px rgba(176,107,255,.3);
+    animation:portalBtnGlow 1.5s infinite alternate}
+  @keyframes portalBtnGlow{from{box-shadow:0 0 20px rgba(176,107,255,.3)}
+    to{box-shadow:0 0 30px rgba(255,210,74,.7),0 0 50px rgba(176,107,255,.6)}}
+  .lobby-btn .badge{position:absolute;top:4px;right:4px;padding:1px 6px;border-radius:8px;
+    background:linear-gradient(180deg,#ffd24a,#ff8a00);color:#2a1c00;
+    font-size:9px;font-weight:900;animation:claimPulse .8s infinite alternate}
+  @keyframes claimPulse{from{filter:brightness(1)}to{filter:brightness(1.4)}}
+  .lobby-btn.admin{background:linear-gradient(180deg,rgba(255,59,92,.28),rgba(120,0,30,.1));
+    border-color:rgba(255,59,92,.7)}
+
+  .lobby-info{margin-top:12px;padding:10px;border-radius:10px;
+    background:rgba(176,107,255,.08);border:1px solid rgba(176,107,255,.3);
+    font-size:10px;color:#b8a8d0;line-height:1.6;flex:0 0 auto}
+  .lobby-info b{color:#ffd24a}
+
+  .sect-card{background:linear-gradient(180deg,rgba(57,208,255,.06),rgba(57,208,255,.02));
+    border:1px solid rgba(57,208,255,.3);border-radius:12px;padding:11px;margin-bottom:9px;
+    display:flex;flex-direction:column;gap:8px}
+  .sect-card.current{border-color:rgba(255,210,74,.7);
+    background:linear-gradient(180deg,rgba(255,210,74,.12),rgba(255,210,74,.02));
+    box-shadow:0 0 20px rgba(255,210,74,.25)}
+  .sect-card .sc-head{display:flex;align-items:center;gap:10px}
+  .sect-card .sc-icon{font-size:34px;line-height:1;
+    filter:drop-shadow(0 0 8px rgba(57,208,255,.6))}
+  .sect-card.current .sc-icon{filter:drop-shadow(0 0 12px #ffd24a)}
+  .sect-card .sc-info{flex:1;min-width:0}
+  .sect-card .sc-name{font-size:13px;font-weight:900;color:#fff}
+  .sect-card .sc-desc{font-size:10px;color:#8bb8d8;margin-top:1px}
+  .sect-card .sc-buff{font-size:10.5px;color:var(--neon);font-weight:800;margin-top:3px}
+  .sect-card .sc-level{font-size:9.5px;color:#b8a8d0}
+  .sect-card .sc-actions{display:flex;gap:6px}
+  .sect-card .sc-actions button{flex:1;padding:8px;border-radius:7px;border:none;
+    font-family:inherit;font-size:10.5px;font-weight:900;cursor:pointer;
+    background:linear-gradient(180deg,#7fe8ff,#39d0ff);color:#031018}
+  .sect-card .sc-actions button:active{transform:scale(.95);filter:brightness(1.3)}
+  .sect-card .sc-actions button:disabled{background:rgba(255,255,255,.08);color:#5b6b7d;cursor:not-allowed}
+  .sect-card .sc-actions button.upgrade{background:linear-gradient(180deg,#7fffd4,#00b886);color:#021e17}
+  .sect-card .sc-actions button.leave{background:linear-gradient(180deg,#ff7a8f,#ff3b5c);color:#2a0008;flex:0 0 70px}
+
+  .inv-section{margin-bottom:14px}
+  .inv-section h4{font-size:11px;letter-spacing:1.5px;color:var(--purple);
+    text-shadow:0 0 8px rgba(176,107,255,.5);margin-bottom:8px;
+    padding-bottom:5px;border-bottom:1px dashed rgba(176,107,255,.3)}
+  .inv-item{display:flex;align-items:center;gap:10px;padding:9px;border-radius:9px;
+    background:rgba(57,208,255,.05);border:1px solid rgba(57,208,255,.2);margin-bottom:6px}
+  .inv-item.active{border-color:rgba(255,210,74,.6);background:rgba(255,210,74,.1)}
+  .inv-item.manual{border-color:rgba(255,226,122,.5);background:rgba(255,226,122,.06)}
+  .inv-item .iv-icon{font-size:22px;line-height:1}
+  .inv-item .iv-info{flex:1;min-width:0}
+  .inv-item .iv-name{font-size:11.5px;font-weight:800;color:#fff}
+  .inv-item .iv-stat{font-size:9.5px;color:#8bb8d8}
+  .inv-item .iv-stat b{color:var(--neon)}
+  .inv-item button{border:none;border-radius:6px;padding:6px 10px;font-family:inherit;
+    font-size:9.5px;font-weight:900;cursor:pointer;white-space:nowrap;
+    background:linear-gradient(180deg,#7fe8ff,#39d0ff);color:#031018}
+  .inv-item button:active{filter:brightness(1.3);transform:scale(.95)}
+  .inv-item button.eq{background:linear-gradient(180deg,#ffd24a,#e0a800);color:#2a1c00;cursor:default}
+  .inv-item button.use{background:linear-gradient(180deg,#ffe27a,#ffb800);color:#2a1c00}
+  .inv-item button.learned{background:linear-gradient(180deg,#0d5,#0a3);color:#02140c}
+  .inv-empty{font-size:10px;color:#5b6b7d;text-align:center;padding:14px;font-style:italic}
+
+  .info-section{margin-bottom:14px}
+  .info-section h3{font-size:11px;letter-spacing:2px;color:var(--purple);
+    text-shadow:0 0 8px rgba(176,107,255,.5);margin-bottom:8px;padding-bottom:5px;
+    border-bottom:1px dashed rgba(176,107,255,.3)}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .info-stat{background:rgba(57,208,255,.05);border:1px solid rgba(57,208,255,.2);
+    border-radius:9px;padding:9px 10px}
+  .info-stat.full{grid-column:span 2}
+  .info-stat .is-label{font-size:9px;letter-spacing:1px;color:#8bb8d8;text-transform:uppercase}
+  .info-stat .is-value{font-size:14px;font-weight:900;color:#fff;margin-top:2px}
+  .info-stat .is-value.gold{color:var(--gold)}
+  .info-stat .is-value.cry{color:var(--purple)}
+  .info-stat .is-value.stone{color:var(--stone)}
+  .info-stat .is-value.neon{color:var(--neon)}
+  .info-stat .is-value.red{color:var(--red)}
+  .info-stat .is-value.green{color:var(--green)}
+  .info-stat .is-value.manual{color:#ffe27a}
+
+  .sys-card{background:rgba(57,208,255,.05);border:1px solid rgba(57,208,255,.2);
+    border-radius:10px;padding:11px;margin-bottom:9px}
+  .sys-card h4{font-size:11px;color:#fff;font-weight:800;margin-bottom:6px}
+  .sys-card p{font-size:10px;color:#8bb8d8;line-height:1.55}
+  .sys-card button{margin-top:8px;width:100%;padding:10px;border-radius:8px;border:none;
+    font-family:inherit;font-size:11px;font-weight:900;cursor:pointer;
+    background:linear-gradient(180deg,#7fe8ff,#39d0ff);color:#031018}
+  .sys-card button:active{transform:scale(.96);filter:brightness(1.3)}
+  .sys-card button.danger{background:linear-gradient(180deg,#ff7a8f,#ff3b5c);color:#2a0008}
+  .sys-card button.gold{background:linear-gradient(180deg,#ffe27a,#ffb800);color:#2a1c00}
+  .sys-card button.ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25)}
+
+  .market-tabs{display:flex;gap:6px;margin-bottom:10px}
+  .market-tab{flex:1;padding:9px;border-radius:9px;border:1px solid rgba(57,208,255,.3);
+    background:rgba(57,208,255,.05);color:#8bb8d8;font-family:inherit;
+    font-size:10.5px;font-weight:900;letter-spacing:1px;cursor:pointer;transition:all .15s}
+  .market-tab.active{background:linear-gradient(180deg,rgba(57,208,255,.25),rgba(57,208,255,.08));
+    color:#fff;border-color:rgba(57,208,255,.7);box-shadow:0 0 14px rgba(57,208,255,.3)}
+  .market-tab:active{transform:scale(.97)}
+  .market-listing{display:flex;align-items:center;gap:10px;padding:10px;
+    border-radius:10px;background:rgba(57,208,255,.04);
+    border:1px solid rgba(57,208,255,.2);margin-bottom:7px}
+  .market-listing.mine{border-color:rgba(255,210,74,.5);
+    background:linear-gradient(180deg,rgba(255,210,74,.1),rgba(255,210,74,.02))}
+  .market-listing .ml-icon{font-size:26px;flex:0 0 auto}
+  .market-listing .ml-info{flex:1;min-width:0}
+  .market-listing .ml-name{font-size:11.5px;font-weight:800;color:#fff}
+  .market-listing .ml-seller{font-size:9.5px;color:#8bb8d8;margin-top:1px}
+  .market-listing .ml-price{flex:0 0 auto;text-align:right;margin-right:6px}
+  .market-listing .ml-price .p-total{font-size:12px;font-weight:900;color:#ffd24a}
+  .market-listing .ml-price .p-unit{font-size:9px;color:#8bb8d8}
+  .market-listing button{border:none;border-radius:7px;padding:8px 12px;font-family:inherit;
+    font-size:10px;font-weight:900;cursor:pointer;white-space:nowrap;
+    background:linear-gradient(180deg,#7fe8ff,#39d0ff);color:#031018}
+  .market-listing button:active{filter:brightness(1.3);transform:scale(.95)}
+  .market-listing button.buy{background:linear-gradient(180deg,#0d5,#0a3);color:#02140c}
+  .market-listing button.cancel{background:linear-gradient(180deg,#ff7a8f,#ff3b5c);color:#2a0008}
+  .market-listing button.no{background:rgba(255,255,255,.1);color:#5b6b7d;cursor:not-allowed}
+  .market-empty{font-size:11px;color:#5b6b7d;text-align:center;padding:24px 12px;font-style:italic}
+  .sell-form{background:rgba(57,208,255,.05);border:1px solid rgba(57,208,255,.25);
+    border-radius:11px;padding:12px;margin-bottom:12px}
+  .sell-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .sell-row label{flex:0 0 90px;font-size:10.5px;color:#8bb8d8;font-weight:800;letter-spacing:.5px}
+  .sell-row input{flex:1;padding:8px 10px;border-radius:8px;
+    background:rgba(57,208,255,.08);border:1px solid rgba(57,208,255,.35);
+    color:#fff;font-family:inherit;font-size:12px;font-weight:700;outline:none}
+  .sell-row input:focus{border-color:rgba(57,208,255,.8);box-shadow:0 0 10px rgba(57,208,255,.3)}
+  .sell-item{display:flex;align-items:center;gap:10px;padding:8px 10px;
+    border-radius:9px;border:1px solid rgba(57,208,255,.2);
+    background:rgba(57,208,255,.03);cursor:pointer;margin-bottom:6px;transition:all .15s}
+  .sell-item.active{border-color:rgba(255,210,74,.7);
+    background:linear-gradient(180deg,rgba(255,210,74,.12),rgba(255,210,74,.02))}
+  .sell-item .si-icon{font-size:22px}
+  .sell-item .si-info{flex:1}
+  .sell-item .si-name{font-size:11.5px;font-weight:800;color:#fff}
+  .sell-item .si-qty{font-size:9.5px;color:#8bb8d8}
+
+  .rank-row{display:flex;align-items:center;gap:10px;padding:9px 11px;
+    border-radius:9px;background:rgba(57,208,255,.04);
+    border:1px solid rgba(57,208,255,.15);margin-bottom:6px}
+  .rank-row.me{background:linear-gradient(180deg,rgba(255,210,74,.18),rgba(255,210,74,.05));
+    border-color:rgba(255,210,74,.6)}
+  .rank-row.top1{background:linear-gradient(180deg,rgba(255,215,0,.15),rgba(255,215,0,.02));
+    border-color:rgba(255,215,0,.5)}
+  .rank-row.top2{background:linear-gradient(180deg,rgba(192,192,192,.13),rgba(192,192,192,.02));
+    border-color:rgba(192,192,192,.4)}
+  .rank-row.top3{background:linear-gradient(180deg,rgba(205,127,50,.13),rgba(205,127,50,.02));
+    border-color:rgba(205,127,50,.4)}
+  .rank-pos{flex:0 0 32px;text-align:center;font-size:14px;font-weight:900;color:#8bb8d8}
+  .rank-avt{flex:0 0 auto;font-size:22px;line-height:1;width:28px;text-align:center}
+  .rank-info{flex:1;min-width:0}
+  .rank-name{font-size:11.5px;font-weight:800;color:#fff}
+  .rank-sub{font-size:9.5px;color:#8bb8d8;margin-top:1px}
+  .rank-bp{flex:0 0 auto;font-size:11px;font-weight:900;color:var(--neon)}
+
+  #modal,#encModal,#breakModal,#nameModal{position:absolute;inset:0;z-index:20;display:none;
+    background:rgba(2,4,12,.86);backdrop-filter:blur(4px);
+    align-items:center;justify-content:center;padding:12px}
+  #encModal{z-index:25}
+  #modal.on,#encModal.on,#breakModal.on,#nameModal.on{display:flex;animation:modalIn .25s ease-out}
+  @keyframes modalIn{from{opacity:0}to{opacity:1}}
+  .modal-box{width:100%;max-height:88%;background:linear-gradient(180deg,#0a1a38,#050912);
+    border:1px solid rgba(57,208,255,.45);border-radius:14px;
+    box-shadow:0 0 40px rgba(57,208,255,.25);display:flex;flex-direction:column;overflow:hidden;
+    animation:modalBoxIn .3s cubic-bezier(.2,.8,.3,1.2)}
+  @keyframes modalBoxIn{from{transform:scale(.85) translateY(20px);opacity:0}
+    to{transform:scale(1) translateY(0);opacity:1}}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;
+    font-size:12px;font-weight:900;letter-spacing:1.2px;color:var(--neon);
+    text-shadow:0 0 10px rgba(57,208,255,.6);border-bottom:1px solid rgba(57,208,255,.25);
+    background:rgba(57,208,255,.06)}
+  .modal-head button{background:rgba(255,59,92,.15);border:1px solid rgba(255,59,92,.5);
+    color:#ff8fa3;width:28px;height:28px;border-radius:7px;font-weight:900;cursor:pointer;font-size:14px}
+  #shopBody,#questBody{overflow-y:auto;padding:8px 10px 14px}
+  .shop-sec{margin-bottom:12px}
+  .shop-sec h4{font-size:10.5px;letter-spacing:1.5px;color:var(--purple);
+    text-shadow:0 0 8px rgba(176,107,255,.5);margin:6px 0 6px;padding-bottom:4px;
+    border-bottom:1px dashed rgba(176,107,255,.3)}
+  .shop-item{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    background:rgba(57,208,255,.05);border:1px solid rgba(57,208,255,.18);border-radius:9px;
+    padding:7px 9px;margin-bottom:6px}
+  .si-info2{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .si-info2 b{font-size:11.5px;color:#dff0ff;font-weight:800}
+  .si-info2 span{font-size:9.5px;color:#7fb0d0}
+  .si-info2 span.bp{color:var(--neon)}
+  .buy{flex:0 0 auto;border-radius:7px;padding:7px 10px;font-size:9.5px;font-weight:900;
+    font-family:inherit;cursor:pointer;color:#031018;
+    background:linear-gradient(180deg,#7fe8ff,#39d0ff);border:none;white-space:nowrap}
+  .buy:active{transform:scale(.94);filter:brightness(1.3)}
+  .buy.owned{background:linear-gradient(180deg,#0d5,#0a3);color:#02140c}
+  .buy.equipped{background:linear-gradient(180deg,#ffd24a,#e0a800);color:#2a1c00}
+  .buy.locked{background:rgba(255,255,255,.08);color:#5b6b7d;cursor:not-allowed}
+  .buy.no{background:linear-gradient(180deg,#ff7a8f,#ff3b5c);color:#2a0008}
+
+  .quest-card{background:rgba(176,107,255,.08);border:1px solid rgba(176,107,255,.3);
+    border-radius:10px;padding:10px;margin-bottom:8px}
+  .quest-card.done{background:rgba(255,210,74,.12);border-color:rgba(255,210,74,.6)}
+  .quest-card h5{font-size:11.5px;color:#fff;font-weight:800;margin-bottom:6px;
+    display:flex;justify-content:space-between;align-items:center}
+  .quest-card h5 .tag{font-size:9px;padding:2px 6px;border-radius:5px;
+    background:rgba(176,107,255,.25);color:#e0c4ff;letter-spacing:1px}
+  .quest-card.done h5 .tag{background:rgba(255,210,74,.4);color:#fff}
+  .quest-progress-bar{height:8px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden;margin:6px 0}
+  .quest-progress-bar .fill{height:100%;background:linear-gradient(90deg,#b06bff,#ffd24a);
+    box-shadow:0 0 10px #b06bff;border-radius:4px;transition:width .4s}
+  .quest-progress-text{display:flex;justify-content:space-between;
+    font-size:9.5px;color:#b8a8d0;margin-top:3px}
+  .quest-reward{font-size:10px;color:#ffd24a;margin-top:4px}
+  .quest-reward b{color:#fff}
+  .claim-btn{margin-top:8px;width:100%;padding:8px;border-radius:7px;border:none;
+    background:linear-gradient(180deg,#ffe27a,#ffb800);color:#2a1c00;font-weight:900;
+    font-family:inherit;font-size:11px;cursor:pointer}
+
+  .enc-box{width:100%;max-width:400px;background:linear-gradient(180deg,#1a0a38,#050912);
+    border:2px solid #b06bff;border-radius:16px;padding:18px 16px;
+    animation:encIn .4s cubic-bezier(.2,.8,.3,1.3);position:relative;overflow:hidden}
+  @keyframes encIn{from{transform:scale(.6) rotate(-3deg);opacity:0}
+    to{transform:scale(1) rotate(0);opacity:1}}
+  .enc-icon{font-size:52px;text-align:center;margin-bottom:8px}
+  .enc-title{font-size:16px;font-weight:900;letter-spacing:2px;text-align:center;
+    color:#ffd24a;text-shadow:0 0 14px #ffd24a;margin-bottom:6px}
+  .enc-desc{font-size:12px;text-align:center;color:#dcc9ff;line-height:1.5;margin-bottom:14px}
+  .enc-choices{display:flex;flex-direction:column;gap:8px}
+  .enc-choice{padding:11px 12px;border-radius:9px;border:1px solid rgba(255,210,74,.5);
+    background:linear-gradient(180deg,rgba(255,210,74,.15),rgba(176,107,255,.1));
+    color:#fff;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;
+    text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .enc-choice:active{transform:scale(.97)}
+  .enc-choice .cost{font-size:10px;color:#ffd24a}
+  .enc-choice.danger{border-color:rgba(255,59,92,.6);
+    background:linear-gradient(180deg,rgba(255,59,92,.2),rgba(120,0,30,.15))}
+  .enc-choice.safe{border-color:rgba(57,208,255,.5);
+    background:linear-gradient(180deg,rgba(57,208,255,.15),rgba(20,60,120,.1))}
+
+  .break-box{width:100%;max-width:380px;background:linear-gradient(180deg,#2a1a04,#0a0700);
+    border:2px solid #ffd24a;border-radius:16px;padding:20px 16px;
+    box-shadow:0 0 60px rgba(255,210,74,.5);animation:encIn .4s}
+  .break-icon{font-size:56px;text-align:center;margin-bottom:8px;
+    animation:breakFloat 1.5s ease-in-out infinite}
+  @keyframes breakFloat{0%,100%{transform:translateY(0) scale(1)}
+    50%{transform:translateY(-8px) scale(1.05)}}
+  .break-title{font-size:18px;font-weight:900;letter-spacing:3px;text-align:center;
+    color:#ffd24a;text-shadow:0 0 14px #ffd24a;margin-bottom:14px}
+  .break-info{background:rgba(0,0,0,.35);border:1px solid rgba(255,210,74,.35);
+    border-radius:10px;padding:10px 12px;font-size:11px;line-height:1.8;color:#ffe9a8;
+    margin-bottom:12px}
+  .break-info b{color:#fff}
+  .break-info .warn-rate{color:#ff3b5c;font-weight:900}
+  .break-info .good-rate{color:#00ffa3;font-weight:900}
+  .break-pill-info{background:rgba(127,255,212,.1);border:1px solid rgba(127,255,212,.4);
+    border-radius:10px;padding:10px 12px;font-size:11px;line-height:1.6;color:#b8ffe8;
+    margin-bottom:12px}
+  .break-pill-info b{color:#7fffd4}
+  .break-choices{display:flex;flex-direction:column;gap:8px}
+  .break-choice{padding:12px;border-radius:10px;border:none;cursor:pointer;
+    font-family:inherit;font-size:12.5px;font-weight:900;display:flex;flex-direction:column;gap:3px}
+  .break-choice:active{transform:scale(.97);filter:brightness(1.3)}
+  .break-choice.pill{background:linear-gradient(180deg,#7fffd4,#00b886);color:#021e17}
+  .break-choice.pill .sub{font-size:9.5px;color:#034a35;font-weight:700;opacity:.85}
+  .break-choice.nopill{background:linear-gradient(180deg,#ffe27a,#ffb800);color:#2a1c00}
+  .break-choice.nopill .sub{font-size:9.5px;color:#5a3a00;font-weight:700;opacity:.85}
+  .break-choice.cancel{background:rgba(255,255,255,.08);color:#fff;
+    border:1px solid rgba(255,255,255,.25)}
+
+  .name-box{width:100%;max-width:380px;background:linear-gradient(180deg,#0a1a38,#050912);
+    border:2px solid #39d0ff;border-radius:16px;padding:16px;
+    box-sizing:border-box;overflow:hidden}
+  .name-box h3{font-size:14px;font-weight:900;letter-spacing:2px;text-align:center;
+    color:var(--neon);margin-bottom:14px}
+  .name-label{font-size:10px;letter-spacing:1.5px;color:#8bb8d8;margin-bottom:5px;text-transform:uppercase}
+  .name-input{width:100%;padding:11px 12px;border-radius:9px;
+    background:rgba(57,208,255,.08);border:1px solid rgba(57,208,255,.4);
+    color:#fff;font-family:inherit;font-size:14px;font-weight:800;
+    margin-bottom:14px;outline:none;text-align:center}
+  .avatar-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin-bottom:14px;
+    width:100%;box-sizing:border-box;padding:0 2px}
+  .avatar-pick{aspect-ratio:1/1;min-width:0;min-height:0;border-radius:8px;
+    border:1px solid rgba(57,208,255,.25);background:rgba(57,208,255,.05);
+    font-size:clamp(14px,5vw,20px);line-height:1;cursor:pointer;padding:0;
+    display:flex;align-items:center;justify-content:center;font-family:inherit;
+    overflow:hidden;box-sizing:border-box;transition:all .12s}
+  .avatar-pick.active{border-color:rgba(255,210,74,.8);background:rgba(255,210,74,.15);
+    box-shadow:0 0 12px rgba(255,210,74,.5);transform:scale(1.05)}
+  .name-actions{display:flex;gap:8px}
+  .name-actions button{flex:1;padding:11px;border-radius:9px;border:none;cursor:pointer;
+    font-family:inherit;font-size:11.5px;font-weight:900}
+  .name-actions button.save{background:linear-gradient(180deg,#7fe8ff,#39d0ff);color:#031018}
+  .name-actions button.cancel{background:rgba(255,255,255,.08);color:#fff;
+    border:1px solid rgba(255,255,255,.25)}
+
+  .admin-badge{display:inline-block;padding:1px 7px;border-radius:6px;font-size:8.5px;
+    font-weight:900;letter-spacing:1px;background:linear-gradient(180deg,#ff3b5c,#c00);
+    color:#fff;box-shadow:0 0 8px rgba(255,59,92,.7);margin-left:4px;text-transform:uppercase}
+
+  /* ADMIN PANEL */
+  .admin-tab-row{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+  .admin-tab{flex:1;min-width:70px;padding:8px 4px;border-radius:8px;border:1px solid rgba(255,59,92,.3);
+    background:rgba(255,59,92,.05);color:#ff8fa3;font-family:inherit;
+    font-size:9.5px;font-weight:900;cursor:pointer;letter-spacing:.5px}
+  .admin-tab.active{background:linear-gradient(180deg,rgba(255,59,92,.3),rgba(255,59,92,.1));
+    color:#fff;border-color:rgba(255,59,92,.7);box-shadow:0 0 14px rgba(255,59,92,.4)}
+  .admin-form{background:rgba(255,59,92,.06);border:1px solid rgba(255,59,92,.3);
+    border-radius:10px;padding:12px;margin-bottom:10px}
+  .admin-form h4{font-size:11.5px;color:#ff8fa3;font-weight:900;margin-bottom:8px;letter-spacing:1px}
+  .admin-form label{display:block;font-size:9.5px;color:#8bb8d8;letter-spacing:1px;
+    margin:8px 0 4px;text-transform:uppercase;font-weight:800}
+  .admin-form input,.admin-form select,.admin-form textarea{width:100%;padding:9px 10px;
+    border-radius:8px;background:rgba(255,59,92,.06);border:1px solid rgba(255,59,92,.3);
+    color:#fff;font-family:inherit;font-size:12px;font-weight:700;outline:none;
+    -webkit-appearance:none;appearance:none}
+  .admin-form input:focus,.admin-form select:focus,.admin-form textarea:focus{
+    border-color:rgba(255,59,92,.8);box-shadow:0 0 10px rgba(255,59,92,.4)}
+  .admin-form select option{background:#0a1a38;color:#fff}
+  .admin-form textarea{min-height:70px;resize:vertical;font-family:inherit}
+  .admin-btn{width:100%;padding:10px;border-radius:8px;border:none;cursor:pointer;
+    font-family:inherit;font-size:11px;font-weight:900;letter-spacing:1px;margin-top:10px;
+    background:linear-gradient(180deg,#ff8a8a,#ff3b5c);color:#fff;
+    box-shadow:0 0 14px rgba(255,59,92,.5)}
+  .admin-btn:active{transform:scale(.97);filter:brightness(1.3)}
+  .admin-btn.green{background:linear-gradient(180deg,#7fffd4,#00b886);color:#021e17}
+  .admin-btn.gold{background:linear-gradient(180deg,#ffe27a,#ffb800);color:#2a1c00}
+  .admin-btn.purple{background:linear-gradient(180deg,#c99bff,#8a3fd9);color:#fff}
+  .admin-user{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;
+    background:rgba(255,59,92,.06);border:1px solid rgba(255,59,92,.25);margin-bottom:7px}
+  .admin-user .au-avt{font-size:22px;flex:0 0 auto}
+  .admin-user .au-info{flex:1;min-width:0}
+  .admin-user .au-name{font-size:11.5px;font-weight:800;color:#fff}
+  .admin-user .au-sub{font-size:9px;color:#8bb8d8;margin-top:2px}
+  .admin-user.banned{opacity:.6}
+  .admin-user .au-actions{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
+  .admin-user .au-actions button{border:none;border-radius:6px;padding:5px 9px;
+    font-family:inherit;font-size:9px;font-weight:900;cursor:pointer;white-space:nowrap}
+  .admin-user .au-actions .edit{background:linear-gradient(180deg,#7fe8ff,#39d0ff);color:#031018}
+  .admin-user .au-actions .ban{background:linear-gradient(180deg,#ffe27a,#ffb800);color:#2a1c00}
+  .admin-user .au-actions .unban{background:linear-gradient(180deg,#7fffd4,#00b886);color:#021e17}
+  .admin-user .au-actions .del{background:linear-gradient(180deg,#ff7a8f,#ff3b5c);color:#2a0008}
+  .event-card{background:rgba(176,107,255,.08);border:1px solid rgba(176,107,255,.35);
+    border-radius:10px;padding:10px;margin-bottom:7px}
+  .event-card h5{font-size:11.5px;color:#fff;font-weight:800;margin-bottom:4px}
+  .event-card .ev-info{font-size:9.5px;color:#8bb8d8;line-height:1.5}
+  .event-card .ev-time{font-size:10px;color:#ffd24a;font-weight:800;margin-top:4px}
+  .event-card button{margin-top:6px;padding:5px 10px;border:none;border-radius:6px;
+    background:linear-gradient(180deg,#ff7a8f,#ff3b5c);color:#2a0008;
+    font-family:inherit;font-size:9px;font-weight:900;cursor:pointer}
+
+  #broadcastModal{position:absolute;inset:0;z-index:200;display:none;background:rgba(2,4,12,.92);
+    backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:14px}
+  #broadcastModal.on{display:flex;animation:modalIn .3s ease-out}
+  .bc-box{width:100%;max-width:420px;background:linear-gradient(180deg,#2a0410,#0a0206);
+    border:2px solid #ff3b5c;border-radius:16px;padding:18px 16px;
+    box-shadow:0 0 60px rgba(255,59,92,.5)}
+  .bc-icon{font-size:52px;text-align:center;margin-bottom:8px;
+    filter:drop-shadow(0 0 20px #ff3b5c);animation:bcShake .5s infinite alternate}
+  @keyframes bcShake{from{transform:rotate(-6deg) scale(1)}to{transform:rotate(6deg) scale(1.08)}}
+  .bc-title{font-size:14px;font-weight:900;letter-spacing:3px;text-align:center;
+    color:#ff8fa3;text-shadow:0 0 14px #ff3b5c;margin-bottom:12px}
+  .bc-msg{background:rgba(0,0,0,.4);border:1px solid rgba(255,59,92,.35);
+    border-radius:10px;padding:12px;font-size:12.5px;line-height:1.7;color:#fff;
+    margin-bottom:10px;white-space:pre-wrap;word-break:break-word;max-height:220px;overflow-y:auto}
+  .bc-from{font-size:9.5px;color:#8bb8d8;text-align:center;margin-bottom:12px}
+  .bc-btn{width:100%;padding:12px;border-radius:10px;border:none;cursor:pointer;
+    font-family:inherit;font-size:12px;font-weight:900;letter-spacing:1px;
+    background:linear-gradient(180deg,#ff8a8a,#ff3b5c);color:#fff}
+  .bc-btn:active{transform:scale(.97);filter:brightness(1.3)}
+
+  #activeEventsBar{display:none;margin-bottom:8px;padding:6px 9px;border-radius:9px;
+    background:rgba(176,107,255,.12);border:1px solid rgba(176,107,255,.45);
+    font-size:10px;color:#dcc9ff;line-height:1.5}
+  #activeEventsBar.on{display:block}
+  #activeEventsBar .ae-line{display:flex;align-items:center;gap:5px;margin:2px 0}
+  #activeEventsBar .ae-line b{color:#ffd24a}
+</style>
+</head>
+<body class="not-logged">
+<div id="app">
+  <div id="shakeInner">
+    <div id="stars"></div>
+    <div id="flashLayer"></div>
+
+    <div id="authOverlay" class="auth-overlay">
+      <div class="auth-box">
+        <div class="auth-logo">🌌 TINH KHÔNG</div>
+        <div class="auth-sub">THÔN PHỆ ĐẠI LỤC</div>
+        <div class="auth-tabs">
+          <button class="active" data-auth="login">ĐĂNG NHẬP</button>
+          <button data-auth="register">TẠO ACC</button>
+        </div>
+        <div id="authForm"></div>
+        <div id="authMsg" class="auth-msg"></div>
+      </div>
+    </div>
+
+    <header id="hud">
+      <div class="hud-top">
+        <div class="realm-box">
+          <div class="label">CẢNH GIỚI</div>
+          <div class="value" id="realmName">Chiến Sĩ Cấp 1</div>
+        </div>
+        <div class="cur-box">
+          <div class="cur" id="goldWrap">💰 <span id="gold">0</span></div>
+          <div class="cur cry" id="cryWrap">💎 <span id="crystal">0</span></div>
+          <div class="cur stone" id="stoneWrap">🪨 <span id="stone">0</span></div>
+        </div>
+      </div>
+      <div class="bp-line">
+        <span>LỰC CHIẾN: <span id="bpVal">100</span></span>
+        <span class="buffs" id="buffTag"></span>
+        <span id="devourTag">🐉 ×2.5</span>
+      </div>
+      <div class="bar hp-bar" id="hpBar">
+        <div class="fill" id="hpFill"></div>
+        <span id="hpText">0/0</span>
+      </div>
+      <div id="questMini">
+        <span class="qm-icon">📜</span>
+        <span class="qm-text" id="qmText">Đang tải...</span>
+        <div class="qm-bar"><div class="qm-fill" id="qmFill"></div></div>
+      </div>
+    </header>
+
+    <div id="mainWrap">
+      <main id="screenCombat" class="screen">
+        <div id="arena">
+          <div class="zone-bar">
+            <button id="zonePrev">◀</button>
+            <div id="zoneName">KHU VỰC 1</div>
+            <button id="zoneNext">▶</button>
+          </div>
+          <div id="bossTimerWrap">
+            <div class="timer-bar" id="bossTimerBar">
+              <div class="fill" id="bossTimerFill"></div>
+              <span id="bossTimerText">BOSS NỔI ĐIÊN: 15.0s</span>
+            </div>
+          </div>
+          <div id="enemyWrap">
+            <div id="enemySprite">👾</div>
+            <div id="enemyName">Tinh Không Thú</div>
+            <div id="enemyInfo">BP: 0</div>
+            <div class="bar e-hp" id="ehpBar">
+              <div class="fill" id="ehpFill"></div>
+              <span id="ehpText"></span>
+            </div>
+            <div id="playerWrap"><span id="playerSprite">🧙</span></div>
+            <div id="combo">0<span> COMBO</span></div>
+            <div id="combatTag">⚔ ĐANG GIAO CHIẾN</div>
+          </div>
+          <button id="portalBtn">🌀 BÍ CẢNH</button>
+          <div id="floatLayer"></div>
+          <div id="bossIntro"><div class="introTxt">BOSS!!</div></div>
+        </div>
+      </main>
+
+      <div id="screenLobby" class="screen">
+        <div id="activeEventsBar"></div>
+        <div class="lobby-profile">
+          <div class="avatar-box">
+            <span class="avatar-icon" id="lobbyAvatar">🧙‍♂️</span>
+            <span class="edit-tag">✎</span>
+          </div>
+          <div class="lobby-profile-info">
+            <div class="p-name" id="lobbyName">Tu Chân Giả</div>
+            <div class="p-realm" id="lobbyRealm">Chiến Sĩ Cấp 1</div>
+            <div class="p-bp" id="lobbyBP">Lực chiến: 100</div>
+            <div class="p-classes" id="lobbyClasses">Hệ: —</div>
+          </div>
+          <button class="lobby-edit-btn" data-action="edit-profile">SỬA</button>
+        </div>
+
+        <div class="lobby-classes" id="lobbyClassTags"></div>
+
+        <div class="lobby-grid">
+          <button class="lobby-btn primary" data-screen="combat">
+            <span class="lb-icon">⚔️</span><span class="lb-name">ĐI CÀY</span>
+            <span class="lb-desc">Chiến trường</span>
+          </button>
+          <button class="lobby-btn breakout" data-action="breakthrough">
+            <span class="lb-icon">⚡</span><span class="lb-name">ĐỘT PHÁ CẢNH GIỚI</span>
+            <span class="lb-desc" id="lobbyBreakCost">—</span>
+          </button>
+          <button class="lobby-btn" data-screen="sect"><span class="lb-icon">🏯</span><span class="lb-name">TÔNG MÔN</span></button>
+          <button class="lobby-btn" data-screen="inventory"><span class="lb-icon">🎒</span><span class="lb-name">ĐỒ</span></button>
+          <button class="lobby-btn" data-screen="info"><span class="lb-icon">📊</span><span class="lb-name">THÔNG TIN</span></button>
+          <button class="lobby-btn" data-action="shop"><span class="lb-icon">🛒</span><span class="lb-name">CỬA HÀNG</span></button>
+          <button class="lobby-btn" data-screen="market"><span class="lb-icon">🏪</span><span class="lb-name">CHỢ CĐ</span></button>
+          <button class="lobby-btn" data-screen="rank"><span class="lb-icon">🏆</span><span class="lb-name">XẾP HẠNG</span></button>
+          <button class="lobby-btn" data-action="quest" id="lobbyQuestBtn">
+            <span class="lb-icon">📜</span><span class="lb-name">NHIỆM VỤ</span>
+            <span class="badge" id="lobbyQuestBadge" style="display:none">0</span>
+          </button>
+          <button class="lobby-btn portal" data-action="portal" id="lobbyPortalBtn" style="display:none">
+            <span class="lb-icon">🌀</span><span class="lb-name">BÍ CẢNH ĐANG MỞ!</span>
+          </button>
+          <button class="lobby-btn admin" data-screen="admin" id="lobbyAdminBtn" style="display:none;grid-column:span 3;background:linear-gradient(180deg,rgba(255,210,74,.3),rgba(180,130,0,.1));border-color:rgba(255,210,74,.8)">
+            <span class="lb-icon">👑</span><span class="lb-name">ADMIN PANEL</span>
+            <span class="lb-desc">Quản lý server</span>
+          </button>
+          <button class="lobby-btn admin" data-action="logout" style="grid-column:span 3">
+            <span class="lb-icon">🚪</span><span class="lb-name">ĐĂNG XUẤT</span>
+          </button>
+        </div>
+
+        <div class="lobby-info">
+          <b>💡 Mẹo:</b> Đột phá ở Lobby — dùng <b>Đan Dược</b> để tăng tỉ lệ thành công.
+          Đá <b>🪨</b> rơi 1% khi diệt quái. Bí Tịch <b>📕</b> rơi từ Boss/Bí cảnh — dùng để học hệ mới hoặc bán ở Chợ Cộng Đồng!
+        </div>
+      </div>
+
+      <div id="screenSect" class="screen">
+        <div class="screen-header"><button data-close>←</button><h2>🏯 TÔNG MÔN</h2><div class="spacer"></div></div>
+        <div id="sectBody"></div>
+      </div>
+
+      <div id="screenInventory" class="screen">
+        <div class="screen-header"><button data-close>←</button><h2>🎒 ĐỒ</h2><div class="spacer"></div></div>
+        <div id="invBody"></div>
+      </div>
+
+      <div id="screenInfo" class="screen">
+        <div class="screen-header"><button data-close>←</button><h2>📊 THÔNG TIN</h2><div class="spacer"></div></div>
+        <div id="infoBody"></div>
+      </div>
+
+      <div id="screenRank" class="screen">
+        <div class="screen-header"><button data-close>←</button><h2>🏆 XẾP HẠNG</h2><div class="spacer"></div></div>
+        <div id="rankBody"></div>
+      </div>
+
+      <div id="screenMarket" class="screen">
+        <div class="screen-header"><button data-close>←</button><h2>🏪 CHỢ CỘNG ĐỒNG</h2><div class="spacer"></div></div>
+        <div class="market-tabs">
+          <button class="market-tab active" data-mtab="buy">🛒 MUA</button>
+          <button class="market-tab" data-mtab="sell">💰 BÁN</button>
+        </div>
+        <div id="marketBody"></div>
+      </div>
+
+      <div id="screenAdmin" class="screen">
+        <div class="screen-header">
+          <button data-close>←</button>
+          <h2>👑 ADMIN PANEL</h2>
+          <div class="spacer"></div>
+        </div>
+        <div class="admin-tab-row">
+          <button class="admin-tab active" data-atab="gift">🎁 TẶNG</button>
+          <button class="admin-tab" data-atab="manage">👥 QUẢN LÝ</button>
+          <button class="admin-tab" data-atab="broadcast">📢 THÔNG BÁO</button>
+          <button class="admin-tab" data-atab="events">🎉 EVENT</button>
+        </div>
+        <div id="adminBody"></div>
+      </div>
+    </div>
+
+    <div id="logBox"></div>
+
+    <footer id="controls">
+      <div class="btn-row">
+        <button class="btn attack" id="btnAttack">⚔️ TẤN CÔNG</button>
+        <button class="btn small" id="btnAuto">AUTO: OFF</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn devour" id="btnDevour">🐉 THÔN PHỆ</button>
+        <button class="btn boss" id="btnBoss">👑 BOSS</button>
+        <button class="btn back" id="btnHome">🏠</button>
+      </div>
+    </footer>
+
+    <div id="modal">
+      <div class="modal-box">
+        <div class="modal-head">
+          <span id="modalTitle">🛒 CỬA HÀNG</span>
+          <button id="closeModal">✕</button>
+        </div>
+        <div id="shopBody"></div>
+        <div id="questBody" style="display:none"></div>
+      </div>
+    </div>
+
+    <div id="encModal">
+      <div class="enc-box">
+        <div class="enc-icon" id="encIcon">🔮</div>
+        <div class="enc-title" id="encTitle">KỲ NGỘ</div>
+        <div class="enc-desc" id="encDesc"></div>
+        <div class="enc-choices" id="encChoices"></div>
+      </div>
+    </div>
+
+    <div id="breakModal">
+      <div class="break-box">
+        <div class="break-icon">⚡</div>
+        <div class="break-title">ĐỘT PHÁ CẢNH GIỚI</div>
+        <div class="break-info" id="breakInfo"></div>
+        <div class="break-pill-info" id="breakPillInfo" style="display:none"></div>
+        <div class="break-choices" id="breakChoices"></div>
+      </div>
+    </div>
+
+    <div id="nameModal">
+      <div class="name-box">
+        <h3>✎ CHỈNH HỒ SƠ</h3>
+        <div class="name-label">Tên nhân vật</div>
+        <input class="name-input" id="nameInput" maxlength="16" placeholder="Nhập tên..." />
+        <div class="name-label">Ảnh đại diện</div>
+        <div class="avatar-grid" id="avatarGrid"></div>
+        <div class="name-actions">
+          <button class="cancel" data-name="cancel">HỦY</button>
+          <button class="save" data-name="save">💾 LƯU</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="broadcastModal">
+      <div class="bc-box">
+        <div class="bc-icon">📢</div>
+        <div class="bc-title">THÔNG BÁO TOÀN SERVER</div>
+        <div class="bc-msg" id="bcMsg"></div>
+        <div class="bc-from" id="bcFrom"></div>
+        <button class="bc-btn" id="closeBroadcast">✓ ĐÃ HIỂU</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   THÔN PHỆ TINH KHÔNG — LOCAL EDITION (không Firebase)
+   ========================================================= */
+
+const ACCOUNTS_KEY = 'thonphe_accounts_v3';
+const CURRENT_KEY = 'thonphe_current_v3';
+const MARKET_KEY = 'thonphe_market_v3';
+const GLOBAL_KEY = 'thonphe_global_v3';
+
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = '25082007Hieu@';
+
+const REALMS = [
+  { n:'Chiến Sĩ Cấp 1',   bp:100,       hp:1200 },
+  { n:'Chiến Sĩ Cấp 2',   bp:350,       hp:2400 },
+  { n:'Chiến Sĩ Cấp 3',   bp:1000,      hp:4500 },
+  { n:'Chiến Tướng',      bp:3500,      hp:9000 },
+  { n:'Chiến Thần',       bp:12000,     hp:18000 },
+  { n:'Hành Tinh Cấp',    bp:45000,     hp:38000 },
+  { n:'Hằng Tinh Cấp',    bp:160000,    hp:78000 },
+  { n:'Vũ Trụ Cấp',       bp:600000,    hp:165000 },
+  { n:'Vực Chủ',          bp:2400000,   hp:350000 },
+  { n:'Giới Chủ',         bp:10000000,  hp:760000 },
+  { n:'Bất Hủ Chân Thần', bp:45000000,  hp:1700000 }
+];
+const BREAK_RATE = [0.85,0.78,0.70,0.60,0.50,0.40,0.30,0.22,0.14,0.08];
+const PILL_BREAK_BONUS = 0.20;
+const SECT_STONE_DROP = 0.01;
+const SECT_STONE_JOIN_BONUS = 5;
+const MANUAL_DROP_CHANCE = 0.05;
+const MANUAL_REALM_DROP_CHANCE = 0.12;
+
+const CLASSES = [
+  { id:'melee',   name:'Cận Chiến',  icon:'⚔️', desc:'+15% sát thương', bonus:{ dmg:0.15 } },
+  { id:'psychic', name:'Niệm Lực',   icon:'🧠', desc:'+20% BP', bonus:{ bp:0.20 } },
+  { id:'speed',   name:'Tốc Độ',     icon:'💨', desc:'-18% cooldown đánh', bonus:{ cd:-0.18 } },
+  { id:'defense', name:'Phòng Ngự',  icon:'🛡️', desc:'+25% HP, +5% giảm thương', bonus:{ hp:0.25, dr:0.05 } },
+  { id:'body',    name:'Thể Chất',   icon:'💪', desc:'+60% hồi HP', bonus:{ regen:0.60 } }
+];
+const CLASS_MAP = Object.fromEntries(CLASSES.map(c => [c.id, c]));
+
+const MANUALS = {};
+CLASSES.forEach(c => {
+  MANUALS[c.id] = { id: c.id, name: 'Bí Tịch ' + c.name, icon: '📕', classId: c.id,
+    desc: 'Học hệ ' + c.name + ' — ' + c.desc };
+});
+
+const WEAPONS = [
+  { n:'Huyết Ảnh Đao',      bp:400,      cost:600,        cry:0 },
+  { n:'Tinh Hà Thần Đao',   bp:2000,     cost:8000,       cry:0 },
+  { n:'Tinh Thần Phi Đao',  bp:12000,    cost:100000,     cry:0 },
+  { n:'Diệt Tinh Đao',      bp:120000,   cost:2000000,    cry:0 },
+  { n:'Hỗn Độn Thần Đao',   bp:1200000,  cost:40000000,   cry:50 }
+];
+const ARMORS = [
+  { n:'Giáp Tác Chiến D1', bp:200,      cost:500,         cry:0,   dr:0.05 },
+  { n:'Giáp Tác Chiến D2', bp:700,      cost:3000,        cry:0,   dr:0.09 },
+  { n:'Giáp Tác Chiến D3', bp:2500,     cost:15000,       cry:0,   dr:0.13 },
+  { n:'Giáp Tác Chiến D4', bp:9000,     cost:90000,       cry:0,   dr:0.17 },
+  { n:'Giáp Tác Chiến D5', bp:35000,    cost:600000,      cry:0,   dr:0.21 },
+  { n:'Giáp Tác Chiến D6', bp:130000,   cost:4000000,     cry:0,   dr:0.25 },
+  { n:'Giáp Tác Chiến D7', bp:500000,   cost:25000000,    cry:0,   dr:0.29 },
+  { n:'Giáp Tác Chiến D8', bp:2000000,  cost:150000000,   cry:0,   dr:0.33 },
+  { n:'Giáp Tác Chiến D9', bp:8000000,  cost:900000000,   cry:0,   dr:0.38 },
+  { n:'Giáp Bất Hủ',       bp:40000000, cost:0,           cry:300, dr:0.55 }
+];
+const BEASTS = [
+  ['👾','Tinh Không Thú'], ['🐺','Huyết Ma Lang'], ['🦂','Thiết Giáp Tê'],
+  ['🐍','Kim Giáp Cự Xà'], ['🦇','Hắc Ám Bức'],   ['🕷️','Hư Không Nhện'],
+  ['🦖','Viêm Long Thú'],  ['🐲','Lôi Đình Giao'], ['🦈','Tinh Thạch Sa'],
+  ['🦅','Ma Nhãn Quạ'],    ['🐻','Cuồng Bạo Viên'],['🦎','Băng Tinh Triết']
+];
+const BOSSES = [
+  'Kim Giác Cự Thú','Huyết Ảnh Ma Vương','Tinh Không Cự Thú','Hắc Động Chi Chủ',
+  'Vũ Trụ Bá Chủ','Hỗn Độn Tà Thần','Thôn Phệ Chi Vương','Bất Hủ Ma Thần',
+  'Hư Không Giới Chủ','Sáng Thế Tinh Linh','Chung Cực Tà Thần'
+];
+const SECTS = [
+  { id:'thanhvan',  name:'Thanh Vân Tông', icon:'☁️', desc:'Tu luyện thanh tao',
+    buffType:'bp',      perLv:0.03, buffName:'BP' },
+  { id:'huetsat',   name:'Huyết Sát Tông', icon:'🩸', desc:'Sát phạt tông môn',
+    buffType:'dmg',     perLv:0.03, buffName:'Sát thương' },
+  { id:'thienco',   name:'Thiên Cơ Các',  icon:'🔮', desc:'Thương nhân tu chân',
+    buffType:'gold',    perLv:0.04, buffName:'Vàng' },
+  { id:'tinhkhong', name:'Tinh Không Các', icon:'✨', desc:'Săn tinh thạch',
+    buffType:'crystal', perLv:0.03, buffName:'Tinh thạch' },
+  { id:'batdiet',   name:'Bất Diệt Cung',  icon:'🛡️', desc:'Phòng ngự tuyệt đối',
+    buffType:'tank',    perLv:0.03, buffName:'HP+Giảm thương' }
+];
+const SECT_STONE_COST = [2, 5, 8, 14, 22, 35, 55, 85, 130];
+
+const REALM_TIERS = [
+  { name:'Phàm Cấp Bí Cảnh',   icon:'🌟', bpMult:1.5, hpMult:8, time:30, reward:{gold:3, cry:2 } },
+  { name:'Linh Cấp Bí Cảnh',   icon:'✨', bpMult:2.0, hpMult:10,time:30, reward:{gold:8, cry:5 } },
+  { name:'Thánh Cấp Bí Cảnh',  icon:'💫', bpMult:2.5, hpMult:12,time:30, reward:{gold:20,cry:12} },
+  { name:'Thần Cấp Bí Cảnh',   icon:'🌠', bpMult:3.2, hpMult:15,time:35, reward:{gold:50,cry:25} }
+];
+
+const ENCOUNTERS = [
+  { id:'cave', icon:'🏛️', title:'CỔ ĐỘNG PHỦ',
+    desc:'Bạn phát hiện một cổ động phủ với linh khí nồng đậm.',
+    choices:[
+      { text:'⚔️ Tiến vào khiêu chiến', desc:'Nguy hiểm cao', cls:'danger', onPick:()=>enterRealm(2) },
+      { text:'🚪 Bỏ qua an toàn', desc:'Không mất gì', cls:'safe', onPick:()=>log('Bạn rời đi.') }
+    ] },
+  { id:'elder', icon:'🧙‍♂️', title:'THẦN BÍ LÃO NHÂN',
+    desc:'"Ta có thể truyền cho ngươi chút đạo vận..."',
+    choices:[
+      { text:'💎 Dâng 5 tinh thạch', desc:'+30% BP 60s', check:()=>state.crystals>=5,
+        onPick:()=>{ state.crystals-=5; addBuff(1.3,60000,'ĐẠO VẬN'); log('🧙 Ban đạo vận!','epic'); } },
+      { text:'🙏 Từ chối', desc:'Bỏ qua', cls:'safe', onPick:()=>log('Lão nhân tan thành khói.') }
+    ] },
+  { id:'stone', icon:'🪨', title:'NGỘ ĐẠO THẠCH',
+    desc:'Một tảng đá cổ khắc phù văn phát sáng.',
+    choices:[
+      { text:'🧘 Ngồi thiền ngộ đạo', desc:'+50% BP 45s',
+        onPick:()=>{ addBuff(1.5,45000,'NGỘ ĐẠO'); log('🌟 BP ×1.5 (45s)!','epic'); auraBurst(); } },
+      { text:'⚡ Đập vỡ lấy linh thạch', desc:'+vàng',
+        onPick:()=>{ const g=Math.max(500,Math.floor(playerBP()*2));
+          state.gold+=g; bumpCurrency('gold'); log(`Nhận ${fmt(g)} vàng.`,'good'); } }
+    ] },
+  { id:'demon', icon:'😈', title:'MA KHÍ XÂM NHẬP',
+    desc:'Một luồng ma khí đen ngòm bao phủ lấy bạn.',
+    choices:[
+      { text:'💀 Hấp thụ ma khí', desc:'-40% HP, +3💎', cls:'danger',
+        onPick:()=>{ state.hp=Math.max(1,Math.floor(state.hp*0.6));
+          state.crystals+=3; bumpCurrency('cry'); playerHurtAnim(); screenFlash('red');
+          log('💀 Ma khí tràn vào!','bad'); } },
+      { text:'🛡️ Kháng cự', desc:'An toàn', cls:'safe', onPick:()=>log('Bạn đẩy lùi ma khí.') }
+    ] },
+  { id:'merchant', icon:'🛒', title:'THƯƠNG NHÂN HUYỀN BÍ',
+    desc:'"Ta có đan dược quý, đổi lấy vàng..."',
+    choices:[
+      { text:'💰 Mua 2 đan dược (50K vàng)', desc:'+2 đan dược', check:()=>state.gold>=50000,
+        onPick:()=>{ state.gold-=50000; state.pills+=2; log('💊 Mua 2 đan dược!','good'); } },
+      { text:'🙅 Từ chối', desc:'Không mua', cls:'safe', onPick:()=>log('Thương nhân biến mất.') }
+    ] },
+  { id:'thunder', icon:'⚡', title:'LÔI ĐÌNH TÀN DƯ',
+    desc:'Một quả cầu lôi điện còn sót lại đang lơ lửng.',
+    choices:[
+      { text:'⚡ Chạm vào lôi cầu', desc:'Rủi ro cao', cls:'danger',
+        onPick:()=>{ if(Math.random()<0.6){ state.crystals+=5; bumpCurrency('cry');
+            addBuff(1.4,40000,'LÔI ĐÌNH'); log('⚡ +5💎, BP ×1.4','epic'); auraBurst();
+          } else { state.hp=Math.max(1,Math.floor(state.hp*0.5));
+            playerHurtAnim(); lightningStrike(); log('⚡ Lôi điện phản phệ!','bad'); } } },
+      { text:'🚶 Rời đi', desc:'Không gì', cls:'safe', onPick:()=>{} }
+    ] }
+];
+
+const AVATARS = ['🧙‍♂️','🧝‍♂️','🧛‍♂️','🥷','🧑‍🚀','🧑‍🔬','🦸‍♂️','👨‍🚀','🧑‍🎓','🧑‍🏫','🧑‍💻','🧑‍🎤',
+                 '🧑‍🚒','🧑‍✈️','🧑‍⚕️','🧑‍🌾','🧑‍🍳','🧑‍💼','🧑‍🔧','🧑‍🎨','🧑‍⚖️','🧑‍🏭','🧑‍🎮','🧑‍🚁'];
+
+const NPC_SELLERS = ['Tiêu Viêm','Lâm Phong','Đường Tam','Hàn Lập','Diệp Phàm','Thạch Hạo',
+  'Lý Thất Dạ','Tần Trần','Lộc Hàm','Vương Lâm','Sở Phong','Nhạc Phong','Mạnh Xuyên',
+  'Lôi Thần','Bách Lý','Hắc Long','Tần Mục','Vân Triệt','Trần Nam','Tô Minh','Lâm Nặc'];
+
+const EVENT_TYPES = [
+  { id:'gold_mult',    name:'x2 Vàng',        icon:'💰', desc:'Nhân vàng rơi' },
+  { id:'crystal_mult', name:'x2 Tinh Thạch',  icon:'💎', desc:'Nhân tinh thạch rơi' },
+  { id:'stone_mult',   name:'x2 Đá TM',       icon:'🪨', desc:'Nhân tỉ lệ rơi đá tông môn' },
+  { id:'bp_mult',      name:'x1.5 BP',        icon:'⚡', desc:'Nhân lực chiến' },
+  { id:'drop_mult',    name:'x2 Bí Tịch',     icon:'📕', desc:'Nhân tỉ lệ rơi bí tịch' }
+];
+
+const $ = id => document.getElementById(id);
+const ATK_CD_BASE = 280;
+const COMBAT_RESET = 2500;
+
+function fmt(n){
+  n = Math.floor(n);
+  if (!isFinite(n)) return '∞';
+  if (n < 1000) return '' + n;
+  if (n < 1e6)  return (n/1e3).toFixed(1).replace(/\.0$/,'') + 'K';
+  if (n < 1e9)  return (n/1e6).toFixed(2).replace(/\.00$/,'') + 'M';
+  if (n < 1e12) return (n/1e9).toFixed(2).replace(/\.00$/,'') + 'B';
+  if (n < 1e15) return (n/1e12).toFixed(2).replace(/\.00$/,'') + 'T';
+  return (n/1e15).toFixed(2) + 'Qa';
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ===== STATE ===== */
+function freshState(){
+  return {
+    realm: 0, gold: 0, crystals: 0, hp: 1200,
+    weapon: -1, armor: -1, zone: 0, kills: 0, pills: 0,
+    auto: false,
+    devourUntil: 0, devourCd: 0,
+    killsBoss: 0, realmClears: 0, breaks: 0, breaksFailed: 0,
+    name: 'Tu Chân Giả',
+    avatar: '🧙‍♂️',
+    sectStones: 0,
+    sectId: null, sectLevel: 0,
+    firstSectJoined: false,
+    classes: [],
+    manuals: {},
+    quests: [],
+    lastBroadcastId: 0,
+    /* Các field dùng trong combat */
+    screen: 'lobby',
+    lastCombatAt: 0,
+    attackCd: 0,
+    lockUntil: 0,
+    dead: false,
+    bossActive: false,
+    bossEnd: 0,
+    portal: null,
+    inRealm: false,
+    realmEnd: 0,
+    realmTier: 0,
+    encounterOpen: false,
+    bpBuff: 0,
+    bpBuffUntil: 0,
+    bpBuffName: '',
+    sessionStart: Date.now(),
+    accountCreatedAt: Date.now()
+  };
+}
+let state = freshState();
+let isAdmin = false;
+let enemy = null;
+let comboCount = 0;
+let comboTimer = 0;
+let lastTickTime = Date.now();
+let marketTab = 'buy';
+let adminTab = 'gift';
+let authTab = 'login';
+let regClassId = 'melee';
+
+/* ===== LOCAL STORAGE HELPERS ===== */
+function getAccounts(){
+  try {
+    const raw = localStorage.getItem(ACCOUNTS_KEY);
+    if (!raw) return {};
+    return JSON.parse(raw) || {};
+  } catch(e){ return {}; }
+}
+function setAccounts(obj){
+  try { localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(obj)); } catch(e){}
+}
+function getCurrentUser(){
+  try { return localStorage.getItem(CURRENT_KEY) || null; } catch(e){ return null; }
+}
+function setCurrentUser(u){
+  try { if (u) localStorage.setItem(CURRENT_KEY, u); else localStorage.removeItem(CURRENT_KEY); } catch(e){}
+}
+function hashPass(s){
+  let h = 0;
+  for (let i = 0; i < s.length; i++){
+    h = ((h << 5) - h) + s.charCodeAt(i);
+    h |= 0;
+  }
+  return 'h' + Math.abs(h).toString(36);
+}
+function createAccount(u, p, classId){
+  const accounts = getAccounts();
+  if (accounts[u]) return { ok:false, msg:'Tên đã tồn tại!' };
+  if (u === ADMIN_USER) return { ok:false, msg:'Tên này không được dùng!' };
+  const s = freshState();
+  s.name = u;
+  s.classes = [classId];
+  accounts[u] = {
+    username: u,
+    passHash: hashPass(p),
+    isAdmin: false,
+    banned: false,
+    banReason: '',
+    createdAt: Date.now(),
+    save: serializeState(s)
+  };
+  setAccounts(accounts);
+  return { ok:true };
+}
+function loginAccount(u, p){
+  const accounts = getAccounts();
+  const acc = accounts[u];
+  if (!acc) return { ok:false, msg:'Tài khoản không tồn tại!' };
+  if (acc.passHash !== hashPass(p)) return { ok:false, msg:'Sai mật khẩu!' };
+  if (acc.banned) return { ok:false, msg:'🚫 Tài khoản đã bị khóa: ' + (acc.banReason || 'Không rõ lý do') };
+  return { ok:true, acc };
+}
+
+function serializeState(s){
+  return {
+    realm: s.realm, gold: s.gold, crystals: s.crystals, hp: s.hp,
+    weapon: s.weapon, armor: s.armor, zone: s.zone, kills: s.kills,
+    pills: s.pills, auto: s.auto,
+    killsBoss: s.killsBoss, realmClears: s.realmClears,
+    breaks: s.breaks, breaksFailed: s.breaksFailed,
+    name: s.name, avatar: s.avatar,
+    sectStones: s.sectStones,
+    sectId: s.sectId, sectLevel: s.sectLevel,
+    firstSectJoined: s.firstSectJoined,
+    classes: Array.isArray(s.classes) ? s.classes.slice() : [],
+    manuals: s.manuals && typeof s.manuals === 'object' ? JSON.parse(JSON.stringify(s.manuals)) : {},
+    quests: Array.isArray(s.quests) ? JSON.parse(JSON.stringify(s.quests)) : [],
+    lastBroadcastId: s.lastBroadcastId || 0,
+    accountCreatedAt: s.accountCreatedAt || Date.now()
+  };
+}
+function applyState(saved){
+  if (!saved) return;
+  const base = freshState();
+  for (const k in base){
+    if (saved[k] !== undefined) state[k] = saved[k];
+  }
+  if (!Array.isArray(state.classes)) state.classes = [];
+  if (!state.manuals || typeof state.manuals !== 'object') state.manuals = {};
+  if (!Array.isArray(state.quests)) state.quests = [];
+  if (typeof saved.lastBroadcastId === 'number') state.lastBroadcastId = saved.lastBroadcastId;
+  state.realm = Math.min(REALMS.length - 1, Math.max(0, state.realm|0));
+  state.weapon = Math.min(WEAPONS.length - 1, Math.max(-1, state.weapon ?? -1));
+  state.armor = Math.min(ARMORS.length - 1, Math.max(-1, state.armor ?? -1));
+  state.zone = Math.min(state.realm, Math.max(0, state.zone|0));
+  state.sessionStart = Date.now();
+}
+function saveAccountState(){
+  const u = getCurrentUser();
+  if (!u) return;
+  const accounts = getAccounts();
+  const acc = accounts[u];
+  if (!acc) return;
+  acc.save = serializeState(state);
+  setAccounts(accounts);
+}
+function loadAccountState(u){
+  const accounts = getAccounts();
+  const acc = accounts[u];
+  if (!acc) return false;
+  isAdmin = !!acc.isAdmin;
+  if (acc.save) applyState(acc.save);
+  else state = freshState();
+  if (isAdmin){
+    state.gold = Math.max(state.gold, 1e15);
+    state.crystals = Math.max(state.crystals, 99999);
+    state.sectStones = Math.max(state.sectStones, 99999);
+    state.pills = Math.max(state.pills, 999);
+    state.realm = REALMS.length - 1;
+    state.weapon = WEAPONS.length - 1;
+    state.armor = ARMORS.length - 1;
+    state.classes = CLASSES.map(c => c.id);
+    if (!state.name || state.name === 'Tu Chân Giả') state.name = 'ADMIN';
+    if (!state.avatar) state.avatar = '🧙‍♂️';
+  }
+  return true;
+}
+function logoutAccount(){
+  try { localStorage.removeItem(CURRENT_KEY); } catch(e){}
+  location.reload();
+}
+
+/* ===== GLOBAL (Broadcast + Events) ===== */
+function getGlobal(){
+  try {
+    const raw = localStorage.getItem(GLOBAL_KEY);
+    if (!raw) return { broadcast: null, broadcastIdCounter: 0, events: [] };
+    const g = JSON.parse(raw);
+    if (!Array.isArray(g.events)) g.events = [];
+    if (typeof g.broadcastIdCounter !== 'number') g.broadcastIdCounter = 0;
+    return g;
+  } catch(e){ return { broadcast: null, broadcastIdCounter: 0, events: [] }; }
+}
+function setGlobal(g){
+  try { localStorage.setItem(GLOBAL_KEY, JSON.stringify(g)); } catch(e){}
+}
+function getEventMult(type){
+  const g = getGlobal();
+  const now = Date.now();
+  let m = 1;
+  for (const e of g.events){
+    if (e.endsAt > now && e.type === type) m *= (e.mult || 1);
+  }
+  return m;
+}
+function getActiveEvents(){
+  const g = getGlobal();
+  const now = Date.now();
+  return g.events.filter(e => e.endsAt > now);
+}
+function checkBroadcast(){
+  if (!getCurrentUser()) return;
+  const g = getGlobal();
+  if (!g.broadcast) return;
+  const seen = state.lastBroadcastId || 0;
+  if ((g.broadcast.id || 0) > seen){
+    state.lastBroadcastId = g.broadcast.id;
+    showBroadcast(g.broadcast);
+    saveAccountState();
+  }
+}
+function showBroadcast(b){
+  $('bcMsg').textContent = b.msg;
+  const d = new Date(b.createdAt);
+  $('bcFrom').textContent = `Từ: ${b.from || 'Admin'} • ${d.toLocaleString('vi-VN')}`;
+  $('broadcastModal').classList.add('on');
+}
+
+/* ===== CLASS BONUS ===== */
+function classBonus(){
+  const b = { dmg:0, bp:0, cd:0, hp:0, dr:0, regen:0 };
+  for (const cid of state.classes){
+    const c = CLASS_MAP[cid];
+    if (!c) continue;
+    for (const k in c.bonus) b[k] = (b[k] || 0) + c.bonus[k];
+  }
+  return b;
+}
+function hasClass(cid){ return state.classes.includes(cid); }
+function learnClass(cid){
+  if (hasClass(cid)) return false;
+  if (!CLASS_MAP[cid]) return false;
+  state.classes.push(cid);
+  return true;
+}
+
+/* ===== SECT HELPERS ===== */
+function getSect(){ return state.sectId ? SECTS.find(s => s.id === state.sectId) : null; }
+function sectBuff(){ const s = getSect(); return s ? s.perLv * state.sectLevel : 0; }
+function sectBuffBP(){ const s = getSect(); return s && s.buffType === 'bp' ? sectBuff() : 0; }
+function sectBuffDmg(){ const s = getSect(); return s && s.buffType === 'dmg' ? sectBuff() : 0; }
+function sectBuffGold(){ const s = getSect(); return s && s.buffType === 'gold' ? sectBuff() : 0; }
+function sectBuffCrystal(){ const s = getSect(); return s && s.buffType === 'crystal' ? sectBuff() : 0; }
+function sectBuffTank(){ const s = getSect(); return s && s.buffType === 'tank' ? sectBuff() : 0; }
+
+/* ===== CORE STATS ===== */
+function playerBP(){
+  let bp = REALMS[state.realm].bp;
+  if (state.weapon >= 0) bp += WEAPONS[state.weapon].bp;
+  if (state.armor  >= 0) bp += ARMORS[state.armor].bp;
+  bp = Math.floor(bp * (1 + sectBuffBP()));
+  bp = Math.floor(bp * (1 + classBonus().bp));
+  if (state.bpBuffUntil > Date.now()) bp = Math.floor(bp * state.bpBuff);
+  bp = Math.floor(bp * getEventMult('bp_mult'));
+  return Math.floor(bp);
+}
+function maxHP(){
+  const base = REALMS[state.realm].hp;
+  const ab = state.armor >= 0 ? ARMORS[state.armor].bp : 0;
+  return Math.floor((base + ab * 0.2) * (1 + sectBuffTank()) * (1 + classBonus().hp));
+}
+function damageReduction(){
+  const base = state.armor >= 0 ? ARMORS[state.armor].dr : 0;
+  return Math.min(0.85, base + sectBuffTank() * 0.5 + classBonus().dr);
+}
+function hpRegenMul(){ return 1 + classBonus().regen; }
+function attackCooldown(){
+  const cd = ATK_CD_BASE * (1 + classBonus().cd);
+  return Math.max(100, cd);
+}
+function isDevour(){ return Date.now() < state.devourUntil; }
+function inCombat(){ return Date.now() - (state.lastCombatAt || 0) < COMBAT_RESET; }
+function addBuff(mult, durMs, name){
+  state.bpBuff = mult; state.bpBuffUntil = Date.now() + durMs; state.bpBuffName = name;
+  $('buffTag').textContent = `${name} ×${mult}`;
+}
+
+function log(msg, cls){
+  const box = $('logBox');
+  const d = document.createElement('div');
+  d.className = 'logline ' + (cls || '');
+  d.textContent = msg;
+  box.appendChild(d);
+  while (box.children.length > 30) box.removeChild(box.firstChild);
+  box.scrollTop = box.scrollHeight;
+}
+
+/* ===== AUTH UI ===== */
+function renderAuth(){
+  const f = $('authForm');
+  document.querySelectorAll('[data-auth]').forEach(b => {
+    b.classList.toggle('active', b.dataset.auth === authTab);
+  });
+  let h = '';
+  if (authTab === 'login'){
+    h += `<div class="auth-label">Tên đăng nhập</div>
+      <input class="auth-input" id="inUser" maxlength="20" placeholder="username" autocomplete="off" />
+      <div class="auth-label">Mật khẩu</div>
+      <input class="auth-input" id="inPass" type="password" maxlength="30" placeholder="••••••" />
+      <button class="auth-btn" id="btnLogin">⚡ ĐĂNG NHẬP</button>
+      <div style="font-size:9px;color:#5b6b7d;text-align:center;margin-top:10px;line-height:1.5">
+        Chưa có tài khoản? Nhấn <b style="color:#39d0ff">TẠO ACC</b> phía trên.
+      </div>`;
+  } else {
+    h += `<div class="auth-label">Tên đăng nhập</div>
+      <input class="auth-input" id="inUser" maxlength="20" placeholder="username" autocomplete="off" />
+      <div class="auth-label">Mật khẩu</div>
+      <input class="auth-input" id="inPass" type="password" maxlength="30" placeholder="••••••" />
+      <div class="auth-label">Chọn hệ khởi đầu</div>
+      <div class="class-grid" id="classGrid"></div>
+      <button class="auth-btn" id="btnRegister">🌌 TẠO TÀI KHOẢN</button>`;
+  }
+  f.innerHTML = h;
+  if (authTab === 'register'){
+    const grid = $('classGrid');
+    CLASSES.forEach(c => {
+      const d = document.createElement('div');
+      d.className = 'class-card' + (c.id === regClassId ? ' active' : '');
+      d.innerHTML = `<div class="cc-icon">${c.icon}</div>
+        <div class="cc-name">${c.name}</div>
+        <div class="cc-desc">${c.desc}</div>`;
+      d.addEventListener('click', ()=>{
+        regClassId = c.id;
+        grid.querySelectorAll('.class-card').forEach(x => x.classList.remove('active'));
+        d.classList.add('active');
+      });
+      grid.appendChild(d);
+    });
+    $('btnRegister').addEventListener('click', doRegister);
+  } else {
+    $('btnLogin').addEventListener('click', doLogin);
+  }
+  ['inUser','inPass'].forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('keypress', e => { if (e.key === 'Enter') {
+      if (authTab === 'login') doLogin(); else doRegister();
+    }});
+  });
+}
+function setAuthMsg(msg, type){
+  const m = $('authMsg');
+  m.className = 'auth-msg on ' + (type || '');
+  m.textContent = msg;
+}
+function clearAuthMsg(){ $('authMsg').className = 'auth-msg'; }
+
+function doLogin(){
+  const u = $('inUser').value.trim();
+  const p = $('inPass').value;
+  if (!u || !p){ setAuthMsg('Vui lòng nhập đủ thông tin!', 'err'); return; }
+
+  const r = loginAccount(u, p);
+  if (!r.ok){ setAuthMsg(r.msg, 'err'); return; }
+  isAdmin = !!r.acc.isAdmin;
+  loadAccountState(u);
+  setCurrentUser(u);
+  setAuthMsg('Đăng nhập thành công!', 'ok');
+  setTimeout(() => startGame(), 300);
+}
+function doRegister(){
+  const u = $('inUser').value.trim();
+  const p = $('inPass').value;
+  if (!u || !p){ setAuthMsg('Vui lòng nhập đủ!', 'err'); return; }
+  if (u.length < 3){ setAuthMsg('Tên phải từ 3 ký tự!', 'err'); return; }
+  if (p.length < 3){ setAuthMsg('Mật khẩu phải từ 3 ký tự!', 'err'); return; }
+  if (!/^[A-Za-z0-9_]+$/.test(u)){ setAuthMsg('Tên chỉ chữ, số, gạch dưới!', 'err'); return; }
+
+  /* Nếu là admin → tạo admin */
+  if (u === ADMIN_USER){
+    if (p !== ADMIN_PASS){ setAuthMsg('Mật khẩu admin không đúng!', 'err'); return; }
+    const accounts = getAccounts();
+    accounts[ADMIN_USER] = {
+      username: ADMIN_USER, passHash: hashPass(ADMIN_PASS),
+      isAdmin: true, banned: false, banReason: '',
+      createdAt: Date.now(), save: null
+    };
+    setAccounts(accounts);
+    isAdmin = true;
+    state = freshState();
+    state.name = 'ADMIN';
+    state.classes = CLASSES.map(c => c.id);
+    setCurrentUser(ADMIN_USER);
+    setAuthMsg('👑 Tạo admin thành công!', 'ok');
+    setTimeout(() => startGame(), 300);
+    return;
+  }
+
+  const r = createAccount(u, p, regClassId);
+  if (!r.ok){ setAuthMsg(r.msg, 'err'); return; }
+  isAdmin = false;
+  loadAccountState(u);
+  setCurrentUser(u);
+  setAuthMsg('Tạo tài khoản thành công!', 'ok');
+  setTimeout(() => startGame(), 300);
+}
+
+function showAuth(){
+  document.body.classList.add('not-logged');
+  $('authOverlay').classList.add('on');
+  renderAuth();
+}
+function hideAuth(){
+  document.body.classList.remove('not-logged');
+  $('authOverlay').classList.remove('on');
+}
+
+/* ===== SCREEN ===== */
+function showScreen(name){
+  state.screen = name;
+  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('screen' + name.charAt(0).toUpperCase() + name.slice(1));
+  if (el) el.classList.add('active');
+  $('controls').classList.toggle('on', name === 'combat');
+  if (name === 'sect') renderSect();
+  if (name === 'inventory') renderInventory();
+  if (name === 'info') renderInfo();
+  if (name === 'rank') renderRank();
+  if (name === 'market') renderMarket();
+  if (name === 'admin') renderAdmin();
+  if (name === 'lobby') renderLobby();
+}
+function renderLobby(){
+  $('lobbyAvatar').textContent = state.avatar;
+  const nameEl = $('lobbyName');
+  nameEl.innerHTML = escapeHtml(state.name) + (isAdmin ? ' <span class="admin-badge">ADMIN</span>' : '');
+  $('lobbyRealm').textContent = REALMS[state.realm].n;
+  $('lobbyBP').textContent = `Lực chiến: ${fmt(playerBP())}`;
+  const classNames = state.classes.map(c => CLASS_MAP[c] ? CLASS_MAP[c].name : c).join(', ') || '—';
+  $('lobbyClasses').textContent = `Hệ: ${classNames}`;
+
+  const tagWrap = $('lobbyClassTags');
+  let th = `<span class="lc-label">HỆ:</span>`;
+  for (const cid of state.classes){
+    const c = CLASS_MAP[cid];
+    if (c) th += `<span class="lc-tag">${c.icon} ${c.name}</span>`;
+  }
+  if (!state.classes.length) th += `<span style="color:#8bb8d8">Chưa có hệ</span>`;
+  tagWrap.innerHTML = th;
+
+  const bb = $('lobbyBreakCost');
+  if (state.realm >= REALMS.length - 1){
+    bb.textContent = 'Đã đạt cảnh giới tối cao';
+  } else {
+    const cost = breakCost();
+    const rate = Math.round((BREAK_RATE[state.realm]||0)*100);
+    const canBreak = state.gold >= cost;
+    bb.textContent = `${fmt(cost)}💰 • Tỉ lệ ${rate}%`;
+    bb.style.color = canBreak ? '#c4ffe0' : '#ff8fa3';
+  }
+  const ready = (state.quests||[]).filter(q => q.progress >= q.target && !q.claimed).length;
+  const qb = $('lobbyQuestBadge');
+  if (ready > 0){ qb.style.display = 'block'; qb.textContent = ready; }
+  else qb.style.display = 'none';
+  const lpb = $('lobbyPortalBtn');
+  if (state.portal){
+    lpb.style.display = 'flex';
+    const T = REALM_TIERS[state.portal.tier];
+    lpb.querySelector('.lb-name').textContent = `${T.icon} ${T.name.toUpperCase()}`;
+  } else lpb.style.display = 'none';
+  const adminBtn = $('lobbyAdminBtn');
+  if (adminBtn) adminBtn.style.display = isAdmin ? 'flex' : 'none';
+  renderActiveEventsBar();
+}
+
+function renderActiveEventsBar(){
+  const bar = $('activeEventsBar');
+  if (!bar) return;
+  const evs = getActiveEvents();
+  if (!evs.length){ bar.classList.remove('on'); return; }
+  bar.classList.add('on');
+  let h = `<div style="font-size:10px;color:#e0c4ff;font-weight:900;letter-spacing:1px;margin-bottom:3px">
+    🎉 EVENT ĐANG CHẠY</div>`;
+  for (const e of evs){
+    const remain = Math.max(0, e.endsAt - Date.now());
+    const m = Math.floor(remain / 60000), s = Math.floor((remain % 60000)/1000);
+    const timeStr = m > 0 ? `${m}p${s}s` : `${s}s`;
+    const et = EVENT_TYPES.find(t => t.id === e.type);
+    h += `<div class="ae-line">${et ? et.icon : '🎉'} <b>${escapeHtml(e.name)}</b> ×${e.mult} — còn ${timeStr}</div>`;
+  }
+  bar.innerHTML = h;
+}
+
+/* ===== SECT ===== */
+function renderSect(){
+  const b = $('sectBody');
+  let h = `<div style="font-size:11px;color:#b8a8d0;margin-bottom:12px;padding:10px;
+    background:rgba(127,255,212,.08);border-radius:9px;border:1px solid rgba(127,255,212,.3);
+    line-height:1.6">
+    🪨 <b style="color:#7fffd4">Đá Tông Môn: ${state.sectStones}</b><br>
+    <span style="font-size:10px">Nâng cấp tông môn cần <b>Đá Tông Môn</b> — rơi 1% khi diệt quái.
+    Nhận <b>+${SECT_STONE_JOIN_BONUS} đá</b> khi gia nhập lần đầu. Đổi tông môn tốn <b>50💎</b>.</span>
+  </div>`;
+  for (const s of SECTS){
+    const isCurrent = state.sectId === s.id;
+    const lv = isCurrent ? state.sectLevel : 0;
+    const pct = Math.round(s.perLv * lv * 100);
+    const buffText = lv > 0 ? `+${pct}% ${s.buffName}` : 'Chưa có buff';
+    let actions = '';
+    if (isCurrent){
+      const nextCost = lv < 10 ? SECT_STONE_COST[lv] : null;
+      if (nextCost !== null){
+        const can = state.sectStones >= nextCost;
+        actions = `<button class="upgrade" data-act="upgrade" ${can?'':'disabled'}>
+          ⬆ LÊN Lv${lv+1} (${nextCost}🪨)</button>
+          <button class="leave" data-act="leave">RỜI</button>`;
+      } else {
+        actions = `<button disabled>✦ MAX Lv10</button>
+          <button class="leave" data-act="leave">RỜI</button>`;
+      }
+    } else {
+      if (state.sectId){
+        actions = `<button data-act="join" data-id="${s.id}">ĐỔI (50💎)</button>`;
+      } else {
+        actions = `<button data-act="join" data-id="${s.id}">GIA NHẬP MIỄN PHÍ</button>`;
+      }
+    }
+    h += `<div class="sect-card ${isCurrent ? 'current' : ''}">
+      <div class="sc-head">
+        <div class="sc-icon">${s.icon}</div>
+        <div class="sc-info">
+          <div class="sc-name">${s.name} ${isCurrent ? '✦' : ''}</div>
+          <div class="sc-desc">${s.desc}</div>
+          <div class="sc-buff">Buff: ${buffText}</div>
+          ${isCurrent ? `<div class="sc-level">Cấp: ${lv}/10</div>` : ''}
+        </div>
+      </div>
+      <div class="sc-actions">${actions}</div>
+    </div>`;
+  }
+  b.innerHTML = h;
+}
+function joinSect(id){
+  const s = SECTS.find(x => x.id === id);
+  if (!s) return;
+  if (state.sectId){
+    if (state.crystals < 50){ log('Cần 50💎 để đổi tông môn!', 'bad'); return; }
+    state.crystals -= 50;
+  }
+  state.sectId = id; state.sectLevel = 1;
+  if (!state.firstSectJoined){
+    state.sectStones += SECT_STONE_JOIN_BONUS;
+    state.firstSectJoined = true;
+    log(`🪨 Nhận ${SECT_STONE_JOIN_BONUS} Đá Tông Môn!`, 'stone');
+    bumpCurrency('stone');
+  }
+  log(`🏯 Gia nhập ${s.name}!`, 'epic');
+  screenFlash('gold'); auraBurst();
+  renderSect(); saveAccountState();
+}
+function upgradeSect(){
+  const s = getSect(); if (!s) return;
+  if (state.sectLevel >= 10) return;
+  const cost = SECT_STONE_COST[state.sectLevel];
+  if (state.sectStones < cost){ log(`Cần ${cost}🪨!`, 'bad'); return; }
+  state.sectStones -= cost; state.sectLevel++;
+  log(`🏯 ${s.name} lên Lv${state.sectLevel}!`, 'epic');
+  screenFlash('gold'); renderSect(); saveAccountState();
+}
+function leaveSect(){
+  const s = getSect(); if (!s) return;
+  if (!confirm(`Rời khỏi ${s.name}?`)) return;
+  state.sectId = null; state.sectLevel = 0;
+  log('🏯 Đã rời tông môn.', 'bad');
+  renderSect(); saveAccountState();
+}
+
+/* ===== INVENTORY ===== */
+function renderInventory(){
+  const b = $('invBody');
+  let h = '';
+  h += `<div class="inv-section"><h4>🌟 HỆ ĐÃ HỌC</h4>`;
+  if (state.classes.length){
+    for (const cid of state.classes){
+      const c = CLASS_MAP[cid];
+      if (!c) continue;
+      h += `<div class="inv-item active"><div class="iv-icon">${c.icon}</div>
+        <div class="iv-info"><div class="iv-name">${c.name}</div>
+        <div class="iv-stat">${c.desc}</div></div>
+        <button class="eq">ĐÃ HỌC</button></div>`;
+    }
+  } else h += `<div class="inv-empty">Chưa có hệ nào</div>`;
+  h += `</div>`;
+
+  h += `<div class="inv-section"><h4>📕 BÍ TỊCH</h4>`;
+  const manualEntries = Object.entries(state.manuals || {}).filter(([k,v]) => v > 0);
+  if (manualEntries.length){
+    for (const [cid, count] of manualEntries){
+      const m = MANUALS[cid];
+      if (!m) continue;
+      const learned = hasClass(cid);
+      const btn = learned
+        ? `<button class="learned" disabled>ĐÃ HỌC</button>`
+        : `<button class="use" data-use-manual="${cid}">HỌC</button>`;
+      h += `<div class="inv-item manual"><div class="iv-icon">${m.icon}</div>
+        <div class="iv-info"><div class="iv-name">${m.name} ×${count}</div>
+        <div class="iv-stat">${m.desc}</div></div>${btn}</div>`;
+    }
+  } else h += `<div class="inv-empty">Không có bí tịch</div>`;
+  h += `</div>`;
+
+  h += `<div class="inv-section"><h4>⚔️ VŨ KHÍ</h4>`;
+  if (state.weapon >= 0){
+    const w = WEAPONS[state.weapon];
+    h += `<div class="inv-item active"><div class="iv-icon">⚔️</div>
+      <div class="iv-info"><div class="iv-name">${w.n}</div>
+      <div class="iv-stat">+<b>${fmt(w.bp)}</b> BP</div></div>
+      <button class="eq">ĐANG DÙNG</button></div>`;
+  } else h += `<div class="inv-empty">Chưa trang bị</div>`;
+  if (state.weapon > 0){
+    for (let i = 0; i < state.weapon; i++){
+      const w = WEAPONS[i];
+      h += `<div class="inv-item"><div class="iv-icon">⚔️</div>
+        <div class="iv-info"><div class="iv-name">${w.n}</div>
+        <div class="iv-stat">+<b>${fmt(w.bp)}</b> BP</div></div>
+        <button data-inv-w="${i}">TRANG BỊ</button></div>`;
+    }
+  }
+  h += `</div>`;
+
+  h += `<div class="inv-section"><h4>🛡️ GIÁP</h4>`;
+  if (state.armor >= 0){
+    const a = ARMORS[state.armor];
+    h += `<div class="inv-item active"><div class="iv-icon">🛡️</div>
+      <div class="iv-info"><div class="iv-name">${a.n}</div>
+      <div class="iv-stat">+<b>${fmt(a.bp)}</b> BP • DR <b>${Math.round(a.dr*100)}%</b></div></div>
+      <button class="eq">ĐANG DÙNG</button></div>`;
+  } else h += `<div class="inv-empty">Chưa trang bị</div>`;
+  if (state.armor > 0){
+    for (let i = 0; i < state.armor; i++){
+      const a = ARMORS[i];
+      h += `<div class="inv-item"><div class="iv-icon">🛡️</div>
+        <div class="iv-info"><div class="iv-name">${a.n}</div>
+        <div class="iv-stat">+<b>${fmt(a.bp)}</b> BP • DR <b>${Math.round(a.dr*100)}%</b></div></div>
+        <button data-inv-a="${i}">TRANG BỊ</button></div>`;
+    }
+  }
+  h += `</div>`;
+
+  h += `<div class="inv-section"><h4>💊 ĐAN DƯỢC</h4>
+    <div class="inv-item"><div class="iv-icon">💊</div>
+    <div class="iv-info"><div class="iv-name">Đan Dược Bảo Mệnh</div>
+    <div class="iv-stat">Số lượng: <b>${state.pills}</b> • Full HP + ${Math.round(PILL_BREAK_BONUS*100)}% tỉ lệ đột phá</div></div>
+    <button data-inv-pill ${state.pills>0?'':'disabled'}>DÙNG</button></div>
+  </div>`;
+  b.innerHTML = h;
+}
+
+function useManual(cid){
+  if (!state.manuals[cid] || state.manuals[cid] <= 0){ log('Không có bí tịch!', 'bad'); return; }
+  if (hasClass(cid)){ log('Đã học hệ này rồi!', 'bad'); return; }
+  state.manuals[cid]--;
+  if (state.manuals[cid] === 0) delete state.manuals[cid];
+  learnClass(cid);
+  const c = CLASS_MAP[cid];
+  log(`📕 HỌC THÀNH CÔNG hệ ${c.icon} ${c.name}!`, 'manual');
+  popup(`+${c.icon} ${c.name}!`, 'manual', false, 0, -60);
+  screenFlash('gold'); auraBurst();
+  renderInventory(); renderLobby(); saveAccountState();
+}
+
+/* ===== INFO ===== */
+function renderInfo(){
+  const b = $('infoBody');
+  const s = getSect();
+  const nowMs = Date.now();
+  const sess = Math.floor((nowMs - (state.sessionStart || nowMs)) / 1000);
+  const tot = Math.floor((nowMs - (state.accountCreatedAt || nowMs)) / 1000);
+  function fmtDuration(sec){
+    if (sec < 60) return sec + 's';
+    if (sec < 3600) return Math.floor(sec/60) + 'p ' + (sec%60) + 's';
+    if (sec < 86400) return Math.floor(sec/3600) + 'h ' + Math.floor((sec%3600)/60) + 'p';
+    return Math.floor(sec/86400) + ' ngày ' + Math.floor((sec%86400)/3600) + 'h';
+  }
+
+  let h = '';
+  h += `<div class="info-section"><h3>👤 HỒ SƠ</h3>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;
+      background:linear-gradient(180deg,rgba(57,208,255,.12),rgba(176,107,255,.06));
+      border:1px solid rgba(57,208,255,.35);border-radius:12px;margin-bottom:8px">
+      <div style="font-size:44px;line-height:1">${state.avatar}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;font-weight:900;color:#fff">${escapeHtml(state.name)}
+          ${isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}</div>
+        <div style="font-size:10.5px;color:var(--neon);font-weight:800;margin-top:3px">${REALMS[state.realm].n}</div>
+        <div style="font-size:9.5px;color:#8bb8d8;margin-top:2px">
+          ${s ? s.icon+' '+s.name+' • Lv'+state.sectLevel : 'Chưa gia nhập tông môn'}</div>
+      </div>
+      <button style="padding:8px 12px;border-radius:8px;border:none;background:linear-gradient(180deg,#7fe8ff,#39d0ff);
+        color:#031018;font-weight:900;font-family:inherit;font-size:10px;cursor:pointer"
+        data-act="edit-profile">SỬA</button>
+    </div>
+  </div>`;
+
+  h += `<div class="info-section"><h3>🌟 HỆ ĐANG SỞ HỮU</h3>`;
+  if (state.classes.length){
+    for (const cid of state.classes){
+      const c = CLASS_MAP[cid];
+      if (!c) continue;
+      h += `<div class="inv-item active" style="margin-bottom:6px">
+        <div class="iv-icon">${c.icon}</div>
+        <div class="iv-info"><div class="iv-name">${c.name}</div>
+        <div class="iv-stat">${c.desc}</div></div></div>`;
+    }
+  } else h += `<div class="inv-empty">Chưa có hệ</div>`;
+  h += `</div>`;
+
+  const stats = [
+    ['CẢNH GIỚI', REALMS[state.realm].n, 'neon', true],
+    ['LỰC CHIẾN', fmt(playerBP()), 'neon'],
+    ['HP', `${fmt(state.hp)}/${fmt(maxHP())}`, 'green'],
+    ['COOLDOWN ĐÁNH', attackCooldown().toFixed(0) + 'ms', 'neon'],
+    ['VÀNG', fmt(state.gold), 'gold'],
+    ['TINH THẠCH', fmt(state.crystals), 'cry'],
+    ['ĐÁ TÔNG MÔN', fmt(state.sectStones), 'stone'],
+    ['KHU VỰC', `${state.zone + 1}/${state.realm + 1}`, 'neon'],
+    ['GIẢM THƯƠNG', `${Math.round(damageReduction()*100)}%`, 'green'],
+    ['SỐ HỆ', state.classes.length + '/' + CLASSES.length, 'manual'],
+    ['TỔNG QUÁI HẠ', fmt(state.kills), ''],
+    ['BOSS HẠ', fmt(state.killsBoss), 'red'],
+    ['BÍ CẢNH CLEAR', fmt(state.realmClears), 'neon'],
+    ['ĐỘT PHÁ', `${state.breaks}✓ ${state.breaksFailed}✗`, 'gold'],
+    ['PHIÊN CHƠI', fmtDuration(sess), 'green'],
+    ['TỔNG THỜI GIAN', fmtDuration(tot), 'gold', true]
+  ];
+  h += `<div class="info-section"><h3>📊 CHỈ SỐ</h3><div class="info-grid">`;
+  for (const [label, val, cls, full] of stats){
+    h += `<div class="info-stat ${full?'full':''}">
+      <div class="is-label">${label}</div>
+      <div class="is-value ${cls}">${val}</div>
+    </div>`;
+  }
+  h += `</div></div>`;
+
+  if (state.bpBuffUntil > Date.now()){
+    const remain = Math.ceil((state.bpBuffUntil - Date.now()) / 1000);
+    h += `<div class="info-stat full" style="margin-bottom:14px;border-color:rgba(255,210,74,.6);background:rgba(255,210,74,.1)">
+      <div class="is-label">BUFF</div>
+      <div class="is-value gold">${state.bpBuffName} ×${state.bpBuff} (${remain}s)</div>
+    </div>`;
+  }
+
+  h += `<div class="info-section"><h3>⚙️ CÀI ĐẶT</h3>
+    <div class="sys-card">
+      <h4>💾 LƯU TRỮ</h4>
+      <p>Game tự lưu mỗi 5 giây.</p>
+      <button class="gold" data-sys="save">💾 LƯU NGAY</button>
+      <button class="ghost" data-sys="export">📋 XUẤT SAVE</button>
+      <button class="ghost" data-sys="import">📥 NHẬP SAVE</button>
+    </div>
+    <div class="sys-card">
+      <h4>⚙️ AUTO-ATTACK</h4>
+      <p>Bật/tắt tự đánh (chỉ trong Combat).</p>
+      <button class="ghost" data-sys="toggle-auto">${state.auto ? '🛑 TẮT AUTO' : '▶️ BẬT AUTO'}</button>
+    </div>
+    ${!isAdmin ? `<div class="sys-card">
+      <h4>⚠️ NGUY HIỂM</h4>
+      <p>Reset tài khoản này về ban đầu. Không thể hoàn tác!</p>
+      <button class="danger" data-sys="reset">🗑️ RESET TÀI KHOẢN</button>
+    </div>` : ''}
+  </div>`;
+
+  h += `<div class="sys-card">
+    <h4>ℹ️ THÔNG TIN GAME</h4>
+    <p style="line-height:1.7">
+      <b style="color:#39d0ff">THÔN PHỆ TINH KHÔNG</b> — v2.0 Local<br>
+      Idle / Tu Chân / Multi-Class / Market<br>
+      Cảm hứng: "Thôn Phệ Tinh Không" — Ngã Cật Tây Hồng Thị
+    </p>
+  </div>`;
+
+  b.innerHTML = h;
+}
+
+/* ===== RANKING ===== */
+function renderRank(){
+  const b = $('rankBody');
+  const accounts = getAccounts();
+  const rows = [];
+  for (const uname in accounts){
+    const acc = accounts[uname];
+    if (!acc.save) continue;
+    const st = acc.save;
+    let bp = REALMS[Math.min(REALMS.length-1, Math.max(0, st.realm|0))].bp;
+    if (st.weapon >= 0) bp += WEAPONS[st.weapon].bp;
+    if (st.armor >= 0) bp += ARMORS[st.armor].bp;
+    rows.push({
+      name: st.name || uname, uname,
+      avt: st.avatar || '🧙‍♂️',
+      realm: REALMS[Math.min(REALMS.length-1, Math.max(0, st.realm|0))].n,
+      bp: Math.floor(bp),
+      isAdmin: !!acc.isAdmin,
+      me: uname === getCurrentUser()
+    });
+  }
+  rows.sort((a, b) => b.bp - a.bp);
+
+  let h = `<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px;text-align:center;
+    letter-spacing:1px">Bảng xếp hạng tài khoản trên thiết bị này</div>`;
+  if (!rows.length){
+    h += `<div class="market-empty">Chưa có tài khoản nào.</div>`;
+  } else {
+    let myPos = -1;
+    rows.forEach((r, idx) => {
+      const pos = idx + 1;
+      if (r.me) myPos = pos;
+      let cls = r.me ? ' me' : '';
+      if (pos === 1) cls += ' top1';
+      else if (pos === 2) cls += ' top2';
+      else if (pos === 3) cls += ' top3';
+      let posIcon = '#' + pos;
+      if (pos === 1) posIcon = '🥇';
+      else if (pos === 2) posIcon = '🥈';
+      else if (pos === 3) posIcon = '🥉';
+      h += `<div class="rank-row${cls}">
+        <div class="rank-pos">${posIcon}</div>
+        <div class="rank-avt">${r.avt}</div>
+        <div class="rank-info">
+          <div class="rank-name">${escapeHtml(r.name)}
+            ${r.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}
+            ${r.me ? ' <span style="color:#ffd24a">(Bạn)</span>' : ''}</div>
+          <div class="rank-sub">${r.realm}</div>
+        </div>
+        <div class="rank-bp">${fmt(r.bp)}</div>
+      </div>`;
+    });
+    if (myPos > 0){
+      h += `<div style="margin-top:12px;padding:10px;border-radius:10px;text-align:center;
+        background:linear-gradient(180deg,rgba(255,210,74,.15),rgba(255,210,74,.03));
+        border:1px solid rgba(255,210,74,.5);font-size:11.5px;color:#ffe9a8;font-weight:800">
+        🏆 Xếp hạng: <span style="color:#ffd24a">#${myPos}/${rows.length}</span>
+      </div>`;
+    }
+  }
+  b.innerHTML = h;
+}
+
+/* ===== MARKET ===== */
+function getMarket(){
+  try {
+    const raw = localStorage.getItem(MARKET_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) || [];
+  } catch(e){ return []; }
+}
+function setMarket(list){
+  try { localStorage.setItem(MARKET_KEY, JSON.stringify(list)); } catch(e){}
+}
+function generateNpcListings(n){
+  const items = [
+    { type:'crystal', qty:1, minPrice:1000000, maxPrice:1600000 },
+    { type:'crystal', qty:5, minPrice:4800000, maxPrice:7500000 },
+    { type:'crystal', qty:10, minPrice:9000000, maxPrice:14000000 },
+    { type:'stone',   qty:1, minPrice:400000,  maxPrice:800000 },
+    { type:'stone',   qty:3, minPrice:1200000, maxPrice:2200000 },
+    { type:'pill',    qty:1, minPrice:1500000, maxPrice:2500000 },
+    { type:'pill',    qty:3, minPrice:4200000, maxPrice:6800000 }
+  ];
+  const cls = CLASSES.map(c => c.id);
+  const out = [];
+  for (let i = 0; i < n; i++){
+    const roll = Math.random();
+    let item;
+    if (roll < 0.15){
+      const cid = cls[Math.floor(Math.random()*cls.length)];
+      item = { type:'manual', classId:cid, qty:1, minPrice:8000000, maxPrice:20000000 };
+    } else {
+      item = items[Math.floor(Math.random()*items.length)];
+    }
+    const seller = NPC_SELLERS[Math.floor(Math.random()*NPC_SELLERS.length)]
+      + ' ' + (100 + Math.floor(Math.random()*900));
+    const price = Math.floor(item.minPrice + Math.random()*(item.maxPrice - item.minPrice));
+    out.push({
+      id: 'npc_' + Date.now() + '_' + i + '_' + Math.floor(Math.random()*1000),
+      seller, isPlayer: false,
+      itemType: item.type, classId: item.classId, qty: item.qty, price
+    });
+  }
+  return out;
+}
+function refreshNpcListings(){
+  let list = getMarket();
+  const now = Date.now();
+  list = list.filter(l => l.isPlayer || (now - (l.createdAt||0)) < 600000);
+  const npcCount = list.filter(l => !l.isPlayer).length;
+  if (npcCount < 25){
+    const add = generateNpcListings(Math.min(5, 25 - npcCount));
+    add.forEach(l => { l.createdAt = now; list.push(l); });
+  }
+  setMarket(list);
+}
+function itemInfo(l){
+  if (l.itemType === 'crystal') return { icon:'💎', name:'Tinh Thạch Vũ Trụ', unit:l.price/l.qty };
+  if (l.itemType === 'stone')   return { icon:'🪨', name:'Đá Tông Môn', unit:l.price/l.qty };
+  if (l.itemType === 'pill')    return { icon:'💊', name:'Đan Dược Bảo Mệnh', unit:l.price/l.qty };
+  if (l.itemType === 'manual'){
+    const m = MANUALS[l.classId];
+    return { icon:'📕', name: m ? m.name : 'Bí Tịch', unit:l.price/l.qty };
+  }
+  return { icon:'❓', name:'???', unit:0 };
+}
+function renderMarket(){
+  refreshNpcListings();
+  const b = $('marketBody');
+  if (marketTab === 'buy'){
+    const list = getMarket().filter(l => !l.isPlayer);
+    list.sort((a, b) => a.price - b.price);
+    let h = `<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px;
+      padding:8px 10px;background:rgba(57,208,255,.06);border-radius:8px;border:1px solid rgba(57,208,255,.2)">
+      💡 Chợ làm mới mỗi ~10 phút. Mua từ NPC hoặc người chơi khác trên cùng máy.
+    </div>`;
+    if (!list.length){
+      h += `<div class="market-empty">Chợ trống!</div>`;
+    } else {
+      for (const l of list){
+        const info = itemInfo(l);
+        const canBuy = state.gold >= l.price;
+        h += `<div class="market-listing">
+          <div class="ml-icon">${info.icon}</div>
+          <div class="ml-info">
+            <div class="ml-name">${info.name} ×${l.qty}</div>
+            <div class="ml-seller">Người bán: ${escapeHtml(l.seller)}</div>
+          </div>
+          <div class="ml-price">
+            <div class="p-total">${fmt(l.price)}💰</div>
+            <div class="p-unit">${fmt(info.unit)}/cái</div>
+          </div>
+          <button class="buy ${canBuy?'':'no'}" data-buy="${l.id}" ${canBuy?'':'disabled'}>
+            ${canBuy ? 'MUA' : 'THIẾU'}</button>
+        </div>`;
+      }
+    }
+    b.innerHTML = h;
+  } else {
+    const list = getMarket().filter(l => l.isPlayer);
+    const myUser = getCurrentUser();
+    let h = `<div class="sell-form">
+      <div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:10px;letter-spacing:1px">
+        📤 ĐĂNG BÁN VẬT PHẨM</div>
+      <div style="font-size:10px;color:#8bb8d8;margin-bottom:8px">Chọn loại vật phẩm muốn bán:</div>
+      <div id="sellItemList"></div>
+      <div class="sell-row"><label>Số lượng</label><input type="number" id="sellQty" min="1" value="1" /></div>
+      <div class="sell-row"><label>Giá / 1 đv</label><input type="number" id="sellUnitPrice" min="1" placeholder="Ví dụ: 1000000" /></div>
+      <button class="buy" id="btnPostSell" style="width:100%;padding:10px;font-size:11px">
+        📤 ĐĂNG LÊN CHỢ</button>
+    </div>`;
+
+    h += `<div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:1px">
+      📋 TIN ĐANG BÁN</div>`;
+    const myListings = list.filter(l => l.sellerUser === myUser);
+    if (!myListings.length){
+      h += `<div class="market-empty" style="padding:14px">Bạn chưa có tin đăng nào.</div>`;
+    } else {
+      for (const l of myListings){
+        const info = itemInfo(l);
+        h += `<div class="market-listing mine">
+          <div class="ml-icon">${info.icon}</div>
+          <div class="ml-info">
+            <div class="ml-name">${info.name} ×${l.qty}</div>
+            <div class="ml-seller">Giá: ${fmt(l.price)}💰</div>
+          </div>
+          <button class="cancel" data-cancel="${l.id}">HỦY TIN</button>
+        </div>`;
+      }
+    }
+    b.innerHTML = h;
+    renderSellItemList();
+  }
+}
+
+let sellItemSel = 'crystal';
+function renderSellItemList(){
+  const wrap = $('sellItemList');
+  if (!wrap) return;
+  const items = [
+    { type:'crystal', icon:'💎', name:'Tinh Thạch', qty: state.crystals },
+    { type:'stone',   icon:'🪨', name:'Đá Tông Môn', qty: state.sectStones },
+    { type:'pill',    icon:'💊', name:'Đan Dược', qty: state.pills }
+  ];
+  for (const [cid, cnt] of Object.entries(state.manuals || {})){
+    if (cnt > 0){
+      const m = MANUALS[cid];
+      if (m) items.push({ type:'manual', classId:cid, icon:'📕', name: m.name, qty: cnt });
+    }
+  }
+  let h = '';
+  for (const it of items){
+    const key = it.type === 'manual' ? ('manual_' + it.classId) : it.type;
+    const sel = (sellItemSel === key);
+    h += `<div class="sell-item ${sel?'active':''}" data-sell-key="${key}">
+      <div class="si-icon">${it.icon}</div>
+      <div class="si-info">
+        <div class="si-name">${it.name}</div>
+        <div class="si-qty">Số lượng có: ${it.qty}</div>
+      </div>
+    </div>`;
+  }
+  wrap.innerHTML = h;
+  wrap.querySelectorAll('[data-sell-key]').forEach(el => {
+    el.addEventListener('click', ()=>{
+      sellItemSel = el.dataset.sellKey;
+      renderSellItemList();
+    });
+  });
+}
+
+function buyListing(id){
+  const list = getMarket();
+  const idx = list.findIndex(l => l.id === id);
+  if (idx < 0) return;
+  const l = list[idx];
+  if (state.gold < l.price){ log('Không đủ vàng!', 'bad'); return; }
+  state.gold -= l.price;
+  if (l.itemType === 'crystal'){ state.crystals += l.qty; bumpCurrency('cry'); }
+  else if (l.itemType === 'stone'){ state.sectStones += l.qty; bumpCurrency('stone'); }
+  else if (l.itemType === 'pill'){ state.pills += l.qty; }
+  else if (l.itemType === 'manual'){
+    state.manuals[l.classId] = (state.manuals[l.classId] || 0) + l.qty;
+  }
+  const info = itemInfo(l);
+  log(`🏪 Mua ${info.name} ×${l.qty} — ${fmt(l.price)}💰`, 'good');
+  popup(`+${info.icon} ×${l.qty}`, 'gold', false, 0, -50);
+  if (l.isPlayer && l.sellerUser){
+    const accounts = getAccounts();
+    const sellerAcc = accounts[l.sellerUser];
+    if (sellerAcc && sellerAcc.save){
+      sellerAcc.save.gold = (sellerAcc.save.gold || 0) + l.price;
+      setAccounts(accounts);
+    }
+  }
+  list.splice(idx, 1);
+  setMarket(list);
+  screenFlash('gold');
+  renderMarket(); saveAccountState();
+}
+function cancelListing(id){
+  const list = getMarket();
+  const idx = list.findIndex(l => l.id === id);
+  if (idx < 0) return;
+  const l = list[idx];
+  if (l.sellerUser !== getCurrentUser()) return;
+  if (l.itemType === 'crystal') state.crystals += l.qty;
+  else if (l.itemType === 'stone') state.sectStones += l.qty;
+  else if (l.itemType === 'pill') state.pills += l.qty;
+  else if (l.itemType === 'manual'){
+    state.manuals[l.classId] = (state.manuals[l.classId] || 0) + l.qty;
+  }
+  list.splice(idx, 1);
+  setMarket(list);
+  log('❌ Hủy tin, vật phẩm đã trả về kho.', '');
+  renderMarket(); saveAccountState();
+}
+function postSell(){
+  const qty = parseInt($('sellQty').value, 10);
+  const unitPrice = parseInt($('sellUnitPrice').value, 10);
+  if (!qty || qty < 1){ log('Số lượng không hợp lệ!', 'bad'); return; }
+  if (!unitPrice || unitPrice < 1){ log('Giá không hợp lệ!', 'bad'); return; }
+
+  let type = sellItemSel, classId = null;
+  if (sellItemSel.startsWith('manual_')){
+    type = 'manual';
+    classId = sellItemSel.slice(7);
+  }
+  if (type === 'crystal' && state.crystals < qty){ log('Không đủ tinh thạch!', 'bad'); return; }
+  if (type === 'stone' && state.sectStones < qty){ log('Không đủ đá!', 'bad'); return; }
+  if (type === 'pill' && state.pills < qty){ log('Không đủ đan dược!', 'bad'); return; }
+  if (type === 'manual'){
+    const have = state.manuals[classId] || 0;
+    if (have < qty){ log('Không đủ bí tịch!', 'bad'); return; }
+  }
+
+  if (type === 'crystal') state.crystals -= qty;
+  else if (type === 'stone') state.sectStones -= qty;
+  else if (type === 'pill') state.pills -= qty;
+  else if (type === 'manual'){
+    state.manuals[classId] -= qty;
+    if (state.manuals[classId] <= 0) delete state.manuals[classId];
+  }
+
+  const list = getMarket();
+  const id = 'pl_' + Date.now() + '_' + Math.floor(Math.random()*1000);
+  list.push({
+    id, seller: state.name, sellerUser: getCurrentUser(),
+    isPlayer: true, itemType: type, classId, qty, price: unitPrice * qty,
+    createdAt: Date.now()
+  });
+  setMarket(list);
+  log(`📤 Đã đăng bán ${qty} ${type} giá ${fmt(unitPrice)}/đv`, 'good');
+  screenFlash('gold');
+  renderMarket(); saveAccountState();
+}
+
+/* ===== FX ===== */
+function shake(){ const a=$('app'); a.classList.remove('shake'); void a.offsetWidth; a.classList.add('shake');
+  setTimeout(()=>a.classList.remove('shake'), 280); }
+function bigShake(){ const a=$('app'); a.classList.remove('shake'); void a.offsetWidth; a.classList.add('shake');
+  const i=$('shakeInner'); i.style.animationDuration='.55s';
+  setTimeout(()=>{ a.classList.remove('shake'); i.style.animationDuration=''; }, 560); }
+function screenFlash(type){ const f=$('flashLayer'); f.className=''; void f.offsetWidth;
+  f.classList.add(type); setTimeout(()=>f.className='', 600); }
+function throwKnife(){
+  const arena=$('arena'), sprite=$('enemySprite');
+  const ar=arena.getBoundingClientRect(), sr=sprite.getBoundingClientRect();
+  const sx=ar.width*0.16, sy=ar.height*0.82;
+  const ex=sr.left-ar.left+sr.width/2, ey=sr.top-ar.top+sr.height/2;
+  for (let i=0;i<3;i++){
+    const k=document.createElement('div'); k.className='knife';
+    k.style.left=sx+'px'; k.style.top=sy+'px';
+    k.style.setProperty('--dx', (ex-sx+(Math.random()*30-15))+'px');
+    k.style.setProperty('--dy', (ey-sy+(Math.random()*20-10))+'px');
+    k.style.animationDelay=(i*55)+'ms'; k.style.opacity=i===2?'.7':'1';
+    $('floatLayer').appendChild(k); setTimeout(()=>k.remove(), 600);
+  }
+}
+function particleBurst(x,y,color,count){
+  count=count||12; const layer=$('floatLayer');
+  for (let i=0;i<count;i++){
+    const p=document.createElement('div'); p.className='particle';
+    const ang=Math.random()*Math.PI*2, dist=40+Math.random()*80;
+    p.style.left=x+'px'; p.style.top=y+'px';
+    p.style.setProperty('--px', Math.cos(ang)*dist+'px');
+    p.style.setProperty('--py', Math.sin(ang)*dist+'px');
+    p.style.background=color||'#39d0ff'; p.style.boxShadow=`0 0 10px ${color||'#39d0ff'}`;
+    const s=4+Math.random()*5; p.style.width=s+'px'; p.style.height=s+'px';
+    layer.appendChild(p); setTimeout(()=>p.remove(), 750);
+  }
+}
+function hitRing(x,y,color){
+  const r=document.createElement('div'); r.className='hitRing';
+  r.style.left=x+'px'; r.style.top=y+'px';
+  if(color){ r.style.borderColor=color; r.style.boxShadow=`0 0 14px ${color}`; }
+  $('floatLayer').appendChild(r); setTimeout(()=>r.remove(), 450);
+}
+function shockwave(x,y,cls){
+  const s=document.createElement('div'); s.className='shockwave '+(cls||'');
+  s.style.left=x+'px'; s.style.top=y+'px';
+  $('floatLayer').appendChild(s); setTimeout(()=>s.remove(), 600);
+}
+function popup(text, cls, fromEnemy, offsetX, offsetY){
+  const layer=$('floatLayer'), arena=$('arena');
+  const ar=arena.getBoundingClientRect();
+  const el=document.createElement('div'); el.className='pop '+(cls||'dmg'); el.textContent=text;
+  let x, y;
+  if(fromEnemy){
+    const sr=$('enemySprite').getBoundingClientRect();
+    x=sr.left-ar.left+sr.width/2+(offsetX!==undefined?offsetX:(Math.random()*70-35));
+    y=sr.top-ar.top+sr.height/2+(offsetY!==undefined?offsetY:(Math.random()*30-15));
+  } else {
+    x=ar.width/2+(offsetX!==undefined?offsetX:(Math.random()*40-20));
+    y=ar.height-24+(offsetY||0);
+  }
+  el.style.left=x+'px'; el.style.top=y+'px';
+  layer.appendChild(el); setTimeout(()=>el.remove(), 1000);
+}
+function flashEnemy(){ const s=$('enemySprite'); s.classList.remove('flash'); void s.offsetWidth;
+  s.classList.add('flash'); setTimeout(()=>s.classList.remove('flash'), 200); }
+function playerAttackAnim(){ const p=$('playerSprite'); p.classList.remove('attack'); void p.offsetWidth;
+  p.classList.add('attack'); setTimeout(()=>p.classList.remove('attack'), 320); }
+function playerHurtAnim(){ const p=$('playerSprite'); p.classList.remove('hurt'); void p.offsetWidth;
+  p.classList.add('hurt'); setTimeout(()=>p.classList.remove('hurt'), 380); }
+function enemyLungeAnim(){ const e=$('enemySprite'); e.classList.remove('lunge'); void e.offsetWidth;
+  e.classList.add('lunge'); setTimeout(()=>e.classList.remove('lunge'), 420); }
+function enemyDieAnim(cb){ const e=$('enemySprite'); e.classList.add('dying');
+  setTimeout(()=>{ e.classList.remove('dying'); cb && cb(); }, 620); }
+function hurtFlash(){ const a=$('arena'); a.classList.add('hurt');
+  setTimeout(()=>a.classList.remove('hurt'), 150); }
+function bumpCurrency(which){
+  const w = $({gold:'goldWrap', cry:'cryWrap', stone:'stoneWrap'}[which]);
+  if (!w) return;
+  w.classList.remove('bump'); void w.offsetWidth; w.classList.add('bump');
+  setTimeout(()=>w.classList.remove('bump'), 400);
+}
+function updateCombo(){ const c=$('combo');
+  if(comboCount>=3){ c.classList.add('on'); c.innerHTML=comboCount+'<span> COMBO</span>';
+    c.classList.remove('hit'); void c.offsetWidth; c.classList.add('hit'); }
+  else c.classList.remove('on'); }
+function lightningStrike(){
+  const arena=$('arena'), ar=arena.getBoundingClientRect(), layer=$('floatLayer');
+  const positions=[{x:ar.width*0.28,h:ar.height*0.7},{x:ar.width*0.5,h:ar.height*0.85},{x:ar.width*0.72,h:ar.height*0.75}];
+  positions.forEach((pos,i)=>{
+    setTimeout(()=>{
+      const b=document.createElement('div'); b.className='bolt';
+      b.style.left=pos.x+'px'; b.style.top='0px'; b.style.height=pos.h+'px';
+      layer.appendChild(b); setTimeout(()=>b.remove(), 600);
+      for (let s=0;s<6;s++){
+        const sp=document.createElement('div'); sp.className='boltSpark';
+        sp.style.left=pos.x+'px'; sp.style.top=pos.h+'px';
+        sp.style.setProperty('--sx', (Math.random()*100-50)+'px');
+        sp.style.setProperty('--sy', (Math.random()*50+20)+'px');
+        layer.appendChild(sp); setTimeout(()=>sp.remove(), 550);
+      }
+      bigShake();
+    }, i*130);
+  });
+  screenFlash('white');
+}
+function auraBurst(){
+  const arena=$('arena'), ar=arena.getBoundingClientRect(), layer=$('floatLayer');
+  const cx=ar.width/2, cy=ar.height/2;
+  const a=document.createElement('div'); a.className='auraBurst';
+  a.style.left=cx+'px'; a.style.top=cy+'px';
+  layer.appendChild(a); setTimeout(()=>a.remove(), 1200);
+  for (let i=0;i<8;i++){
+    const ray=document.createElement('div'); ray.className='auraRay';
+    ray.style.left='50%'; ray.style.top='50%';
+    ray.style.transform=`translate(-50%,-50%) rotate(${i*45}deg)`;
+    layer.appendChild(ray); setTimeout(()=>ray.remove(), 1000);
+  }
+  for (let i=0;i<40;i++){
+    setTimeout(()=>particleBurst(cx+(Math.random()*200-100), cy+(Math.random()*200-100), '#ffd24a', 4), i*20);
+  }
+  screenFlash('gold');
+}
+function bossIntro(text, color){
+  const bi=$('bossIntro');
+  bi.querySelector('.introTxt').textContent = text || 'BOSS!!';
+  bi.querySelector('.introTxt').style.color = color || '#ff3b5c';
+  bi.classList.remove('on'); void bi.offsetWidth; bi.classList.add('on');
+  setTimeout(()=>bi.classList.remove('on'), 1700);
+  screenFlash('red');
+}
+
+/* ===== QUEST ===== */
+function makeQuest(){
+  const z = state.realm, baseBP = REALMS[z].bp, roll = Math.random();
+  const id = Date.now() + Math.floor(Math.random()*10000);
+  if (roll < 0.40){
+    const target = 12 + Math.floor(Math.random()*18);
+    return { id, type:'kill', desc:`Diệt ${target} quái thú`, target, progress:0,
+      reward:{ gold: Math.floor(baseBP*4), crystals:0 }, rewardText:`${fmt(baseBP*4)}💰` };
+  } else if (roll < 0.65){
+    const target = Math.floor(baseBP * (25 + Math.random()*25));
+    return { id, type:'damage', desc:`Gây ${fmt(target)} sát thương`, target, progress:0,
+      reward:{ gold: Math.floor(baseBP*6), crystals:0 }, rewardText:`${fmt(baseBP*6)}💰` };
+  } else if (roll < 0.82){
+    const target = 1 + Math.floor(Math.random()*2);
+    return { id, type:'boss', desc:`Hạ ${target} Boss`, target, progress:0,
+      reward:{ gold: Math.floor(baseBP*2), crystals: target*3 }, rewardText:`${fmt(baseBP*2)}💰 + ${target*3}💎` };
+  } else if (roll < 0.93){
+    return { id, type:'breakthrough', desc:'Đột phá cảnh giới', target:1, progress:0,
+      reward:{ gold:0, crystals:10 }, rewardText:'10💎' };
+  } else {
+    return { id, type:'realm', desc:'Hoàn thành 1 Bí Cảnh', target:1, progress:0,
+      reward:{ gold:0, crystals:8 }, rewardText:'8💎' };
+  }
+}
+function ensureQuests(){
+  if (!Array.isArray(state.quests)) state.quests = [];
+  while (state.quests.length < 3) state.quests.push(makeQuest());
+  renderQuestMini();
+}
+function trackQuest(type, amount){
+  if (!state.quests) return;
+  let changed = false;
+  for (const q of state.quests){
+    if (q.type === type && q.progress < q.target){
+      q.progress = Math.min(q.target, q.progress + amount); changed = true;
+      if (q.progress >= q.target && !q.claimed){
+        log(`📜 Nhiệm vụ hoàn thành: ${q.desc}!`, 'quest');
+        popup('QUEST DONE!', 'epic', false, 0, -100);
+        screenFlash('gold');
+      }
+    }
+  }
+  if (changed) renderQuestMini();
+}
+function renderQuestMini(){
+  const mini = $('questMini');
+  if (!state.quests || !state.quests.length){ mini.classList.remove('on'); return; }
+  const active = state.quests.find(q => q.progress < q.target);
+  if (!active){ mini.classList.remove('on'); return; }
+  mini.classList.add('on');
+  $('qmText').textContent = active.desc;
+  $('qmFill').style.width = (active.progress/active.target*100) + '%';
+}
+function openQuests(){
+  $('modalTitle').textContent = '📜 NHIỆM VỤ';
+  $('shopBody').style.display = 'none';
+  $('questBody').style.display = 'block';
+  renderQuestPanel();
+  $('modal').classList.add('on');
+}
+function renderQuestPanel(){
+  const b = $('questBody');
+  let h = `<div style="font-size:10.5px;color:#b8a8d0;margin-bottom:10px">Hoàn thành để nhận thưởng.</div>`;
+  if (!state.quests) state.quests = [];
+  for (const q of state.quests){
+    const done = q.progress >= q.target;
+    const pct = q.progress / q.target * 100;
+    h += `<div class="quest-card ${done && !q.claimed ? 'done' : ''}">
+      <h5>${q.desc}<span class="tag">${done ? (q.claimed ? 'ĐÃ NHẬN' : 'HOÀN THÀNH') : 'ĐANG LÀM'}</span></h5>
+      <div class="quest-progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+      <div class="quest-progress-text">
+        <span>${fmt(q.progress)} / ${fmt(q.target)}</span><span>${Math.floor(pct)}%</span>
+      </div>
+      <div class="quest-reward">Thưởng: <b>${q.rewardText}</b></div>`;
+    if (done && !q.claimed) h += `<button class="claim-btn" data-claim="${q.id}">✓ NHẬN THƯỞNG</button>`;
+    h += `</div>`;
+  }
+  b.innerHTML = h;
+}
+function claimQuest(id){
+  if (!state.quests) return;
+  const idx = state.quests.findIndex(q => q.id === id);
+  if (idx < 0) return;
+  const q = state.quests[idx];
+  if (q.progress < q.target || q.claimed) return;
+  state.gold += q.reward.gold; state.crystals += q.reward.crystals;
+  if (q.reward.gold) bumpCurrency('gold');
+  if (q.reward.crystals) bumpCurrency('cry');
+  log(`🎁 +${fmt(q.reward.gold)}💰 +${q.reward.crystals}💎`, 'quest');
+  screenFlash('gold');
+  state.quests[idx] = makeQuest();
+  renderQuestPanel(); renderQuestMini(); saveAccountState();
+}
+
+/* ===== BÍ CẢNH ===== */
+function spawnPortal(){
+  if (state.portal) return;
+  const tier = Math.min(REALM_TIERS.length - 1, Math.floor(state.zone/2) + Math.floor(Math.random()*2));
+  state.portal = { tier, endsAt: Date.now() + 15000 };
+  log(`🌀 BÍ CẢNH ${REALM_TIERS[tier].name} xuất hiện!`, 'epic');
+  $('portalBtn').classList.add('on');
+  screenFlash('gold'); bigShake();
+  $('portalBtn').textContent = `${REALM_TIERS[tier].icon} ${REALM_TIERS[tier].name.toUpperCase()}`;
+  renderLobby();
+}
+function enterRealm(tierOverride){
+  if (state.inRealm){ log('Đang trong bí cảnh!', 'bad'); return; }
+  if (state.bossActive){ log('Đang có Boss!', 'bad'); return; }
+  if (state.dead){ log('Không thể vào khi đang chết.', 'bad'); return; }
+  const tier = tierOverride !== undefined ? tierOverride : (state.portal ? state.portal.tier : 0);
+  const T = REALM_TIERS[tier];
+  state.inRealm = true; state.realmTier = tier;
+  state.realmEnd = Date.now() + T.time * 1000;
+  state.portal = null; $('portalBtn').classList.remove('on');
+  $('arena').classList.add('realmAura');
+  const baseBP = REALMS[state.zone].bp;
+  const bp = Math.floor(baseBP * T.bpMult);
+  enemy = {
+    name:'Thủ Hộ Giả ' + T.name, bp, hp: bp*T.hpMult, maxHp: bp*T.hpMult,
+    gold: Math.floor(baseBP*T.reward.gold), cry: T.reward.cry,
+    isBoss:true, isRealm:true, atkAt: Date.now()+1500, atkInterval:1500,
+    atkPct:0.08, atkFlat: bp*0.04, emoji:'🐉'
+  };
+  $('enemySprite').textContent = enemy.emoji;
+  $('enemySprite').classList.add('realm');
+  $('enemyName').classList.add('realm');
+  $('ehpBar').classList.add('realm');
+  bossIntro('BÍ CẢNH!', '#b06bff');
+  log(`🌀 Tiến vào ${T.name}!`, 'epic');
+  showScreen('combat');
+  renderEnemy(); saveAccountState();
+}
+function exitRealm(success){
+  state.inRealm = false;
+  $('arena').classList.remove('realmAura');
+  $('enemySprite').classList.remove('realm');
+  $('enemyName').classList.remove('realm');
+  $('ehpBar').classList.remove('realm');
+  if (!success){
+    log('⏱️ Hết giờ! Bị đẩy ra khỏi bí cảnh.', 'bad');
+    popup('HẾT GIỜ!', 'big', false);
+    enemy = null;
+    setTimeout(()=>{ if (!enemy && !state.dead) spawnEnemy(false); }, 900);
+  }
+  renderLobby();
+}
+
+/* ===== ENCOUNTER ===== */
+function triggerEncounter(){
+  if (state.encounterOpen) return;
+  const enc = ENCOUNTERS[Math.floor(Math.random()*ENCOUNTERS.length)];
+  state.encounterOpen = true;
+  $('encIcon').textContent = enc.icon;
+  $('encTitle').textContent = enc.title;
+  $('encDesc').textContent = enc.desc;
+  const wrap = $('encChoices'); wrap.innerHTML = '';
+  enc.choices.forEach(ch => {
+    const btn = document.createElement('button');
+    const canPick = ch.check ? ch.check() : true;
+    btn.className = 'enc-choice ' + (ch.cls || '');
+    btn.disabled = !canPick;
+    btn.style.opacity = canPick ? '1' : '0.45';
+    btn.innerHTML = `<span>${ch.text}</span><span class="cost">${ch.desc||''}</span>`;
+    btn.addEventListener('click', ()=>{
+      if (!canPick) return;
+      state.encounterOpen = false;
+      $('encModal').classList.remove('on');
+      try { ch.onPick(); } catch(e){ console.error(e); }
+      saveAccountState();
+    });
+    wrap.appendChild(btn);
+  });
+  $('encModal').classList.add('on');
+  log(`🔮 KỲ NGỘ: ${enc.title}`, 'epic');
+  screenFlash('gold');
+}
+
+/* ===== SPAWN ===== */
+function spawnEnemy(isBoss){
+  const z = state.zone, baseBP = REALMS[z].bp, now = Date.now();
+  if (isBoss){
+    const bp = Math.floor(baseBP * 1.9);
+    enemy = {
+      name: BOSSES[z % BOSSES.length], bp, hp: bp*6, maxHp: bp*6,
+      gold: Math.floor(bp*2.5), cry: 1 + Math.floor(z/2),
+      isBoss:true, atkAt: now+1500, atkInterval:1500,
+      atkPct:0.10, atkFlat: bp*0.05, emoji:'👹'
+    };
+  } else {
+    const bp = Math.floor(baseBP * (0.9 + Math.random()*0.4));
+    const b = BEASTS[Math.floor(Math.random()*BEASTS.length)];
+    enemy = {
+      name: b[1], bp, hp: bp*4, maxHp: bp*4,
+      gold: Math.floor(bp*0.7), cry: 0,
+      isBoss:false, atkAt: now+1800, atkInterval:2000,
+      atkPct:0.06, atkFlat: bp*0.05, emoji: b[0]
+    };
+  }
+  const sp = $('enemySprite');
+  sp.textContent = enemy.emoji;
+  sp.classList.toggle('boss', !!isBoss);
+  $('enemyName').classList.toggle('boss', !!isBoss);
+  renderEnemy();
+}
+
+/* ===== ATTACK ===== */
+function attack(){
+  const now = Date.now();
+  if (state.dead) return;
+  if (now < state.lockUntil) return;
+  if (now < state.attackCd) return;
+  if (state.encounterOpen) return;
+
+  state.attackCd = now + attackCooldown();
+  state.lastCombatAt = now;
+
+  playerAttackAnim();
+  throwKnife();
+
+  if (!enemy || enemy.hp <= 0) return;
+
+  const pbp = playerBP();
+  if (pbp < enemy.bp){
+    popup('MISS', 'miss', true);
+    return;
+  }
+
+  let dmg;
+  let crit = false;
+  if (isAdmin){
+    /* ADMIN: 1 HIT KILL */
+    dmg = enemy.hp;
+    crit = true;
+  } else {
+    dmg = pbp * 0.09 * (0.9 + Math.random()*0.2);
+    crit = Math.random() < 0.12;
+    if (crit) dmg *= 2.5;
+    if (isDevour()) dmg *= 2.5;
+    dmg = dmg * (1 + sectBuffDmg()) * (1 + classBonus().dmg);
+    dmg = Math.max(1, Math.floor(dmg));
+  }
+
+  comboCount++; comboTimer = now + 2000; updateCombo();
+
+  enemy.hp -= dmg;
+  flashEnemy();
+
+  const arena = $('arena'), sr = $('enemySprite').getBoundingClientRect();
+  const ar = arena.getBoundingClientRect();
+  const ex = sr.left - ar.left + sr.width/2, ey = sr.top - ar.top + sr.height/2;
+
+  hitRing(ex, ey, crit ? '#ffd24a' : '#39d0ff');
+  const pc = crit ? '#ffd24a' : (isDevour() ? '#ff3b5c' : '#39d0ff');
+  particleBurst(ex, ey, pc, crit ? 20 : 10);
+  popup((crit?'✦ ':'')+fmt(dmg), crit?'crit':'dmg', true);
+  if (crit){ shockwave(ex, ey, 'red'); shake(); }
+  if (isDevour()) shockwave(ex, ey, 'purple');
+
+  const ehp = $('ehpBar'); ehp.classList.remove('hit'); void ehp.offsetWidth; ehp.classList.add('hit');
+  trackQuest('damage', dmg);
+
+  if (enemy.hp <= 0){ enemy.hp = 0; killEnemy(); }
+}
+
+function killEnemy(){
+  if (!enemy) return;
+  const g0 = enemy.gold;
+  const c0 = enemy.cry || 0;
+  const g = Math.floor(g0 * (1 + sectBuffGold()) * getEventMult('gold_mult'));
+  const c = Math.floor(c0 * (1 + sectBuffCrystal()) * getEventMult('crystal_mult'));
+  const wasBoss = enemy.isBoss, wasRealm = enemy.isRealm;
+  const capturedName = enemy.name;
+
+  state.gold += g; bumpCurrency('gold');
+  popup('+'+fmt(g)+'💰', 'gold', true, 0, -10);
+  if (c > 0){ state.crystals += c; bumpCurrency('cry'); popup('+'+c+'💎', 'cry', true, 0, 10); }
+
+  if (!wasRealm && Math.random() < SECT_STONE_DROP * getEventMult('stone_mult')){
+    state.sectStones += 1;
+    bumpCurrency('stone');
+    popup('+1🪨', 'stone', true, 0, 22);
+  }
+
+  let droppedManual = null;
+  if (!wasRealm && wasBoss && Math.random() < MANUAL_DROP_CHANCE * getEventMult('drop_mult')){
+    const notLearned = CLASSES.filter(c => !hasClass(c.id));
+    if (notLearned.length){
+      const pick = notLearned[Math.floor(Math.random()*notLearned.length)];
+      state.manuals[pick.id] = (state.manuals[pick.id] || 0) + 1;
+      droppedManual = pick;
+    }
+  }
+  if (wasRealm && Math.random() < MANUAL_REALM_DROP_CHANCE){
+    const notLearned = CLASSES.filter(c => !hasClass(c.id));
+    if (notLearned.length){
+      const pick = notLearned[Math.floor(Math.random()*notLearned.length)];
+      state.manuals[pick.id] = (state.manuals[pick.id] || 0) + 1;
+      droppedManual = pick;
+    }
+  }
+
+  state.kills++;
+  comboCount = 0; updateCombo();
+  trackQuest('kill', 1);
+  if (wasBoss) trackQuest('boss', 1);
+
+  enemyDieAnim(()=>{
+    if (droppedManual){
+      log(`📕 NHẬN BÍ TỊCH: ${droppedManual.icon} ${droppedManual.name}!`, 'manual');
+      popup(`📕 ${droppedManual.name}!`, 'manual', true, 0, -60);
+    }
+    if (wasRealm){
+      state.killsBoss++; state.realmClears++;
+      log(`🏆 HOÀN THÀNH BÍ CẢNH! +${fmt(g)}💰 +${c}💎`, 'epic');
+      popup('BÍ CẢNH CLEAR!', 'big', true, 0, -30);
+      screenFlash('gold'); bigShake(); auraBurst();
+      trackQuest('realm', 1);
+      exitRealm(true);
+      setTimeout(()=>{ if (!enemy && !state.dead && !state.bossActive) spawnEnemy(false); }, 1000);
+      saveAccountState();
+      return;
+    }
+    if (wasBoss){
+      state.bossActive = false;
+      state.killsBoss++;
+      log(`👑 HẠ BOSS ${capturedName}! +${fmt(g)}💰 +${c}💎`, 'epic');
+      popup('BOSS DOWN!', 'big', true, 0, -30);
+      screenFlash('gold'); bigShake();
+    } else {
+      log(`Hạ ${capturedName} — +${fmt(g)} vàng`);
+    }
+    enemy = null;
+    if (Math.random() < 0.07) setTimeout(triggerEncounter, 400);
+    else if (Math.random() < 0.05 && !state.portal && !state.bossActive) setTimeout(spawnPortal, 600);
+    setTimeout(()=>{ if (!enemy && !state.dead && !state.bossActive && !state.inRealm) spawnEnemy(false); }, 500);
+  });
+}
+
+/* ===== DIE ===== */
+function die(){
+  state.dead = true; state.bossActive = false; state.inRealm = false;
+  $('arena').classList.remove('realmAura');
+  $('enemySprite').classList.remove('realm');
+  const lost = Math.floor(state.gold * 0.30);
+  state.gold -= lost; enemy = null; comboCount = 0; updateCombo();
+  $('playerSprite').classList.add('dead');
+  log(`☠️ TỬ VONG! Mất ${fmt(lost)} vàng.`, 'bad');
+  popup('TỬ VONG', 'big', false);
+  screenFlash('red'); bigShake();
+  setTimeout(()=>{
+    state.dead = false; state.hp = Math.floor(maxHP() * 0.4);
+    $('playerSprite').classList.remove('dead');
+    log('✨ Hồi sinh! HP 40%.', 'good');
+    popup('HỒI SINH', 'heal', false);
+    if (!enemy) spawnEnemy(false);
+  }, 5000);
+}
+
+/* ===== BOSS ENRAGE ===== */
+function bossEnrage(){
+  state.bossActive = false;
+  if (isAdmin){
+    log('👑 ADMIN: Boss tự động bị tiêu diệt!', 'epic');
+    if (enemy){
+      const g = enemy.gold, c = enemy.cry || 0;
+      state.gold += g; state.crystals += c;
+      state.killsBoss++; state.kills++;
+    }
+    enemy = null;
+    setTimeout(()=>{ if (!enemy && !state.dead) spawnEnemy(false); }, 500);
+    return;
+  }
+  const lost = Math.floor(state.gold * 0.20);
+  state.gold -= lost; state.hp = 1;
+  state.lockUntil = Date.now() + 45000;
+  log(`💀 BOSS NỔI ĐIÊN! Mất ${fmt(lost)} vàng, khóa 45s!`, 'bad');
+  popup('INSTANT KILL', 'big', true, 0, -40);
+  screenFlash('red'); bigShake();
+  setTimeout(bigShake, 150); playerHurtAnim();
+  enemy = null;
+  setTimeout(()=>{ if (!enemy && !state.dead) spawnEnemy(false); }, 900);
+}
+
+function challengeBoss(){
+  if (state.dead){ log('Đang hồi sinh...', 'bad'); return; }
+  if (state.bossActive){ log('Đang có Boss!', 'bad'); return; }
+  if (state.inRealm){ log('Đang trong bí cảnh!', 'bad'); return; }
+  if (state.encounterOpen){ log('Đang có kỳ ngộ!', 'bad'); return; }
+  if (state.hp < maxHP() * 0.7){ log('⚠️ Cần HP > 70%!', 'bad'); return; }
+  state.bossActive = true;
+  state.bossEnd = Date.now() + 15000;
+  spawnEnemy(true);
+  bossIntro('BOSS!!', '#ff3b5c');
+  log(`👑 KHIÊU CHIẾN BOSS: ${enemy.name}!`, 'epic');
+  bigShake();
+}
+
+/* ===== THÔN PHỆ ===== */
+function activateDevour(){
+  const now = Date.now();
+  if (now < state.devourCd){ log(`Thôn Phệ hồi: ${((state.devourCd-now)/1000).toFixed(1)}s`, 'bad'); return; }
+  if (state.dead){ log('Không thể Thôn Phệ khi đã tử vong.', 'bad'); return; }
+  state.devourUntil = now + 12000;
+  state.devourCd = now + 75000;
+  $('app').classList.add('devour');
+  $('arena').classList.add('devourAura');
+  $('playerWrap').classList.add('devour');
+  $('btnDevour').classList.add('active');
+  log('🐉 THÔN PHỆ ×2.5 sát thương 12s', 'epic');
+  popup('THÔN PHỆ!', 'big', false, 0, -40);
+  const ar = $('arena').getBoundingClientRect();
+  shockwave(ar.width*0.15, ar.height*0.85, 'red');
+  shockwave(ar.width*0.15, ar.height*0.85, 'red');
+  setTimeout(()=>shockwave(ar.width*0.15, ar.height*0.85, 'purple'), 200);
+  screenFlash('red'); bigShake();
+}
+
+/* ===== BREAKTHROUGH ===== */
+function breakCost(){
+  if (state.realm >= REALMS.length - 1) return Infinity;
+  return Math.floor(REALMS[state.realm + 1].bp * 3);
+}
+function openBreakthroughModal(){
+  if (state.realm >= REALMS.length - 1){ log('Đã đạt Bất Hủ Chân Thần!', 'epic'); return; }
+  if (state.dead){ log('Không thể đột phá khi đã tử vong.', 'bad'); return; }
+  const cost = breakCost();
+  if (state.gold < cost){ log(`Không đủ vàng! Cần ${fmt(cost)} 💰`, 'bad'); return; }
+  const curRealm = REALMS[state.realm].n;
+  const nextRealm = REALMS[state.realm + 1].n;
+  const baseRate = BREAK_RATE[state.realm] || 0.08;
+  const boostedRate = Math.min(0.99, baseRate + PILL_BREAK_BONUS);
+
+  $('breakInfo').innerHTML = `
+    Cảnh giới hiện tại: <b>${curRealm}</b><br>
+    Tiếp theo: <b style="color:#7fffd4">${nextRealm}</b><br>
+    Chi phí: <b style="color:#ffd24a">${fmt(cost)} 💰</b><br>
+    Tỉ lệ cơ bản: <span class="${baseRate < 0.4 ? 'warn-rate' : 'good-rate'}">${Math.round(baseRate*100)}%</span>
+  `;
+  const choices = $('breakChoices');
+  choices.innerHTML = '';
+  if (state.pills > 0){
+    $('breakPillInfo').style.display = 'block';
+    $('breakPillInfo').innerHTML = `
+      💊 Bạn có <b>${state.pills}</b> Đan Dược.<br>
+      Dùng: <b>+${Math.round(PILL_BREAK_BONUS*100)}% tỉ lệ</b> (→ ${Math.round(boostedRate*100)}%) và <b>hồi full HP</b>.
+    `;
+    const btnPill = document.createElement('button');
+    btnPill.className = 'break-choice pill';
+    btnPill.innerHTML = `<span>💊 DÙNG ĐAN (còn ${state.pills})</span>
+      <span class="sub">→ ${Math.round(boostedRate*100)}% • Full HP</span>`;
+    btnPill.addEventListener('click', ()=>{
+      $('breakModal').classList.remove('on');
+      doBreakthrough(true);
+    });
+    choices.appendChild(btnPill);
+    const btnNoPill = document.createElement('button');
+    btnNoPill.className = 'break-choice nopill';
+    btnNoPill.innerHTML = `<span>⚡ KHÔNG DÙNG ĐAN</span>
+      <span class="sub">Tỉ lệ: ${Math.round(baseRate*100)}%</span>`;
+    btnNoPill.addEventListener('click', ()=>{
+      $('breakModal').classList.remove('on');
+      doBreakthrough(false);
+    });
+    choices.appendChild(btnNoPill);
+  } else {
+    $('breakPillInfo').style.display = 'none';
+    const btn = document.createElement('button');
+    btn.className = 'break-choice nopill';
+    btn.innerHTML = `<span>⚡ XÁC NHẬN ĐỘT PHÁ</span>
+      <span class="sub">Tỉ lệ: ${Math.round(baseRate*100)}%</span>`;
+    btn.addEventListener('click', ()=>{
+      $('breakModal').classList.remove('on');
+      doBreakthrough(false);
+    });
+    choices.appendChild(btn);
+  }
+  const cancel = document.createElement('button');
+  cancel.className = 'break-choice cancel';
+  cancel.innerHTML = `<span>✕ HỦY</span>`;
+  cancel.addEventListener('click', ()=>{ $('breakModal').classList.remove('on'); });
+  choices.appendChild(cancel);
+  $('breakModal').classList.add('on');
+}
+function doBreakthrough(usePill){
+  if (state.realm >= REALMS.length - 1) return;
+  const cost = breakCost();
+  if (state.gold < cost) return;
+  state.gold -= cost;
+  let rate = BREAK_RATE[state.realm] || 0.08;
+  if (usePill){
+    if (state.pills <= 0) return;
+    state.pills--;
+    rate = Math.min(0.99, rate + PILL_BREAK_BONUS);
+    state.hp = maxHP();
+    log(`💊 Dùng đan! Tỉ lệ: ${Math.round(rate*100)}%`, 'good');
+  }
+  const success = Math.random() < rate;
+  if (success){
+    state.realm++; state.breaks++;
+    state.hp = maxHP();
+    if (state.zone > state.realm) state.zone = state.realm;
+    log(`⚡ ĐỘT PHÁ! ${REALMS[state.realm].n}!`, 'epic');
+    popup('ĐỘT PHÁ!', 'big', false, 0, -50);
+    auraBurst(); bigShake();
+    const rn = $('realmName'); rn.textContent = REALMS[state.realm].n;
+    rn.classList.remove('levelup'); void rn.offsetWidth; rn.classList.add('levelup');
+    setTimeout(()=>rn.classList.remove('levelup'), 1300);
+    trackQuest('breakthrough', 1);
+  } else {
+    state.breaksFailed++;
+    const extra = Math.floor(state.gold * 0.35);
+    state.gold -= extra;
+    state.hp = Math.max(1, Math.floor(state.hp * 0.2));
+    let dropTxt = '';
+    if (Math.random() < 0.65 && state.realm > 0){
+      state.realm--;
+      if (state.zone > state.realm) state.zone = state.realm;
+      dropTxt = ` Tụt xuống ${REALMS[state.realm].n}!`;
+    }
+    log(`🌩️ THẤT BẠI! Mất ${fmt(extra)} vàng.${dropTxt}`, 'bad');
+    popup('LÔI KIẾP!', 'big', false, 0, -50);
+    lightningStrike(); playerHurtAnim();
+  }
+  state.hp = Math.min(state.hp, maxHP());
+  renderLobby();
+  saveAccountState();
+}
+
+/* ===== SHOP ===== */
+function openShop(){
+  $('modalTitle').textContent = '🛒 CỬA HÀNG';
+  $('shopBody').style.display = 'block';
+  $('questBody').style.display = 'none';
+  renderShop();
+  $('modal').classList.add('on');
+}
+function closeModal(){ $('modal').classList.remove('on'); }
+function canAfford(cost, cry){ return state.gold >= cost && state.crystals >= (cry||0); }
+function renderShop(){
+  const b = $('shopBody');
+  let h = `<div class="shop-sec"><h4>⚔️ VŨ KHÍ</h4>`;
+  WEAPONS.forEach((w,i)=>{
+    const owned = i <= state.weapon, next = i === state.weapon + 1;
+    let btn;
+    if (i === state.weapon) btn = `<button class="buy equipped" disabled>ĐANG DÙNG</button>`;
+    else if (owned) btn = `<button class="buy owned" data-act="weapon" data-i="${i}">TRANG BỊ</button>`;
+    else if (next){ const ok = canAfford(w.cost, w.cry);
+      btn = `<button class="buy ${ok?'':'no'}" data-act="weapon" data-i="${i}">${fmt(w.cost)}💰${w.cry?' +'+w.cry+'💎':''}</button>`;
+    } else btn = `<button class="buy locked" disabled>🔒 KHÓA</button>`;
+    h += `<div class="shop-item"><div class="si-info2"><b>${w.n}</b>
+      <span class="bp">+${fmt(w.bp)} BP</span></div>${btn}</div>`;
+  });
+  h += `</div>`;
+  h += `<div class="shop-sec"><h4>🛡️ GIÁP</h4>`;
+  ARMORS.forEach((a,i)=>{
+    const owned = i <= state.armor, next = i === state.armor + 1;
+    let btn;
+    if (i === state.armor) btn = `<button class="buy equipped" disabled>ĐANG DÙNG</button>`;
+    else if (owned) btn = `<button class="buy owned" data-act="armor" data-i="${i}">TRANG BỊ</button>`;
+    else if (next){ const ok = canAfford(a.cost, a.cry);
+      const p = a.cry ? `${a.cry}💎` : `${fmt(a.cost)}💰`;
+      btn = `<button class="buy ${ok?'':'no'}" data-act="armor" data-i="${i}">${p}</button>`;
+    } else btn = `<button class="buy locked" disabled>🔒 KHÓA</button>`;
+    h += `<div class="shop-item"><div class="si-info2"><b>${a.n}</b>
+      <span class="bp">+${fmt(a.bp)} BP</span>
+      <span>DR: ${Math.round(a.dr*100)}%</span></div>${btn}</div>`;
+  });
+  h += `</div>`;
+  h += `<div class="shop-sec"><h4>💊 ĐAN DƯỢC</h4>
+    <div class="shop-item"><div class="si-info2"><b>Đan Dược Bảo Mệnh</b>
+      <span>Full HP + ${Math.round(PILL_BREAK_BONUS*100)}% tỉ lệ đột phá</span>
+      <span class="bp">Có: ${state.pills}</span></div>
+      <button class="buy ${state.crystals>=5?'':'no'}" data-act="pill">5💎</button>
+    </div>
+    <div class="shop-item"><div class="si-info2"><b>Dùng đan</b>
+      <span>Dùng ngay 1 viên</span></div>
+      <button class="buy ${state.pills>0?'owned':'locked'}" data-act="usepill" ${state.pills>0?'':'disabled'}>DÙNG</button>
+    </div>
+  </div>`;
+  h += `<div class="shop-sec"><h4>💎 ĐỔI TINH THẠCH</h4>
+    <div class="shop-item"><div class="si-info2"><b>1 Tinh Thạch</b>
+      <span>1,000,000 💰</span></div>
+      <button class="buy ${state.gold>=1000000?'':'no'}" data-act="exchange">ĐỔI</button></div>
+    <div class="shop-item"><div class="si-info2"><b>10 Tinh Thạch</b>
+      <span>9,000,000 💰</span></div>
+      <button class="buy ${state.gold>=9000000?'':'no'}" data-act="exchange10">ĐỔI</button></div>
+  </div>`;
+  b.innerHTML = h;
+}
+function buyWeapon(i){
+  const w = WEAPONS[i];
+  if (i < state.weapon){ state.weapon = i; renderShop(); return; }
+  if (i === state.weapon) return;
+  if (i !== state.weapon + 1){ log('Cần mua cấp trước!', 'bad'); return; }
+  if (!canAfford(w.cost, w.cry)){ log('Không đủ!', 'bad'); return; }
+  state.gold -= w.cost; if (w.cry) state.crystals -= w.cry;
+  state.weapon = i;
+  log(`⚔️ Mua ${w.n}!`, 'epic');
+  screenFlash('gold'); renderShop(); saveAccountState();
+}
+function buyArmor(i){
+  const a = ARMORS[i];
+  if (i < state.armor){ state.armor = i; state.hp = Math.min(state.hp, maxHP()); renderShop(); return; }
+  if (i === state.armor) return;
+  if (i !== state.armor + 1){ log('Cần mua cấp trước!', 'bad'); return; }
+  if (!canAfford(a.cost, a.cry)){ log('Không đủ!', 'bad'); return; }
+  state.gold -= a.cost; if (a.cry) state.crystals -= a.cry;
+  state.armor = i;
+  state.hp = Math.min(maxHP(), state.hp + a.bp * 0.2);
+  log(`🛡️ Mua ${a.n}!`, 'epic');
+  screenFlash('gold'); renderShop(); saveAccountState();
+}
+function buyPill(){
+  if (state.crystals < 5){ log('Không đủ tinh thạch!', 'bad'); return; }
+  state.crystals -= 5; state.pills++;
+  log('💊 +1 Đan Dược', 'good');
+  renderShop(); saveAccountState();
+}
+function usePill(){
+  if (state.pills <= 0){ log('Không có đan dược!', 'bad'); return; }
+  state.pills--;
+  state.hp = maxHP();
+  state.lockUntil = 0;
+  log('💊 Full HP, giải khóa!', 'epic');
+  popup('FULL HP', 'heal', false, 0, -60);
+  screenFlash('gold'); renderShop(); saveAccountState();
+}
+function exchangeCrystal(amount){
+  const cost = amount === 1 ? 1000000 : 9000000;
+  const gain = amount === 1 ? 1 : 10;
+  if (state.gold < cost){ log('Không đủ vàng!', 'bad'); return; }
+  state.gold -= cost; state.crystals += gain;
+  log(`💎 +${gain} Tinh Thạch`, 'good');
+  renderShop(); saveAccountState();
+}
+
+/* ===== NAME / AVATAR ===== */
+function openNameModal(){
+  $('nameInput').value = state.name;
+  const grid = $('avatarGrid');
+  grid.innerHTML = '';
+  AVATARS.forEach(av => {
+    const btn = document.createElement('button');
+    btn.className = 'avatar-pick' + (av === state.avatar ? ' active' : '');
+    btn.textContent = av;
+    btn.type = 'button';
+    btn.addEventListener('click', ()=>{
+      state.avatar = av;
+      grid.querySelectorAll('.avatar-pick').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+    grid.appendChild(btn);
+  });
+  $('nameModal').classList.add('on');
+  setTimeout(()=>$('nameInput').focus(), 150);
+}
+function closeNameModal(){ $('nameModal').classList.remove('on'); }
+function saveName(){
+  const v = $('nameInput').value.trim();
+  if (!v){ log('Tên không được để trống!', 'bad'); return; }
+  if (v.length > 16){ log('Tối đa 16 ký tự!', 'bad'); return; }
+  state.name = v;
+  log(`✎ Đổi tên thành "${v}"`, 'good');
+  closeNameModal();
+  renderLobby();
+  if (state.screen === 'info') renderInfo();
+  if (state.screen === 'rank') renderRank();
+  saveAccountState();
+}
+
+/* ===== RENDER ===== */
+function renderHUD(){
+  $('gold').textContent = fmt(state.gold);
+  $('crystal').textContent = fmt(state.crystals);
+  $('stone').textContent = fmt(state.sectStones);
+  $('bpVal').textContent = fmt(playerBP());
+  const mh = maxHP();
+  const hp = Math.max(0, Math.min(mh, state.hp));
+  const pct = (hp/mh)*100;
+  $('hpFill').style.width = pct + '%';
+  $('hpText').textContent = fmt(hp) + ' / ' + fmt(mh);
+  $('hpBar').classList.toggle('low', pct < 30);
+  $('devourTag').classList.toggle('on', isDevour());
+  $('combatTag').classList.toggle('on', inCombat() && !state.dead);
+  if (state.bpBuffUntil > Date.now()){
+    const remain = Math.ceil((state.bpBuffUntil - Date.now())/1000);
+    $('buffTag').textContent = `${state.bpBuffName} ×${state.bpBuff} (${remain}s)`;
+  } else if (state.bpBuffUntil){
+    state.bpBuffUntil = 0; state.bpBuff = 0; $('buffTag').textContent = '';
+  }
+}
+function renderEnemy(){
+  const now = Date.now();
+  if (!enemy){
+    $('enemySprite').textContent = state.dead ? '💀' : '🌌';
+    $('enemySprite').classList.remove('boss');
+    $('enemyName').textContent = state.dead ? 'ĐANG HỒI SINH...' : 'Đang triệu hồi...';
+    $('enemyName').classList.remove('boss');
+    $('enemyInfo').textContent = '';
+    $('ehpFill').style.width = '0%'; $('ehpText').textContent = '';
+    return;
+  }
+  const pbp = playerBP();
+  const notEnough = pbp < enemy.bp;
+  $('enemyName').textContent = enemy.name;
+  $('enemyInfo').innerHTML = `BP: <b>${fmt(enemy.bp)}</b>` +
+    (notEnough ? ` <span class="warn">⚠️ THIẾU BP!</span>` : '');
+  const pct = Math.max(0, enemy.hp/enemy.maxHp*100);
+  $('ehpFill').style.width = pct + '%';
+  $('ehpText').textContent = fmt(Math.max(0, enemy.hp)) + ' / ' + fmt(enemy.maxHp);
+  const wrap = $('bossTimerWrap'), tbar = $('bossTimerBar');
+  if (state.inRealm){
+    wrap.classList.add('on'); tbar.classList.add('realm');
+    const remain = Math.max(0, state.realmEnd - now);
+    const total = REALM_TIERS[state.realmTier].time * 1000;
+    $('bossTimerFill').style.width = ((remain/total)*100) + '%';
+    $('bossTimerText').textContent = `⏱️ BÍ CẢNH: ${(remain/1000).toFixed(1)}s`;
+    tbar.classList.toggle('danger', remain < 8000);
+  } else if (state.bossActive && enemy.isBoss){
+    wrap.classList.add('on'); tbar.classList.remove('realm');
+    const remain = Math.max(0, state.bossEnd - now);
+    $('bossTimerFill').style.width = ((remain/15000)*100) + '%';
+    $('bossTimerText').textContent = `BOSS ENRAGE: ${(remain/1000).toFixed(1)}s`;
+    tbar.classList.toggle('danger', remain < 5000);
+  } else {
+    wrap.classList.remove('on'); tbar.classList.remove('danger', 'realm');
+  }
+}
+function updateButtons(){
+  const now = Date.now();
+  const autoBtn = $('btnAuto');
+  autoBtn.textContent = state.auto ? 'AUTO: ON' : 'AUTO: OFF';
+  autoBtn.style.color = state.auto ? '#00ffa3' : '#fff';
+  const bd = $('btnDevour');
+  if (isDevour()){ bd.textContent = `🐉 (${((state.devourUntil-now)/1000).toFixed(1)}s)`; bd.disabled = false; bd.classList.add('active'); }
+  else if (now < state.devourCd){ bd.textContent = `🐉 HỒI: ${Math.ceil((state.devourCd-now)/1000)}s`; bd.disabled = true; bd.classList.remove('active'); }
+  else { bd.textContent = '🐉 THÔN PHỆ'; bd.disabled = false; bd.classList.remove('active'); }
+  const ba = $('btnAttack');
+  if (now < state.lockUntil){
+    ba.textContent = `💀 KHÓA ${Math.ceil((state.lockUntil-now)/1000)}s`;
+    ba.disabled = true; ba.classList.remove('cd'); ba.style.setProperty('--cd', '0%');
+  } else {
+    ba.textContent = '⚔️ TẤN CÔNG'; ba.disabled = false;
+    const cd = attackCooldown();
+    if (now < state.attackCd){
+      const pct = (1 - (state.attackCd-now)/cd)*100;
+      ba.classList.add('cd'); ba.style.setProperty('--cd', pct + '%');
+    } else { ba.classList.remove('cd'); ba.style.setProperty('--cd', '100%'); }
+  }
+  $('btnBoss').disabled = state.bossActive || state.dead || state.inRealm;
+}
+
+/* ===== TICK ===== */
+function tick(){
+  const now = Date.now();
+  const dt = Math.min(0.5, (now - lastTickTime) / 1000);
+  lastTickTime = now;
+
+  if (!state.dead && state.hp > 0 && state.hp < maxHP() && !inCombat()){
+    state.hp = Math.min(maxHP(), state.hp + maxHP() * 0.03 * hpRegenMul() * dt);
+  }
+
+  if (state.devourUntil && now > state.devourUntil){
+    state.devourUntil = 0;
+    $('app').classList.remove('devour');
+    $('arena').classList.remove('devourAura');
+    $('playerWrap').classList.remove('devour');
+    $('btnDevour').classList.remove('active');
+    log('Thôn Phệ kết thúc.');
+  }
+
+  if (state.portal && now > state.portal.endsAt){
+    state.portal = null;
+    $('portalBtn').classList.remove('on');
+    log('🌀 Cổng bí cảnh biến mất.');
+    if (state.screen === 'lobby') renderLobby();
+  }
+
+  if (state.inRealm && now >= state.realmEnd) exitRealm(false);
+
+  if (state.screen === 'combat' && enemy && !state.dead && enemy.hp > 0 && now >= enemy.atkAt){
+    enemy.atkAt = now + enemy.atkInterval;
+    if (isAdmin){
+      state.hp = maxHP();
+    } else {
+      const pbp = Math.max(1, playerBP());
+      let dmg = enemy.atkFlat + maxHP() * enemy.atkPct * (enemy.bp / pbp);
+      dmg *= (1 - damageReduction());
+      dmg = Math.max(1, Math.floor(dmg));
+      state.hp -= dmg;
+      enemyLungeAnim();
+      setTimeout(()=>{
+        hurtFlash(); playerHurtAnim();
+        popup('-'+fmt(dmg), 'hurt', false, 0, -20);
+        const ar = $('arena').getBoundingClientRect();
+        particleBurst(40, ar.height - 60, '#ff3b5c', 8);
+      }, 200);
+      if (state.hp <= 0){ state.hp = 0; die(); }
+    }
+  }
+
+  if (state.bossActive && enemy && enemy.isBoss && !enemy.isRealm && now >= state.bossEnd){
+    bossEnrage();
+  }
+
+  if (state.auto && state.screen === 'combat' && !state.dead && !state.encounterOpen){
+    attack();
+  }
+
+  if (comboCount > 0 && now > comboTimer){ comboCount = 0; updateCombo(); }
+
+  renderHUD();
+  renderEnemy();
+  updateButtons();
+}
+
+/* ===== ADMIN PANEL ===== */
+function renderAdmin(){
+  if (!isAdmin) return;
+  const body = $('adminBody');
+  if (adminTab === 'gift') body.innerHTML = renderAdminGift();
+  else if (adminTab === 'manage') body.innerHTML = renderAdminManage();
+  else if (adminTab === 'broadcast') body.innerHTML = renderAdminBroadcast();
+  else if (adminTab === 'events') body.innerHTML = renderAdminEvents();
+  bindAdminEvents();
+}
+function renderAdminGift(){
+  const accounts = getAccounts();
+  const others = Object.values(accounts).filter(a => a.username !== ADMIN_USER);
+  if (!others.length){
+    return `<div class="market-empty">Chưa có người chơi nào khác.</div>`;
+  }
+  let opts = '';
+  others.forEach(a => {
+    opts += `<option value="${a.username}">${escapeHtml(a.username)}${a.banned?' (BANNED)':''}</option>`;
+  });
+  let clsOpts = '';
+  CLASSES.forEach(c => { clsOpts += `<option value="${c.id}">${c.icon} ${c.name}</option>`; });
+  return `<div class="admin-form">
+    <h4>🎁 TẶNG VẬT PHẨM CHO NGƯỜI CHƠI</h4>
+    <label>Người nhận</label>
+    <select id="giftTarget">${opts}</select>
+    <label>Loại vật phẩm</label>
+    <select id="giftType">
+      <option value="gold">💰 Vàng</option>
+      <option value="crystal">💎 Tinh Thạch</option>
+      <option value="stone">🪨 Đá Tông Môn</option>
+      <option value="pill">💊 Đan Dược</option>
+      <option value="manual">📕 Bí Tịch</option>
+    </select>
+    <label>Số lượng</label>
+    <input type="number" id="giftAmount" value="10000" min="1" />
+    <div id="giftClassWrap" style="display:none">
+      <label>Chọn hệ (khi tặng bí tịch)</label>
+      <select id="giftClass">${clsOpts}</select>
+    </div>
+    <button class="admin-btn green" data-admin="gift">🎁 TẶNG NGAY</button>
+  </div>`;
+}
+function renderAdminManage(){
+  const accounts = getAccounts();
+  const others = Object.values(accounts).filter(a => a.username !== ADMIN_USER);
+  if (!others.length) return `<div class="market-empty">Chưa có người chơi nào khác.</div>`;
+  let h = `<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px;
+    padding:8px 10px;background:rgba(57,208,255,.06);border-radius:8px;
+    border:1px solid rgba(57,208,255,.2)">
+    👥 Tổng: <b style="color:#fff">${others.length}</b> tài khoản
+  </div>`;
+  for (const a of others){
+    const s = a.save || {};
+    const realmName = REALMS[Math.min(REALMS.length-1, Math.max(0, s.realm|0))].n;
+    const gold = s.gold || 0;
+    const avt = s.avatar || '🧙‍♂️';
+    const banned = !!a.banned;
+    h += `<div class="admin-user ${banned?'banned':''}">
+      <div class="au-avt">${avt}</div>
+      <div class="au-info">
+        <div class="au-name">${escapeHtml(a.username)}${banned?' 🚫':''}</div>
+        <div class="au-sub">${realmName} • ${fmt(gold)}💰</div>
+        ${banned ? `<div class="au-sub" style="color:#ff8fa3">Lý do: ${escapeHtml(a.banReason||'—')}</div>` : ''}
+      </div>
+      <div class="au-actions">
+        <button class="edit" data-admin="setrealm" data-user="${a.username}">📈 CẤP</button>
+        ${banned
+          ? `<button class="unban" data-admin="unban" data-user="${a.username}">✓ MỞ KHÓA</button>`
+          : `<button class="ban" data-admin="ban" data-user="${a.username}">🚫 BAN</button>`}
+        <button class="del" data-admin="delete" data-user="${a.username}">🗑️ XÓA</button>
+      </div>
+    </div>`;
+  }
+  return h;
+}
+function renderAdminBroadcast(){
+  const g = getGlobal();
+  const b = g.broadcast;
+  let h = `<div class="admin-form">
+    <h4>📢 GỬI THÔNG BÁO</h4>
+    <label>Nội dung thông báo</label>
+    <textarea id="bcInput" placeholder="Nhập nội dung..." maxlength="500"></textarea>
+    <button class="admin-btn" data-admin="broadcast">📢 GỬI NGAY</button>
+  </div>`;
+  if (b){
+    h += `<div class="admin-form">
+      <h4>📜 Thông báo hiện tại</h4>
+      <div style="background:rgba(0,0,0,.35);border:1px solid rgba(255,59,92,.35);
+        border-radius:8px;padding:10px;font-size:12px;color:#fff;line-height:1.6;
+        white-space:pre-wrap;word-break:break-word">${escapeHtml(b.msg)}</div>
+      <div style="font-size:9px;color:#8bb8d8;margin-top:6px">
+        Gửi lúc: ${new Date(b.createdAt).toLocaleString('vi-VN')} • ID #${b.id}
+      </div>
+      <button class="admin-btn" data-admin="clearbroadcast">🗑️ XÓA THÔNG BÁO</button>
+    </div>`;
+  }
+  return h;
+}
+function renderAdminEvents(){
+  let typeOpts = '';
+  EVENT_TYPES.forEach(t => {
+    typeOpts += `<option value="${t.id}">${t.icon} ${t.name} — ${t.desc}</option>`;
+  });
+  let h = `<div class="admin-form">
+    <h4>🎉 TẠO EVENT MỚI</h4>
+    <label>Tên event</label>
+    <input type="text" id="evName" placeholder="VD: Lễ Hội Mùa Xuân" maxlength="40" />
+    <label>Loại event</label>
+    <select id="evType">${typeOpts}</select>
+    <label>Hệ số (multiplier)</label>
+    <input type="number" id="evMult" value="2" step="0.1" min="1" max="100" />
+    <label>Thời gian (phút)</label>
+    <input type="number" id="evDuration" value="30" min="1" max="10080" />
+    <button class="admin-btn purple" data-admin="createevent">🎉 TẠO EVENT</button>
+  </div>`;
+  const evs = getGlobal().events.filter(e => e.endsAt > Date.now());
+  h += `<div class="admin-form">
+    <h4>🎊 Event đang chạy (${evs.length})</h4>`;
+  if (!evs.length){
+    h += `<div style="font-size:10px;color:#8bb8d8;font-style:italic;text-align:center;padding:10px">
+      Chưa có event nào.</div>`;
+  } else {
+    for (const e of evs){
+      const et = EVENT_TYPES.find(t => t.id === e.type);
+      const remain = Math.max(0, e.endsAt - Date.now());
+      const m = Math.floor(remain / 60000), s = Math.floor((remain % 60000)/1000);
+      h += `<div class="event-card">
+        <h5>${et ? et.icon : '🎉'} ${escapeHtml(e.name)}</h5>
+        <div class="ev-info">Loại: ${et ? et.name : e.type} • Hệ số: ×${e.mult}</div>
+        <div class="ev-time">⏱️ Còn: ${m}p ${s}s</div>
+        <button data-admin="endevent" data-evid="${e.id}">🛑 KẾT THÚC SỚM</button>
+      </div>`;
+    }
+  }
+  h += `</div>`;
+  return h;
+}
+function bindAdminEvents(){
+  const body = $('adminBody');
+  const gt = body.querySelector('#giftType');
+  if (gt){
+    gt.addEventListener('change', ()=>{
+      const wrap = body.querySelector('#giftClassWrap');
+      if (wrap) wrap.style.display = gt.value === 'manual' ? 'block' : 'none';
+    });
+  }
+  body.querySelectorAll('[data-admin]').forEach(btn => {
+    btn.addEventListener('click', ()=>handleAdminAction(btn.dataset.admin, btn));
+  });
+}
+function handleAdminAction(action, btn){
+  if (!isAdmin) return;
+  const accounts = getAccounts();
+
+  if (action === 'gift'){
+    const target = $('giftTarget').value;
+    const type = $('giftType').value;
+    const amount = parseInt($('giftAmount').value, 10);
+    if (!target || !amount || amount < 1){ alert('Dữ liệu không hợp lệ!'); return; }
+    const acc = accounts[target];
+    if (!acc){ alert('Không tìm thấy user!'); return; }
+    if (!acc.save) acc.save = serializeState(freshState());
+    const s = acc.save;
+    if (type === 'gold') s.gold = (s.gold || 0) + amount;
+    else if (type === 'crystal') s.crystals = (s.crystals || 0) + amount;
+    else if (type === 'stone') s.sectStones = (s.sectStones || 0) + amount;
+    else if (type === 'pill') s.pills = (s.pills || 0) + amount;
+    else if (type === 'manual'){
+      const cid = $('giftClass').value;
+      if (!s.manuals || typeof s.manuals !== 'object') s.manuals = {};
+      s.manuals[cid] = (s.manuals[cid] || 0) + amount;
+    }
+    setAccounts(accounts);
+    log(`🎁 Đã tặng ${fmt(amount)} ${type} cho ${target}`, 'good');
+    screenFlash('gold');
+    alert(`✓ Đã tặng ${fmt(amount)} ${type} cho "${target}"!`);
+  }
+  else if (action === 'setrealm'){
+    const user = btn.dataset.user;
+    const acc = accounts[user];
+    if (!acc) return;
+    const cur = acc.save ? (acc.save.realm | 0) : 0;
+    const input = prompt(`Nhập cấp cảnh giới cho "${user}" (0-${REALMS.length-1})\nHiện tại: ${cur} (${REALMS[cur].n})`, String(cur));
+    if (input === null) return;
+    const v = parseInt(input, 10);
+    if (isNaN(v) || v < 0 || v > REALMS.length-1){ alert('Cấp không hợp lệ!'); return; }
+    if (!acc.save) acc.save = serializeState(freshState());
+    acc.save.realm = v;
+    if ((acc.save.zone|0) > v) acc.save.zone = v;
+    setAccounts(accounts);
+    log(`📈 Đã set ${user} lên ${REALMS[v].n}`, 'good');
+    renderAdmin();
+    alert(`✓ Đã set "${user}" → ${REALMS[v].n}`);
+  }
+  else if (action === 'ban'){
+    const user = btn.dataset.user;
+    const acc = accounts[user];
+    if (!acc) return;
+    const reason = prompt(`Lý do ban "${user}"?`, 'Vi phạm quy định');
+    if (reason === null) return;
+    acc.banned = true;
+    acc.banReason = reason || 'Vi phạm quy định';
+    setAccounts(accounts);
+    log(`🚫 Đã ban ${user}`, 'bad');
+    renderAdmin();
+  }
+  else if (action === 'unban'){
+    const user = btn.dataset.user;
+    const acc = accounts[user];
+    if (!acc) return;
+    acc.banned = false;
+    acc.banReason = '';
+    setAccounts(accounts);
+    log(`✓ Đã mở khóa ${user}`, 'good');
+    renderAdmin();
+  }
+  else if (action === 'delete'){
+    const user = btn.dataset.user;
+    if (!confirm(`⚠️ XÓA "${user}"? Không thể khôi phục!`)) return;
+    delete accounts[user];
+    setAccounts(accounts);
+    log(`🗑️ Đã xóa tài khoản ${user}`, 'bad');
+    screenFlash('red');
+    renderAdmin();
+  }
+  else if (action === 'broadcast'){
+    const msg = $('bcInput').value.trim();
+    if (!msg){ alert('Nội dung không được để trống!'); return; }
+    const g = getGlobal();
+    g.broadcastIdCounter = (g.broadcastIdCounter || 0) + 1;
+    g.broadcast = { id: g.broadcastIdCounter, msg, from: 'ADMIN', createdAt: Date.now() };
+    setGlobal(g);
+    log(`📢 Đã gửi thông báo`, 'epic');
+    screenFlash('red');
+    alert('✓ Đã gửi thông báo!');
+    renderAdmin();
+  }
+  else if (action === 'clearbroadcast'){
+    if (!confirm('Xóa thông báo?')) return;
+    const g = getGlobal();
+    g.broadcast = null;
+    setGlobal(g);
+    renderAdmin();
+  }
+  else if (action === 'createevent'){
+    const name = $('evName').value.trim();
+    const type = $('evType').value;
+    const mult = parseFloat($('evMult').value);
+    const dur = parseInt($('evDuration').value, 10);
+    if (!name){ alert('Nhập tên event!'); return; }
+    if (!mult || mult < 1){ alert('Hệ số không hợp lệ!'); return; }
+    if (!dur || dur < 1){ alert('Thời gian không hợp lệ!'); return; }
+    const g = getGlobal();
+    g.events.push({
+      id: 'ev_' + Date.now(),
+      name, type, mult,
+      createdAt: Date.now(),
+      endsAt: Date.now() + dur * 60000
+    });
+    setGlobal(g);
+    log(`🎉 Đã tạo event "${name}" ×${mult}`, 'epic');
+    screenFlash('gold'); auraBurst();
+    alert(`✓ Đã tạo event "${name}" ×${mult} trong ${dur} phút!`);
+    renderAdmin();
+  }
+  else if (action === 'endevent'){
+    const evId = btn.dataset.evid;
+    if (!confirm('Kết thúc event ngay?')) return;
+    const g = getGlobal();
+    g.events = g.events.filter(e => e.id !== evId);
+    setGlobal(g);
+    log(`🛑 Đã kết thúc event`, 'bad');
+    renderAdmin();
+  }
+}
+
+/* ===== EVENT BINDINGS ===== */
+function bindEvents(){
+  document.querySelectorAll('[data-auth]').forEach(b => {
+    b.addEventListener('click', ()=>{
+      authTab = b.dataset.auth;
+      clearAuthMsg();
+      renderAuth();
+    });
+  });
+
+  $('btnAttack').addEventListener('click', attack);
+  $('enemySprite').addEventListener('click', attack);
+  $('btnAuto').addEventListener('click', ()=>{
+    state.auto = !state.auto;
+    log(state.auto ? '🤖 AUTO: BẬT' : '🤖 AUTO: TẮT');
+    saveAccountState();
+  });
+  $('btnDevour').addEventListener('click', activateDevour);
+  $('btnBoss').addEventListener('click', challengeBoss);
+  $('btnHome').addEventListener('click', ()=>showScreen('lobby'));
+  $('portalBtn').addEventListener('click', ()=>{ if (state.portal) enterRealm(); });
+  $('zonePrev').addEventListener('click', ()=>{ if (state.zone > 0 && !state.inRealm){ state.zone--; onZoneChange(); } });
+  $('zoneNext').addEventListener('click', ()=>{ if (state.zone < state.realm && !state.inRealm){ state.zone++; onZoneChange(); } });
+
+  document.querySelectorAll('#screenLobby [data-screen]').forEach(btn => {
+    btn.addEventListener('click', ()=>{
+      const dest = btn.dataset.screen;
+      if (dest === 'combat') showScreen('combat');
+      else showScreen(dest);
+    });
+  });
+  document.querySelectorAll('#screenLobby [data-action]').forEach(btn => {
+    btn.addEventListener('click', ()=>{
+      const act = btn.dataset.action;
+      if (act === 'shop') openShop();
+      else if (act === 'quest') openQuests();
+      else if (act === 'portal' && state.portal) enterRealm();
+      else if (act === 'breakthrough') openBreakthroughModal();
+      else if (act === 'edit-profile') openNameModal();
+      else if (act === 'logout'){
+        if (confirm('Đăng xuất?')) logoutAccount();
+      }
+    });
+  });
+  document.querySelectorAll('.screen [data-close]').forEach(btn => {
+    btn.addEventListener('click', ()=>showScreen('lobby'));
+  });
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-act="edit-profile"]');
+    if (t) openNameModal();
+  });
+
+  $('sectBody').addEventListener('click', e=>{
+    const btn = e.target.closest('button[data-act]');
+    if (!btn || btn.disabled) return;
+    const act = btn.dataset.act;
+    if (act === 'join') joinSect(btn.dataset.id);
+    else if (act === 'upgrade') upgradeSect();
+    else if (act === 'leave') leaveSect();
+  });
+
+  $('invBody').addEventListener('click', e=>{
+    const wBtn = e.target.closest('button[data-inv-w]');
+    if (wBtn){ state.weapon = parseInt(wBtn.dataset.invW, 10); renderInventory(); saveAccountState(); return; }
+    const aBtn = e.target.closest('button[data-inv-a]');
+    if (aBtn){ state.armor = parseInt(aBtn.dataset.invA, 10); renderInventory(); saveAccountState(); return; }
+    if (e.target.closest('button[data-inv-pill]')){ usePill(); renderInventory(); return; }
+    const mBtn = e.target.closest('button[data-use-manual]');
+    if (mBtn){ useManual(mBtn.dataset.useManual); }
+  });
+
+  $('infoBody').addEventListener('click', e=>{
+    const btn = e.target.closest('button[data-sys]');
+    if (!btn) return;
+    const act = btn.dataset.sys;
+    if (act === 'save'){ saveAccountState(); log('💾 Đã lưu!', 'good'); }
+    else if (act === 'toggle-auto'){ state.auto = !state.auto; renderInfo(); saveAccountState(); }
+    else if (act === 'reset'){
+      if (isAdmin){ alert('Admin không thể reset!'); return; }
+      if (confirm('⚠️ Reset tài khoản này? KHÔNG thể hoàn tác!')){
+        const u = getCurrentUser();
+        const accounts = getAccounts();
+        if (accounts[u]){
+          accounts[u].save = serializeState(freshState());
+          setAccounts(accounts);
+          location.reload();
+        }
+      }
+    }
+    else if (act === 'export'){
+      const u = getCurrentUser();
+      const accounts = getAccounts();
+      const data = JSON.stringify(accounts[u]);
+      if (navigator.clipboard){
+        navigator.clipboard.writeText(data).then(()=>log('📋 Đã copy save!','good'))
+          .catch(()=>prompt('Copy save:', data));
+      } else prompt('Copy save:', data);
+    }
+    else if (act === 'import'){
+      const data = prompt('Dán save JSON:');
+      if (data){
+        try{
+          const parsed = JSON.parse(data);
+          const accounts = getAccounts();
+          accounts[getCurrentUser()] = parsed;
+          setAccounts(accounts);
+          location.reload();
+        } catch(e){ log('❌ Save không hợp lệ!', 'bad'); }
+      }
+    }
+  });
+
+  $('marketBody').addEventListener('click', e=>{
+    const bBtn = e.target.closest('button[data-buy]');
+    if (bBtn){ buyListing(bBtn.dataset.buy); return; }
+    const cBtn = e.target.closest('button[data-cancel]');
+    if (cBtn){ cancelListing(cBtn.dataset.cancel); return; }
+    if (e.target.closest('#btnPostSell')){ postSell(); return; }
+  });
+  document.querySelectorAll('[data-mtab]').forEach(t => {
+    t.addEventListener('click', ()=>{
+      document.querySelectorAll('[data-mtab]').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      marketTab = t.dataset.mtab;
+      renderMarket();
+    });
+  });
+
+  $('closeModal').addEventListener('click', closeModal);
+  $('modal').addEventListener('click', e=>{ if (e.target === $('modal')) closeModal(); });
+  $('shopBody').addEventListener('click', e=>{
+    const btn = e.target.closest('button[data-act]');
+    if (!btn || btn.disabled) return;
+    const act = btn.dataset.act;
+    const i = parseInt(btn.dataset.i || '-1', 10);
+    if (act === 'weapon') buyWeapon(i);
+    else if (act === 'armor') buyArmor(i);
+    else if (act === 'pill') buyPill();
+    else if (act === 'usepill') usePill();
+    else if (act === 'exchange') exchangeCrystal(1);
+    else if (act === 'exchange10') exchangeCrystal(10);
+  });
+  $('questBody').addEventListener('click', e=>{
+    const btn = e.target.closest('button[data-claim]');
+    if (!btn) return;
+    claimQuest(parseInt(btn.dataset.claim, 10));
+  });
+
+  document.querySelectorAll('[data-name]').forEach(btn => {
+    btn.addEventListener('click', ()=>{
+      if (btn.dataset.name === 'save') saveName();
+      else closeNameModal();
+    });
+  });
+  $('nameModal').addEventListener('click', e=>{ if (e.target === $('nameModal')) closeNameModal(); });
+  $('nameInput').addEventListener('keypress', e=>{ if (e.key === 'Enter') saveName(); });
+
+  document.querySelectorAll('[data-atab]').forEach(t => {
+    t.addEventListener('click', ()=>{
+      document.querySelectorAll('[data-atab]').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      adminTab = t.dataset.atab;
+      renderAdmin();
+    });
+  });
+
+  const bcBtn = $('closeBroadcast');
+  if (bcBtn) bcBtn.addEventListener('click', ()=>{ $('broadcastModal').classList.remove('on'); });
+
+  window.addEventListener('beforeunload', saveAccountState);
+  document.addEventListener('visibilitychange', ()=>{ if (document.hidden) saveAccountState(); });
+}
+
+function onZoneChange(){
+  state.bossActive = false;
+  state.portal = null; $('portalBtn').classList.remove('on');
+  $('bossTimerWrap').classList.remove('on');
+  spawnEnemy(false);
+  const zn = $('zoneName');
+  zn.textContent = 'KHU VỰC ' + (state.zone + 1);
+  zn.classList.remove('warp'); void zn.offsetWidth; zn.classList.add('warp');
+  setTimeout(()=>zn.classList.remove('warp'), 600);
+  const ar = $('arena').getBoundingClientRect();
+  for (let i = 0; i < 15; i++){
+    setTimeout(()=>particleBurst(Math.random()*ar.width, Math.random()*ar.height*0.7, '#39d0ff', 3), i * 30);
+  }
+  saveAccountState();
+}
+
+/* ===== INIT ===== */
+function buildStars(){
+  const c = $('stars');
+  for (let i = 0; i < 80; i++){
+    const s = document.createElement('div'); s.className = 'star';
+    s.style.left = (Math.random()*100)+'%';
+    s.style.top = (Math.random()*100)+'%';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    s.style.width = s.style.height = (Math.random() < 0.8 ? 1 : 2) + 'px';
+    if (Math.random() < 0.25) s.style.background = '#a9d8ff';
+    if (Math.random() < 0.12) s.style.background = '#c9a9ff';
+    c.appendChild(s);
+  }
+}
+
+function startGame(){
+  hideAuth();
+  ensureQuests();
+  $('zoneName').textContent = 'KHU VỰC ' + (state.zone + 1);
+  $('realmName').textContent = REALMS[state.realm].n;
+  log(`🌌 Chào mừng ${state.name}!`, 'epic');
+  if (isAdmin) log('👑 Chế độ ADMIN!', 'epic');
+  spawnEnemy(false);
+  showScreen('lobby');
+  renderHUD();
+  renderEnemy();
+  updateButtons();
+  setTimeout(checkBroadcast, 1000);
+  setInterval(checkBroadcast, 5000);
+  setInterval(renderActiveEventsBar, 2000);
+}
+
+function init(){
+  buildStars();
+  bindEvents();
+
+  /* Kiểm tra đăng nhập tự động */
+  const currentUser = getCurrentUser();
+  if (currentUser){
+    const accounts = getAccounts();
+    if (accounts[currentUser]){
+      /* Auto login nếu chưa bị ban */
+      if (accounts[currentUser].banned){
+        setCurrentUser(null);
+        showAuth();
+      } else {
+        isAdmin = !!accounts[currentUser].isAdmin;
+        loadAccountState(currentUser);
+        startGame();
+      }
+    } else {
+      setCurrentUser(null);
+      showAuth();
+    }
+  } else {
+    showAuth();
+  }
+
+  setInterval(tick, 200);
+  setInterval(saveAccountState, 5000);
+}
+
+init();
+</script>
+</body>
+</html>
