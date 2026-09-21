@@ -1632,12 +1632,44 @@ function setAuthMsg(msg, type){
   m.className = 'auth-msg on ' + (type || '');
   m.textContent = msg;
 }
-function clearAuthMsg(){ $('authMsg').className = 'auth-msg'; }
-
-function doLogin(){
+function clearAuthMsg(){ $('authMsg').className = 'auth-function doLogin(){
   const u = $('inUser').value.trim();
   const p = $('inPass').value;
   if (!u || !p){ setAuthMsg('Vui lòng nhập đủ thông tin!', 'err'); return; }
+
+  if (u === ADMIN_USER){
+    if (p !== ADMIN_PASS){
+      setAuthMsg('Sai mật khẩu admin!', 'err');
+      return;
+    }
+    const accounts = getAccounts();
+    if (!accounts[ADMIN_USER]){
+      accounts[ADMIN_USER] = {
+        username: ADMIN_USER,
+        passHash: hashPass(ADMIN_PASS),
+        isAdmin: true,
+        banned: false,
+        banReason: '',
+        createdAt: Date.now(),
+        save: null
+      };
+      setAccounts(accounts);
+    }
+    accounts[ADMIN_USER].isAdmin = true;
+    accounts[ADMIN_USER].banned = false;
+    setAccounts(accounts);
+
+    isAdmin = true;
+    state = freshState();
+    state.name = 'ADMIN';
+    state.classes = CLASSES.map(c => c.id);
+    state.accountCreatedAt = accounts[ADMIN_USER].createdAt;
+
+    setCurrentUser(ADMIN_USER);
+    setAuthMsg('👑 Chào mừng Admin!', 'ok');
+    setTimeout(() => startGame(), 300);
+    return;
+  }
 
   const r = loginAccount(u, p);
   if (!r.ok){ setAuthMsg(r.msg, 'err'); return; }
