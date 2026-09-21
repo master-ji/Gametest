@@ -22,26 +22,27 @@
    60%{transform:translate(-4px,-3px)}
    80%{transform:translate(4px,4px)}
   }
+  .shake{animation:shake .3s ease}
   #shakeInner{
-   position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden
+   position:absolute;top:0;right:0;bottom:0;left:0;inset:0;
+   display:flex;flex-direction:column;overflow:hidden
   }
-  #stars{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  #stars{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;pointer-events:none;overflow:hidden;z-index:0}
   .star{position:absolute;width:2px;height:2px;background:#dff0ff;border-radius:50%;
     animation:twinkle 3.5s infinite ease-in-out}
   @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
-  #flashLayer{position:absolute;inset:0;z-index:18;pointer-events:none;opacity:0}
+  #flashLayer{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;z-index:18;pointer-events:none;opacity:0}
   #flashLayer.red{background:radial-gradient(circle at 50% 60%,rgba(255,20,60,.7),rgba(80,0,10,.3) 60%,transparent);animation:flashFade .5s ease-out}
   #flashLayer.white{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.95),rgba(176,107,255,.5) 45%,transparent 80%);animation:flashFade .55s ease-out}
   #flashLayer.gold{background:radial-gradient(circle at 50% 50%,rgba(255,210,74,.7),rgba(255,140,0,.25) 55%,transparent 85%);animation:flashFade .55s ease-out}
   @keyframes flashFade{0%{opacity:1}100%{opacity:0}}
 
-  /* Ẩn game UI khi chưa login */
   body.not-logged #hud,
   body.not-logged #mainWrap,
   body.not-logged #logBox,
   body.not-logged #controls{display:none!important}
 
-  .auth-overlay{position:absolute;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+  .auth-overlay{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
     background-color:#02030a;
     background-image:radial-gradient(ellipse at 50% 30%,#0b1836 0%,#02030a 70%);
     padding:16px;overflow-y:auto}
@@ -122,7 +123,7 @@
   .hp-bar.low .fill{background:linear-gradient(90deg,#ff3b5c,#ff8a3b);
     box-shadow:0 0 12px rgba(255,59,92,.8);animation:lowHP 1s infinite alternate}
   @keyframes lowHP{from{filter:brightness(1)}to{filter:brightness(1.5)}}
-  .bar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  .bar span{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;display:flex;align-items:center;justify-content:center;
     font-size:9px;font-weight:800;letter-spacing:.5px;color:#fff;text-shadow:0 0 4px #000,0 0 8px #000}
 
   #questMini{position:relative;z-index:3;margin-top:4px;padding:4px 8px;border-radius:8px;
@@ -136,7 +137,7 @@
     box-shadow:0 0 8px #b06bff;transition:width .3s}
 
   #mainWrap{position:relative;z-index:2;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-  .screen{position:absolute;inset:0;display:none;flex-direction:column;
+  .screen{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;display:none;flex-direction:column;
     padding:10px;overflow-y:auto;scrollbar-width:thin;animation:screenIn .3s ease-out}
   .screen.active{display:flex}
   @keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -147,11 +148,11 @@
   #arena{position:relative;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
     align-items:center;padding:6px 0 4px;transition:box-shadow .15s;overflow:hidden}
   #arena.hurt{box-shadow:inset 0 0 60px rgba(255,0,60,.75)}
-  #arena.devourAura::after{content:'';position:absolute;inset:0;pointer-events:none;
+  #arena.devourAura::after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;inset:0;pointer-events:none;
     background:radial-gradient(circle at 50% 80%,rgba(255,59,92,.28),transparent 60%);
     animation:auraBreath 1.6s infinite alternate}
   #arena.realmAura{box-shadow:inset 0 0 80px rgba(176,107,255,.6)}
-  #arena.realmAura::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  #arena.realmAura::before{content:'';position:absolute;top:0;right:0;bottom:0;left:0;inset:0;pointer-events:none;z-index:1;
     background:radial-gradient(circle at 50% 40%,rgba(176,107,255,.18),transparent 70%);
     animation:realmBreath 2s infinite alternate}
   @keyframes realmBreath{from{opacity:.5}to{opacity:1}}
@@ -176,7 +177,7 @@
     box-shadow:0 0 14px rgba(255,59,92,.9);transition:width .1s linear}
   .timer-bar.danger .fill{animation:dangerFlash .4s infinite alternate}
   @keyframes dangerFlash{from{filter:brightness(1)}to{filter:brightness(2)}}
-  .timer-bar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  .timer-bar span{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;display:flex;align-items:center;justify-content:center;
     font-size:9px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 0 5px #000}
   .timer-bar.realm{background:rgba(176,107,255,.15);border-color:rgba(176,107,255,.7)}
   .timer-bar.realm .fill{background:linear-gradient(90deg,#b06bff,#ffd24a);
@@ -264,10 +265,10 @@
   @keyframes portalPulse{from{box-shadow:0 0 20px #b06bff,0 0 40px rgba(176,107,255,.5),inset 0 0 14px rgba(255,255,255,.3)}
     to{box-shadow:0 0 30px #ffd24a,0 0 60px #b06bff,inset 0 0 20px rgba(255,255,255,.5);transform:translateX(-50%) scale(1.05)}}
 
-  #floatLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+  #floatLayer{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;pointer-events:none;overflow:hidden;z-index:5}
   .knife{position:absolute;width:34px;height:34px;pointer-events:none;
     animation:knifeFly .38s cubic-bezier(.3,0,.85,.5) forwards}
-  .knife::before{content:'';position:absolute;inset:0;
+  .knife::before{content:'';position:absolute;top:0;right:0;bottom:0;left:0;inset:0;
     background:linear-gradient(135deg,#ffffff,#39d0ff 40%,#b06bff 100%);
     clip-path:polygon(50% 0,100% 78%,50% 100%,0 78%);
     box-shadow:0 0 14px #39d0ff,0 0 26px rgba(176,107,255,.8)}
@@ -347,7 +348,7 @@
     height:3px;border-radius:2px;box-shadow:0 0 14px #ffd24a;transform-origin:center;
     animation:auraRay .9s ease-out forwards}
   @keyframes auraRay{0%{width:0;opacity:1}30%{width:300px;opacity:1}100%{width:500px;opacity:0}}
-  #bossIntro{position:absolute;inset:0;z-index:16;pointer-events:none;
+  #bossIntro{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;z-index:16;pointer-events:none;
     display:flex;align-items:center;justify-content:center;opacity:0}
   #bossIntro.on{animation:bossIntroAnim 1.6s ease-out forwards}
   @keyframes bossIntroAnim{0%{opacity:0;transform:scale(1.4)}15%{opacity:1;transform:scale(1)}
@@ -640,7 +641,7 @@
   .rank-sub{font-size:9.5px;color:#8bb8d8;margin-top:1px}
   .rank-bp{flex:0 0 auto;font-size:11px;font-weight:900;color:var(--neon)}
 
-  #modal,#encModal,#breakModal,#nameModal{position:absolute;inset:0;z-index:20;display:none;
+  #modal,#encModal,#breakModal,#nameModal{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;z-index:20;display:none;
     background:rgba(2,4,12,.86);backdrop-filter:blur(4px);
     align-items:center;justify-content:center;padding:12px}
   #encModal{z-index:25}
@@ -779,7 +780,6 @@
     font-weight:900;letter-spacing:1px;background:linear-gradient(180deg,#ff3b5c,#c00);
     color:#fff;box-shadow:0 0 8px rgba(255,59,92,.7);margin-left:4px;text-transform:uppercase}
 
-  /* ADMIN PANEL */
   .admin-tab-row{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
   .admin-tab{flex:1;min-width:70px;padding:8px 4px;border-radius:8px;border:1px solid rgba(255,59,92,.3);
     background:rgba(255,59,92,.05);color:#ff8fa3;font-family:inherit;
@@ -830,7 +830,7 @@
     background:linear-gradient(180deg,#ff7a8f,#ff3b5c);color:#2a0008;
     font-family:inherit;font-size:9px;font-weight:900;cursor:pointer}
 
-  #broadcastModal{position:absolute;inset:0;z-index:200;display:none;background:rgba(2,4,12,.92);
+  #broadcastModal{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;z-index:200;display:none;background:rgba(2,4,12,.92);
     backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:14px}
   #broadcastModal.on{display:flex;animation:modalIn .3s ease-out}
   .bc-box{width:100%;max-width:420px;background:linear-gradient(180deg,#2a0410,#0a0206);
@@ -1109,6 +1109,20 @@
 
 <script>
 /* =========================================================
+   GLOBAL ERROR HANDLER — hiện lỗi lên màn hình
+   ========================================================= */
+window.onerror = function(msg, url, line, col, err){
+  try {
+    console.error('GLOBAL ERROR:', msg, 'at line', line, 'col', col, err);
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#300;color:#f88;padding:10px;z-index:99999;font:12px monospace;white-space:pre-wrap;max-height:60vh;overflow:auto';
+    d.textContent = 'LỖI: ' + msg + '\nDòng: ' + line + ':' + col + '\n' + (err && err.stack || '');
+    document.body.appendChild(d);
+  } catch(e){}
+  return false;
+};
+
+/* =========================================================
    THÔN PHỆ TINH KHÔNG — LOCAL EDITION (không Firebase)
    ========================================================= */
 
@@ -1147,10 +1161,12 @@ const CLASSES = [
   { id:'defense', name:'Phòng Ngự',  icon:'🛡️', desc:'+25% HP, +5% giảm thương', bonus:{ hp:0.25, dr:0.05 } },
   { id:'body',    name:'Thể Chất',   icon:'💪', desc:'+60% hồi HP', bonus:{ regen:0.60 } }
 ];
-const CLASS_MAP = Object.fromEntries(CLASSES.map(c => [c.id, c]));
+/* FIX: bỏ Object.fromEntries cho tương thích mobile cũ */
+const CLASS_MAP = {};
+CLASSES.forEach(function(c){ CLASS_MAP[c.id] = c; });
 
 const MANUALS = {};
-CLASSES.forEach(c => {
+CLASSES.forEach(function(c){
   MANUALS[c.id] = { id: c.id, name: 'Bí Tịch ' + c.name, icon: '📕', classId: c.id,
     desc: 'Học hệ ' + c.name + ' — ' + c.desc };
 });
@@ -1197,7 +1213,8 @@ const SECTS = [
   { id:'batdiet',   name:'Bất Diệt Cung',  icon:'🛡️', desc:'Phòng ngự tuyệt đối',
     buffType:'tank',    perLv:0.03, buffName:'HP+Giảm thương' }
 ];
-const SECT_STONE_COST = [2, 5, 8, 14, 22, 35, 55, 85, 130];
+/* FIX: thêm 1 phần tử (cần 10 mức, ban đầu chỉ có 9) */
+const SECT_STONE_COST = [2, 5, 8, 14, 22, 35, 55, 85, 130, 200];
 
 const REALM_TIERS = [
   { name:'Phàm Cấp Bí Cảnh',   icon:'🌟', bpMult:1.5, hpMult:8, time:30, reward:{gold:3, cry:2 } },
@@ -1210,50 +1227,50 @@ const ENCOUNTERS = [
   { id:'cave', icon:'🏛️', title:'CỔ ĐỘNG PHỦ',
     desc:'Bạn phát hiện một cổ động phủ với linh khí nồng đậm.',
     choices:[
-      { text:'⚔️ Tiến vào khiêu chiến', desc:'Nguy hiểm cao', cls:'danger', onPick:()=>enterRealm(2) },
-      { text:'🚪 Bỏ qua an toàn', desc:'Không mất gì', cls:'safe', onPick:()=>log('Bạn rời đi.') }
+      { text:'⚔️ Tiến vào khiêu chiến', desc:'Nguy hiểm cao', cls:'danger', onPick:function(){ enterRealm(2); } },
+      { text:'🚪 Bỏ qua an toàn', desc:'Không mất gì', cls:'safe', onPick:function(){ log('Bạn rời đi.'); } }
     ] },
   { id:'elder', icon:'🧙‍♂️', title:'THẦN BÍ LÃO NHÂN',
     desc:'"Ta có thể truyền cho ngươi chút đạo vận..."',
     choices:[
-      { text:'💎 Dâng 5 tinh thạch', desc:'+30% BP 60s', check:()=>state.crystals>=5,
-        onPick:()=>{ state.crystals-=5; addBuff(1.3,60000,'ĐẠO VẬN'); log('🧙 Ban đạo vận!','epic'); } },
-      { text:'🙏 Từ chối', desc:'Bỏ qua', cls:'safe', onPick:()=>log('Lão nhân tan thành khói.') }
+      { text:'💎 Dâng 5 tinh thạch', desc:'+30% BP 60s', check:function(){ return state.crystals>=5; },
+        onPick:function(){ state.crystals-=5; addBuff(1.3,60000,'ĐẠO VẬN'); log('🧙 Ban đạo vận!','epic'); } },
+      { text:'🙏 Từ chối', desc:'Bỏ qua', cls:'safe', onPick:function(){ log('Lão nhân tan thành khói.'); } }
     ] },
   { id:'stone', icon:'🪨', title:'NGỘ ĐẠO THẠCH',
     desc:'Một tảng đá cổ khắc phù văn phát sáng.',
     choices:[
       { text:'🧘 Ngồi thiền ngộ đạo', desc:'+50% BP 45s',
-        onPick:()=>{ addBuff(1.5,45000,'NGỘ ĐẠO'); log('🌟 BP ×1.5 (45s)!','epic'); auraBurst(); } },
+        onPick:function(){ addBuff(1.5,45000,'NGỘ ĐẠO'); log('🌟 BP ×1.5 (45s)!','epic'); auraBurst(); } },
       { text:'⚡ Đập vỡ lấy linh thạch', desc:'+vàng',
-        onPick:()=>{ const g=Math.max(500,Math.floor(playerBP()*2));
-          state.gold+=g; bumpCurrency('gold'); log(`Nhận ${fmt(g)} vàng.`,'good'); } }
+        onPick:function(){ const g=Math.max(500,Math.floor(playerBP()*2));
+          state.gold+=g; bumpCurrency('gold'); log('Nhận '+fmt(g)+' vàng.','good'); } }
     ] },
   { id:'demon', icon:'😈', title:'MA KHÍ XÂM NHẬP',
     desc:'Một luồng ma khí đen ngòm bao phủ lấy bạn.',
     choices:[
       { text:'💀 Hấp thụ ma khí', desc:'-40% HP, +3💎', cls:'danger',
-        onPick:()=>{ state.hp=Math.max(1,Math.floor(state.hp*0.6));
+        onPick:function(){ state.hp=Math.max(1,Math.floor(state.hp*0.6));
           state.crystals+=3; bumpCurrency('cry'); playerHurtAnim(); screenFlash('red');
           log('💀 Ma khí tràn vào!','bad'); } },
-      { text:'🛡️ Kháng cự', desc:'An toàn', cls:'safe', onPick:()=>log('Bạn đẩy lùi ma khí.') }
+      { text:'🛡️ Kháng cự', desc:'An toàn', cls:'safe', onPick:function(){ log('Bạn đẩy lùi ma khí.'); } }
     ] },
   { id:'merchant', icon:'🛒', title:'THƯƠNG NHÂN HUYỀN BÍ',
     desc:'"Ta có đan dược quý, đổi lấy vàng..."',
     choices:[
-      { text:'💰 Mua 2 đan dược (50K vàng)', desc:'+2 đan dược', check:()=>state.gold>=50000,
-        onPick:()=>{ state.gold-=50000; state.pills+=2; log('💊 Mua 2 đan dược!','good'); } },
-      { text:'🙅 Từ chối', desc:'Không mua', cls:'safe', onPick:()=>log('Thương nhân biến mất.') }
+      { text:'💰 Mua 2 đan dược (50K vàng)', desc:'+2 đan dược', check:function(){ return state.gold>=50000; },
+        onPick:function(){ state.gold-=50000; state.pills+=2; log('💊 Mua 2 đan dược!','good'); } },
+      { text:'🙅 Từ chối', desc:'Không mua', cls:'safe', onPick:function(){ log('Thương nhân biến mất.'); } }
     ] },
   { id:'thunder', icon:'⚡', title:'LÔI ĐÌNH TÀN DƯ',
     desc:'Một quả cầu lôi điện còn sót lại đang lơ lửng.',
     choices:[
       { text:'⚡ Chạm vào lôi cầu', desc:'Rủi ro cao', cls:'danger',
-        onPick:()=>{ if(Math.random()<0.6){ state.crystals+=5; bumpCurrency('cry');
+        onPick:function(){ if(Math.random()<0.6){ state.crystals+=5; bumpCurrency('cry');
             addBuff(1.4,40000,'LÔI ĐÌNH'); log('⚡ +5💎, BP ×1.4','epic'); auraBurst();
           } else { state.hp=Math.max(1,Math.floor(state.hp*0.5));
             playerHurtAnim(); lightningStrike(); log('⚡ Lôi điện phản phệ!','bad'); } } },
-      { text:'🚶 Rời đi', desc:'Không gì', cls:'safe', onPick:()=>{} }
+      { text:'🚶 Rời đi', desc:'Không gì', cls:'safe', onPick:function(){} }
     ] }
 ];
 
@@ -1272,7 +1289,7 @@ const EVENT_TYPES = [
   { id:'drop_mult',    name:'x2 Bí Tịch',     icon:'📕', desc:'Nhân tỉ lệ rơi bí tịch' }
 ];
 
-const $ = id => document.getElementById(id);
+const $ = function(id){ return document.getElementById(id); };
 const ATK_CD_BASE = 280;
 const COMBAT_RESET = 2500;
 
@@ -1287,7 +1304,9 @@ function fmt(n){
   return (n/1e15).toFixed(2) + 'Qa';
 }
 function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
 }
 
 /* ===== STATE ===== */
@@ -1307,7 +1326,6 @@ function freshState(){
     manuals: {},
     quests: [],
     lastBroadcastId: 0,
-    /* Các field dùng trong combat */
     screen: 'lobby',
     lastCombatAt: 0,
     attackCd: 0,
@@ -1420,8 +1438,11 @@ function applyState(saved){
   if (!Array.isArray(state.quests)) state.quests = [];
   if (typeof saved.lastBroadcastId === 'number') state.lastBroadcastId = saved.lastBroadcastId;
   state.realm = Math.min(REALMS.length - 1, Math.max(0, state.realm|0));
-  state.weapon = Math.min(WEAPONS.length - 1, Math.max(-1, state.weapon ?? -1));
-  state.armor = Math.min(ARMORS.length - 1, Math.max(-1, state.armor ?? -1));
+  /* FIX: bỏ ?? (nullish) cho tương thích mobile cũ */
+  const wv = (state.weapon === null || state.weapon === undefined) ? -1 : state.weapon;
+  const av = (state.armor  === null || state.armor  === undefined) ? -1 : state.armor;
+  state.weapon = Math.min(WEAPONS.length - 1, Math.max(-1, wv));
+  state.armor  = Math.min(ARMORS.length - 1,  Math.max(-1, av));
   state.zone = Math.min(state.realm, Math.max(0, state.zone|0));
   state.sessionStart = Date.now();
 }
@@ -1449,7 +1470,7 @@ function loadAccountState(u){
     state.realm = REALMS.length - 1;
     state.weapon = WEAPONS.length - 1;
     state.armor = ARMORS.length - 1;
-    state.classes = CLASSES.map(c => c.id);
+    state.classes = CLASSES.map(function(c){ return c.id; });
     if (!state.name || state.name === 'Tu Chân Giả') state.name = 'ADMIN';
     if (!state.avatar) state.avatar = '🧙‍♂️';
   }
@@ -1486,7 +1507,7 @@ function getEventMult(type){
 function getActiveEvents(){
   const g = getGlobal();
   const now = Date.now();
-  return g.events.filter(e => e.endsAt > now);
+  return g.events.filter(function(e){ return e.endsAt > now; });
 }
 function checkBroadcast(){
   if (!getCurrentUser()) return;
@@ -1502,7 +1523,7 @@ function checkBroadcast(){
 function showBroadcast(b){
   $('bcMsg').textContent = b.msg;
   const d = new Date(b.createdAt);
-  $('bcFrom').textContent = `Từ: ${b.from || 'Admin'} • ${d.toLocaleString('vi-VN')}`;
+  $('bcFrom').textContent = 'Từ: ' + (b.from || 'Admin') + ' • ' + d.toLocaleString('vi-VN');
   $('broadcastModal').classList.add('on');
 }
 
@@ -1516,7 +1537,7 @@ function classBonus(){
   }
   return b;
 }
-function hasClass(cid){ return state.classes.includes(cid); }
+function hasClass(cid){ return state.classes.indexOf(cid) >= 0; }
 function learnClass(cid){
   if (hasClass(cid)) return false;
   if (!CLASS_MAP[cid]) return false;
@@ -1525,7 +1546,7 @@ function learnClass(cid){
 }
 
 /* ===== SECT HELPERS ===== */
-function getSect(){ return state.sectId ? SECTS.find(s => s.id === state.sectId) : null; }
+function getSect(){ return state.sectId ? SECTS.find(function(s){ return s.id === state.sectId; }) : null; }
 function sectBuff(){ const s = getSect(); return s ? s.perLv * state.sectLevel : 0; }
 function sectBuffBP(){ const s = getSect(); return s && s.buffType === 'bp' ? sectBuff() : 0; }
 function sectBuffDmg(){ const s = getSect(); return s && s.buffType === 'dmg' ? sectBuff() : 0; }
@@ -1562,7 +1583,7 @@ function isDevour(){ return Date.now() < state.devourUntil; }
 function inCombat(){ return Date.now() - (state.lastCombatAt || 0) < COMBAT_RESET; }
 function addBuff(mult, durMs, name){
   state.bpBuff = mult; state.bpBuffUntil = Date.now() + durMs; state.bpBuffName = name;
-  $('buffTag').textContent = `${name} ×${mult}`;
+  $('buffTag').textContent = name + ' ×' + mult;
 }
 
 function log(msg, cls){
@@ -1578,40 +1599,39 @@ function log(msg, cls){
 /* ===== AUTH UI ===== */
 function renderAuth(){
   const f = $('authForm');
-  document.querySelectorAll('[data-auth]').forEach(b => {
+  document.querySelectorAll('[data-auth]').forEach(function(b){
     b.classList.toggle('active', b.dataset.auth === authTab);
   });
   let h = '';
   if (authTab === 'login'){
-    h += `<div class="auth-label">Tên đăng nhập</div>
-      <input class="auth-input" id="inUser" maxlength="20" placeholder="username" autocomplete="off" />
-      <div class="auth-label">Mật khẩu</div>
-      <input class="auth-input" id="inPass" type="password" maxlength="30" placeholder="••••••" />
-      <button class="auth-btn" id="btnLogin">⚡ ĐĂNG NHẬP</button>
-      <div style="font-size:9px;color:#5b6b7d;text-align:center;margin-top:10px;line-height:1.5">
-        Chưa có tài khoản? Nhấn <b style="color:#39d0ff">TẠO ACC</b> phía trên.
-      </div>`;
+    h += '<div class="auth-label">Tên đăng nhập</div>' +
+      '<input class="auth-input" id="inUser" maxlength="20" placeholder="username" autocomplete="off" />' +
+      '<div class="auth-label">Mật khẩu</div>' +
+      '<input class="auth-input" id="inPass" type="password" maxlength="30" placeholder="••••••" />' +
+      '<button class="auth-btn" id="btnLogin">⚡ ĐĂNG NHẬP</button>' +
+      '<div style="font-size:9px;color:#5b6b7d;text-align:center;margin-top:10px;line-height:1.5">' +
+        'Chưa có tài khoản? Nhấn <b style="color:#39d0ff">TẠO ACC</b> phía trên.</div>';
   } else {
-    h += `<div class="auth-label">Tên đăng nhập</div>
-      <input class="auth-input" id="inUser" maxlength="20" placeholder="username" autocomplete="off" />
-      <div class="auth-label">Mật khẩu</div>
-      <input class="auth-input" id="inPass" type="password" maxlength="30" placeholder="••••••" />
-      <div class="auth-label">Chọn hệ khởi đầu</div>
-      <div class="class-grid" id="classGrid"></div>
-      <button class="auth-btn" id="btnRegister">🌌 TẠO TÀI KHOẢN</button>`;
+    h += '<div class="auth-label">Tên đăng nhập</div>' +
+      '<input class="auth-input" id="inUser" maxlength="20" placeholder="username" autocomplete="off" />' +
+      '<div class="auth-label">Mật khẩu</div>' +
+      '<input class="auth-input" id="inPass" type="password" maxlength="30" placeholder="••••••" />' +
+      '<div class="auth-label">Chọn hệ khởi đầu</div>' +
+      '<div class="class-grid" id="classGrid"></div>' +
+      '<button class="auth-btn" id="btnRegister">🌌 TẠO TÀI KHOẢN</button>';
   }
   f.innerHTML = h;
   if (authTab === 'register'){
     const grid = $('classGrid');
-    CLASSES.forEach(c => {
+    CLASSES.forEach(function(c){
       const d = document.createElement('div');
       d.className = 'class-card' + (c.id === regClassId ? ' active' : '');
-      d.innerHTML = `<div class="cc-icon">${c.icon}</div>
-        <div class="cc-name">${c.name}</div>
-        <div class="cc-desc">${c.desc}</div>`;
-      d.addEventListener('click', ()=>{
+      d.innerHTML = '<div class="cc-icon">' + c.icon + '</div>' +
+        '<div class="cc-name">' + c.name + '</div>' +
+        '<div class="cc-desc">' + c.desc + '</div>';
+      d.addEventListener('click', function(){
         regClassId = c.id;
-        grid.querySelectorAll('.class-card').forEach(x => x.classList.remove('active'));
+        grid.querySelectorAll('.class-card').forEach(function(x){ x.classList.remove('active'); });
         d.classList.add('active');
       });
       grid.appendChild(d);
@@ -1620,11 +1640,13 @@ function renderAuth(){
   } else {
     $('btnLogin').addEventListener('click', doLogin);
   }
-  ['inUser','inPass'].forEach(id => {
+  ['inUser','inPass'].forEach(function(id){
     const el = $(id);
-    if (el) el.addEventListener('keypress', e => { if (e.key === 'Enter') {
-      if (authTab === 'login') doLogin(); else doRegister();
-    }});
+    if (el) el.addEventListener('keypress', function(e){
+      if (e.key === 'Enter') {
+        if (authTab === 'login') doLogin(); else doRegister();
+      }
+    });
   });
 }
 function setAuthMsg(msg, type){
@@ -1632,44 +1654,12 @@ function setAuthMsg(msg, type){
   m.className = 'auth-msg on ' + (type || '');
   m.textContent = msg;
 }
-function clearAuthMsg(){ $('authMsg').className = 'auth-function doLogin(){
+function clearAuthMsg(){ $('authMsg').className = 'auth-msg'; }
+
+function doLogin(){
   const u = $('inUser').value.trim();
   const p = $('inPass').value;
   if (!u || !p){ setAuthMsg('Vui lòng nhập đủ thông tin!', 'err'); return; }
-
-  if (u === ADMIN_USER){
-    if (p !== ADMIN_PASS){
-      setAuthMsg('Sai mật khẩu admin!', 'err');
-      return;
-    }
-    const accounts = getAccounts();
-    if (!accounts[ADMIN_USER]){
-      accounts[ADMIN_USER] = {
-        username: ADMIN_USER,
-        passHash: hashPass(ADMIN_PASS),
-        isAdmin: true,
-        banned: false,
-        banReason: '',
-        createdAt: Date.now(),
-        save: null
-      };
-      setAccounts(accounts);
-    }
-    accounts[ADMIN_USER].isAdmin = true;
-    accounts[ADMIN_USER].banned = false;
-    setAccounts(accounts);
-
-    isAdmin = true;
-    state = freshState();
-    state.name = 'ADMIN';
-    state.classes = CLASSES.map(c => c.id);
-    state.accountCreatedAt = accounts[ADMIN_USER].createdAt;
-
-    setCurrentUser(ADMIN_USER);
-    setAuthMsg('👑 Chào mừng Admin!', 'ok');
-    setTimeout(() => startGame(), 300);
-    return;
-  }
 
   const r = loginAccount(u, p);
   if (!r.ok){ setAuthMsg(r.msg, 'err'); return; }
@@ -1677,7 +1667,7 @@ function clearAuthMsg(){ $('authMsg').className = 'auth-function doLogin(){
   loadAccountState(u);
   setCurrentUser(u);
   setAuthMsg('Đăng nhập thành công!', 'ok');
-  setTimeout(() => startGame(), 300);
+  setTimeout(function(){ startGame(); }, 300);
 }
 function doRegister(){
   const u = $('inUser').value.trim();
@@ -1687,7 +1677,6 @@ function doRegister(){
   if (p.length < 3){ setAuthMsg('Mật khẩu phải từ 3 ký tự!', 'err'); return; }
   if (!/^[A-Za-z0-9_]+$/.test(u)){ setAuthMsg('Tên chỉ chữ, số, gạch dưới!', 'err'); return; }
 
-  /* Nếu là admin → tạo admin */
   if (u === ADMIN_USER){
     if (p !== ADMIN_PASS){ setAuthMsg('Mật khẩu admin không đúng!', 'err'); return; }
     const accounts = getAccounts();
@@ -1700,10 +1689,10 @@ function doRegister(){
     isAdmin = true;
     state = freshState();
     state.name = 'ADMIN';
-    state.classes = CLASSES.map(c => c.id);
+    state.classes = CLASSES.map(function(c){ return c.id; });
     setCurrentUser(ADMIN_USER);
     setAuthMsg('👑 Tạo admin thành công!', 'ok');
-    setTimeout(() => startGame(), 300);
+    setTimeout(function(){ startGame(); }, 300);
     return;
   }
 
@@ -1713,7 +1702,7 @@ function doRegister(){
   loadAccountState(u);
   setCurrentUser(u);
   setAuthMsg('Tạo tài khoản thành công!', 'ok');
-  setTimeout(() => startGame(), 300);
+  setTimeout(function(){ startGame(); }, 300);
 }
 
 function showAuth(){
@@ -1729,7 +1718,7 @@ function hideAuth(){
 /* ===== SCREEN ===== */
 function showScreen(name){
   state.screen = name;
-  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(function(el){ el.classList.remove('active'); });
   const el = document.getElementById('screen' + name.charAt(0).toUpperCase() + name.slice(1));
   if (el) el.classList.add('active');
   $('controls').classList.toggle('on', name === 'combat');
@@ -1746,17 +1735,17 @@ function renderLobby(){
   const nameEl = $('lobbyName');
   nameEl.innerHTML = escapeHtml(state.name) + (isAdmin ? ' <span class="admin-badge">ADMIN</span>' : '');
   $('lobbyRealm').textContent = REALMS[state.realm].n;
-  $('lobbyBP').textContent = `Lực chiến: ${fmt(playerBP())}`;
-  const classNames = state.classes.map(c => CLASS_MAP[c] ? CLASS_MAP[c].name : c).join(', ') || '—';
-  $('lobbyClasses').textContent = `Hệ: ${classNames}`;
+  $('lobbyBP').textContent = 'Lực chiến: ' + fmt(playerBP());
+  const classNames = state.classes.map(function(c){ return CLASS_MAP[c] ? CLASS_MAP[c].name : c; }).join(', ') || '—';
+  $('lobbyClasses').textContent = 'Hệ: ' + classNames;
 
   const tagWrap = $('lobbyClassTags');
-  let th = `<span class="lc-label">HỆ:</span>`;
+  let th = '<span class="lc-label">HỆ:</span>';
   for (const cid of state.classes){
     const c = CLASS_MAP[cid];
-    if (c) th += `<span class="lc-tag">${c.icon} ${c.name}</span>`;
+    if (c) th += '<span class="lc-tag">' + c.icon + ' ' + c.name + '</span>';
   }
-  if (!state.classes.length) th += `<span style="color:#8bb8d8">Chưa có hệ</span>`;
+  if (!state.classes.length) th += '<span style="color:#8bb8d8">Chưa có hệ</span>';
   tagWrap.innerHTML = th;
 
   const bb = $('lobbyBreakCost');
@@ -1766,10 +1755,10 @@ function renderLobby(){
     const cost = breakCost();
     const rate = Math.round((BREAK_RATE[state.realm]||0)*100);
     const canBreak = state.gold >= cost;
-    bb.textContent = `${fmt(cost)}💰 • Tỉ lệ ${rate}%`;
+    bb.textContent = fmt(cost) + '💰 • Tỉ lệ ' + rate + '%';
     bb.style.color = canBreak ? '#c4ffe0' : '#ff8fa3';
   }
-  const ready = (state.quests||[]).filter(q => q.progress >= q.target && !q.claimed).length;
+  const ready = (state.quests||[]).filter(function(q){ return q.progress >= q.target && !q.claimed; }).length;
   const qb = $('lobbyQuestBadge');
   if (ready > 0){ qb.style.display = 'block'; qb.textContent = ready; }
   else qb.style.display = 'none';
@@ -1777,7 +1766,7 @@ function renderLobby(){
   if (state.portal){
     lpb.style.display = 'flex';
     const T = REALM_TIERS[state.portal.tier];
-    lpb.querySelector('.lb-name').textContent = `${T.icon} ${T.name.toUpperCase()}`;
+    lpb.querySelector('.lb-name').textContent = T.icon + ' ' + T.name.toUpperCase();
   } else lpb.style.display = 'none';
   const adminBtn = $('lobbyAdminBtn');
   if (adminBtn) adminBtn.style.display = isAdmin ? 'flex' : 'none';
@@ -1790,14 +1779,14 @@ function renderActiveEventsBar(){
   const evs = getActiveEvents();
   if (!evs.length){ bar.classList.remove('on'); return; }
   bar.classList.add('on');
-  let h = `<div style="font-size:10px;color:#e0c4ff;font-weight:900;letter-spacing:1px;margin-bottom:3px">
-    🎉 EVENT ĐANG CHẠY</div>`;
+  let h = '<div style="font-size:10px;color:#e0c4ff;font-weight:900;letter-spacing:1px;margin-bottom:3px">' +
+    '🎉 EVENT ĐANG CHẠY</div>';
   for (const e of evs){
     const remain = Math.max(0, e.endsAt - Date.now());
     const m = Math.floor(remain / 60000), s = Math.floor((remain % 60000)/1000);
-    const timeStr = m > 0 ? `${m}p${s}s` : `${s}s`;
-    const et = EVENT_TYPES.find(t => t.id === e.type);
-    h += `<div class="ae-line">${et ? et.icon : '🎉'} <b>${escapeHtml(e.name)}</b> ×${e.mult} — còn ${timeStr}</div>`;
+    const timeStr = m > 0 ? (m + 'p' + s + 's') : (s + 's');
+    const et = EVENT_TYPES.find(function(t){ return t.id === e.type; });
+    h += '<div class="ae-line">' + (et ? et.icon : '🎉') + ' <b>' + escapeHtml(e.name) + '</b> ×' + e.mult + ' — còn ' + timeStr + '</div>';
   }
   bar.innerHTML = h;
 }
@@ -1805,54 +1794,54 @@ function renderActiveEventsBar(){
 /* ===== SECT ===== */
 function renderSect(){
   const b = $('sectBody');
-  let h = `<div style="font-size:11px;color:#b8a8d0;margin-bottom:12px;padding:10px;
-    background:rgba(127,255,212,.08);border-radius:9px;border:1px solid rgba(127,255,212,.3);
-    line-height:1.6">
-    🪨 <b style="color:#7fffd4">Đá Tông Môn: ${state.sectStones}</b><br>
-    <span style="font-size:10px">Nâng cấp tông môn cần <b>Đá Tông Môn</b> — rơi 1% khi diệt quái.
-    Nhận <b>+${SECT_STONE_JOIN_BONUS} đá</b> khi gia nhập lần đầu. Đổi tông môn tốn <b>50💎</b>.</span>
-  </div>`;
+  let h = '<div style="font-size:11px;color:#b8a8d0;margin-bottom:12px;padding:10px;' +
+    'background:rgba(127,255,212,.08);border-radius:9px;border:1px solid rgba(127,255,212,.3);' +
+    'line-height:1.6">' +
+    '🪨 <b style="color:#7fffd4">Đá Tông Môn: ' + state.sectStones + '</b><br>' +
+    '<span style="font-size:10px">Nâng cấp tông môn cần <b>Đá Tông Môn</b> — rơi 1% khi diệt quái. ' +
+    'Nhận <b>+' + SECT_STONE_JOIN_BONUS + ' đá</b> khi gia nhập lần đầu. Đổi tông môn tốn <b>50💎</b>.</span>' +
+  '</div>';
   for (const s of SECTS){
     const isCurrent = state.sectId === s.id;
     const lv = isCurrent ? state.sectLevel : 0;
     const pct = Math.round(s.perLv * lv * 100);
-    const buffText = lv > 0 ? `+${pct}% ${s.buffName}` : 'Chưa có buff';
+    const buffText = lv > 0 ? '+' + pct + '% ' + s.buffName : 'Chưa có buff';
     let actions = '';
     if (isCurrent){
       const nextCost = lv < 10 ? SECT_STONE_COST[lv] : null;
       if (nextCost !== null){
         const can = state.sectStones >= nextCost;
-        actions = `<button class="upgrade" data-act="upgrade" ${can?'':'disabled'}>
-          ⬆ LÊN Lv${lv+1} (${nextCost}🪨)</button>
-          <button class="leave" data-act="leave">RỜI</button>`;
+        actions = '<button class="upgrade" data-act="upgrade" ' + (can?'':'disabled') + '>' +
+          '⬆ LÊN Lv' + (lv+1) + ' (' + nextCost + '🪨)</button>' +
+          '<button class="leave" data-act="leave">RỜI</button>';
       } else {
-        actions = `<button disabled>✦ MAX Lv10</button>
-          <button class="leave" data-act="leave">RỜI</button>`;
+        actions = '<button disabled>✦ MAX Lv10</button>' +
+          '<button class="leave" data-act="leave">RỜI</button>';
       }
     } else {
       if (state.sectId){
-        actions = `<button data-act="join" data-id="${s.id}">ĐỔI (50💎)</button>`;
+        actions = '<button data-act="join" data-id="' + s.id + '">ĐỔI (50💎)</button>';
       } else {
-        actions = `<button data-act="join" data-id="${s.id}">GIA NHẬP MIỄN PHÍ</button>`;
+        actions = '<button data-act="join" data-id="' + s.id + '">GIA NHẬP MIỄN PHÍ</button>';
       }
     }
-    h += `<div class="sect-card ${isCurrent ? 'current' : ''}">
-      <div class="sc-head">
-        <div class="sc-icon">${s.icon}</div>
-        <div class="sc-info">
-          <div class="sc-name">${s.name} ${isCurrent ? '✦' : ''}</div>
-          <div class="sc-desc">${s.desc}</div>
-          <div class="sc-buff">Buff: ${buffText}</div>
-          ${isCurrent ? `<div class="sc-level">Cấp: ${lv}/10</div>` : ''}
-        </div>
-      </div>
-      <div class="sc-actions">${actions}</div>
-    </div>`;
+    h += '<div class="sect-card ' + (isCurrent ? 'current' : '') + '">' +
+      '<div class="sc-head">' +
+        '<div class="sc-icon">' + s.icon + '</div>' +
+        '<div class="sc-info">' +
+          '<div class="sc-name">' + s.name + ' ' + (isCurrent ? '✦' : '') + '</div>' +
+          '<div class="sc-desc">' + s.desc + '</div>' +
+          '<div class="sc-buff">Buff: ' + buffText + '</div>' +
+          (isCurrent ? '<div class="sc-level">Cấp: ' + lv + '/10</div>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="sc-actions">' + actions + '</div>' +
+    '</div>';
   }
   b.innerHTML = h;
 }
 function joinSect(id){
-  const s = SECTS.find(x => x.id === id);
+  const s = SECTS.find(function(x){ return x.id === id; });
   if (!s) return;
   if (state.sectId){
     if (state.crystals < 50){ log('Cần 50💎 để đổi tông môn!', 'bad'); return; }
@@ -1862,10 +1851,10 @@ function joinSect(id){
   if (!state.firstSectJoined){
     state.sectStones += SECT_STONE_JOIN_BONUS;
     state.firstSectJoined = true;
-    log(`🪨 Nhận ${SECT_STONE_JOIN_BONUS} Đá Tông Môn!`, 'stone');
+    log('🪨 Nhận ' + SECT_STONE_JOIN_BONUS + ' Đá Tông Môn!', 'stone');
     bumpCurrency('stone');
   }
-  log(`🏯 Gia nhập ${s.name}!`, 'epic');
+  log('🏯 Gia nhập ' + s.name + '!', 'epic');
   screenFlash('gold'); auraBurst();
   renderSect(); saveAccountState();
 }
@@ -1873,14 +1862,14 @@ function upgradeSect(){
   const s = getSect(); if (!s) return;
   if (state.sectLevel >= 10) return;
   const cost = SECT_STONE_COST[state.sectLevel];
-  if (state.sectStones < cost){ log(`Cần ${cost}🪨!`, 'bad'); return; }
+  if (state.sectStones < cost){ log('Cần ' + cost + '🪨!', 'bad'); return; }
   state.sectStones -= cost; state.sectLevel++;
-  log(`🏯 ${s.name} lên Lv${state.sectLevel}!`, 'epic');
+  log('🏯 ' + s.name + ' lên Lv' + state.sectLevel + '!', 'epic');
   screenFlash('gold'); renderSect(); saveAccountState();
 }
 function leaveSect(){
   const s = getSect(); if (!s) return;
-  if (!confirm(`Rời khỏi ${s.name}?`)) return;
+  if (!confirm('Rời khỏi ' + s.name + '?')) return;
   state.sectId = null; state.sectLevel = 0;
   log('🏯 Đã rời tông môn.', 'bad');
   renderSect(); saveAccountState();
@@ -1890,80 +1879,81 @@ function leaveSect(){
 function renderInventory(){
   const b = $('invBody');
   let h = '';
-  h += `<div class="inv-section"><h4>🌟 HỆ ĐÃ HỌC</h4>`;
+  h += '<div class="inv-section"><h4>🌟 HỆ ĐÃ HỌC</h4>';
   if (state.classes.length){
     for (const cid of state.classes){
       const c = CLASS_MAP[cid];
       if (!c) continue;
-      h += `<div class="inv-item active"><div class="iv-icon">${c.icon}</div>
-        <div class="iv-info"><div class="iv-name">${c.name}</div>
-        <div class="iv-stat">${c.desc}</div></div>
-        <button class="eq">ĐÃ HỌC</button></div>`;
+      h += '<div class="inv-item active"><div class="iv-icon">' + c.icon + '</div>' +
+        '<div class="iv-info"><div class="iv-name">' + c.name + '</div>' +
+        '<div class="iv-stat">' + c.desc + '</div></div>' +
+        '<button class="eq">ĐÃ HỌC</button></div>';
     }
-  } else h += `<div class="inv-empty">Chưa có hệ nào</div>`;
-  h += `</div>`;
+  } else h += '<div class="inv-empty">Chưa có hệ nào</div>';
+  h += '</div>';
 
-  h += `<div class="inv-section"><h4>📕 BÍ TỊCH</h4>`;
-  const manualEntries = Object.entries(state.manuals || {}).filter(([k,v]) => v > 0);
+  h += '<div class="inv-section"><h4>📕 BÍ TỊCH</h4>';
+  const manualEntries = Object.entries(state.manuals || {}).filter(function(kv){ return kv[1] > 0; });
   if (manualEntries.length){
-    for (const [cid, count] of manualEntries){
+    for (const kv of manualEntries){
+      const cid = kv[0], count = kv[1];
       const m = MANUALS[cid];
       if (!m) continue;
       const learned = hasClass(cid);
       const btn = learned
-        ? `<button class="learned" disabled>ĐÃ HỌC</button>`
-        : `<button class="use" data-use-manual="${cid}">HỌC</button>`;
-      h += `<div class="inv-item manual"><div class="iv-icon">${m.icon}</div>
-        <div class="iv-info"><div class="iv-name">${m.name} ×${count}</div>
-        <div class="iv-stat">${m.desc}</div></div>${btn}</div>`;
+        ? '<button class="learned" disabled>ĐÃ HỌC</button>'
+        : '<button class="use" data-use-manual="' + cid + '">HỌC</button>';
+      h += '<div class="inv-item manual"><div class="iv-icon">' + m.icon + '</div>' +
+        '<div class="iv-info"><div class="iv-name">' + m.name + ' ×' + count + '</div>' +
+        '<div class="iv-stat">' + m.desc + '</div></div>' + btn + '</div>';
     }
-  } else h += `<div class="inv-empty">Không có bí tịch</div>`;
-  h += `</div>`;
+  } else h += '<div class="inv-empty">Không có bí tịch</div>';
+  h += '</div>';
 
-  h += `<div class="inv-section"><h4>⚔️ VŨ KHÍ</h4>`;
+  h += '<div class="inv-section"><h4>⚔️ VŨ KHÍ</h4>';
   if (state.weapon >= 0){
     const w = WEAPONS[state.weapon];
-    h += `<div class="inv-item active"><div class="iv-icon">⚔️</div>
-      <div class="iv-info"><div class="iv-name">${w.n}</div>
-      <div class="iv-stat">+<b>${fmt(w.bp)}</b> BP</div></div>
-      <button class="eq">ĐANG DÙNG</button></div>`;
-  } else h += `<div class="inv-empty">Chưa trang bị</div>`;
+    h += '<div class="inv-item active"><div class="iv-icon">⚔️</div>' +
+      '<div class="iv-info"><div class="iv-name">' + w.n + '</div>' +
+      '<div class="iv-stat">+<b>' + fmt(w.bp) + '</b> BP</div></div>' +
+      '<button class="eq">ĐANG DÙNG</button></div>';
+  } else h += '<div class="inv-empty">Chưa trang bị</div>';
   if (state.weapon > 0){
     for (let i = 0; i < state.weapon; i++){
       const w = WEAPONS[i];
-      h += `<div class="inv-item"><div class="iv-icon">⚔️</div>
-        <div class="iv-info"><div class="iv-name">${w.n}</div>
-        <div class="iv-stat">+<b>${fmt(w.bp)}</b> BP</div></div>
-        <button data-inv-w="${i}">TRANG BỊ</button></div>`;
+      h += '<div class="inv-item"><div class="iv-icon">⚔️</div>' +
+        '<div class="iv-info"><div class="iv-name">' + w.n + '</div>' +
+        '<div class="iv-stat">+<b>' + fmt(w.bp) + '</b> BP</div></div>' +
+        '<button data-inv-w="' + i + '">TRANG BỊ</button></div>';
     }
   }
-  h += `</div>`;
+  h += '</div>';
 
-  h += `<div class="inv-section"><h4>🛡️ GIÁP</h4>`;
+  h += '<div class="inv-section"><h4>🛡️ GIÁP</h4>';
   if (state.armor >= 0){
     const a = ARMORS[state.armor];
-    h += `<div class="inv-item active"><div class="iv-icon">🛡️</div>
-      <div class="iv-info"><div class="iv-name">${a.n}</div>
-      <div class="iv-stat">+<b>${fmt(a.bp)}</b> BP • DR <b>${Math.round(a.dr*100)}%</b></div></div>
-      <button class="eq">ĐANG DÙNG</button></div>`;
-  } else h += `<div class="inv-empty">Chưa trang bị</div>`;
+    h += '<div class="inv-item active"><div class="iv-icon">🛡️</div>' +
+      '<div class="iv-info"><div class="iv-name">' + a.n + '</div>' +
+      '<div class="iv-stat">+<b>' + fmt(a.bp) + '</b> BP • DR <b>' + Math.round(a.dr*100) + '%</b></div></div>' +
+      '<button class="eq">ĐANG DÙNG</button></div>';
+  } else h += '<div class="inv-empty">Chưa trang bị</div>';
   if (state.armor > 0){
     for (let i = 0; i < state.armor; i++){
       const a = ARMORS[i];
-      h += `<div class="inv-item"><div class="iv-icon">🛡️</div>
-        <div class="iv-info"><div class="iv-name">${a.n}</div>
-        <div class="iv-stat">+<b>${fmt(a.bp)}</b> BP • DR <b>${Math.round(a.dr*100)}%</b></div></div>
-        <button data-inv-a="${i}">TRANG BỊ</button></div>`;
+      h += '<div class="inv-item"><div class="iv-icon">🛡️</div>' +
+        '<div class="iv-info"><div class="iv-name">' + a.n + '</div>' +
+        '<div class="iv-stat">+<b>' + fmt(a.bp) + '</b> BP • DR <b>' + Math.round(a.dr*100) + '%</b></div></div>' +
+        '<button data-inv-a="' + i + '">TRANG BỊ</button></div>';
     }
   }
-  h += `</div>`;
+  h += '</div>';
 
-  h += `<div class="inv-section"><h4>💊 ĐAN DƯỢC</h4>
-    <div class="inv-item"><div class="iv-icon">💊</div>
-    <div class="iv-info"><div class="iv-name">Đan Dược Bảo Mệnh</div>
-    <div class="iv-stat">Số lượng: <b>${state.pills}</b> • Full HP + ${Math.round(PILL_BREAK_BONUS*100)}% tỉ lệ đột phá</div></div>
-    <button data-inv-pill ${state.pills>0?'':'disabled'}>DÙNG</button></div>
-  </div>`;
+  h += '<div class="inv-section"><h4>💊 ĐAN DƯỢC</h4>' +
+    '<div class="inv-item"><div class="iv-icon">💊</div>' +
+    '<div class="iv-info"><div class="iv-name">Đan Dược Bảo Mệnh</div>' +
+    '<div class="iv-stat">Số lượng: <b>' + state.pills + '</b> • Full HP + ' + Math.round(PILL_BREAK_BONUS*100) + '% tỉ lệ đột phá</div></div>' +
+    '<button data-inv-pill ' + (state.pills>0?'':'disabled') + '>DÙNG</button></div>' +
+  '</div>';
   b.innerHTML = h;
 }
 
@@ -1974,8 +1964,8 @@ function useManual(cid){
   if (state.manuals[cid] === 0) delete state.manuals[cid];
   learnClass(cid);
   const c = CLASS_MAP[cid];
-  log(`📕 HỌC THÀNH CÔNG hệ ${c.icon} ${c.name}!`, 'manual');
-  popup(`+${c.icon} ${c.name}!`, 'manual', false, 0, -60);
+  log('📕 HỌC THÀNH CÔNG hệ ' + c.icon + ' ' + c.name + '!', 'manual');
+  popup('+' + c.icon + ' ' + c.name + '!', 'manual', false, 0, -60);
   screenFlash('gold'); auraBurst();
   renderInventory(); renderLobby(); saveAccountState();
 }
@@ -1995,100 +1985,101 @@ function renderInfo(){
   }
 
   let h = '';
-  h += `<div class="info-section"><h3>👤 HỒ SƠ</h3>
-    <div style="display:flex;align-items:center;gap:12px;padding:12px;
-      background:linear-gradient(180deg,rgba(57,208,255,.12),rgba(176,107,255,.06));
-      border:1px solid rgba(57,208,255,.35);border-radius:12px;margin-bottom:8px">
-      <div style="font-size:44px;line-height:1">${state.avatar}</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:15px;font-weight:900;color:#fff">${escapeHtml(state.name)}
-          ${isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}</div>
-        <div style="font-size:10.5px;color:var(--neon);font-weight:800;margin-top:3px">${REALMS[state.realm].n}</div>
-        <div style="font-size:9.5px;color:#8bb8d8;margin-top:2px">
-          ${s ? s.icon+' '+s.name+' • Lv'+state.sectLevel : 'Chưa gia nhập tông môn'}</div>
-      </div>
-      <button style="padding:8px 12px;border-radius:8px;border:none;background:linear-gradient(180deg,#7fe8ff,#39d0ff);
-        color:#031018;font-weight:900;font-family:inherit;font-size:10px;cursor:pointer"
-        data-act="edit-profile">SỬA</button>
-    </div>
-  </div>`;
+  h += '<div class="info-section"><h3>👤 HỒ SƠ</h3>' +
+    '<div style="display:flex;align-items:center;gap:12px;padding:12px;' +
+      'background:linear-gradient(180deg,rgba(57,208,255,.12),rgba(176,107,255,.06));' +
+      'border:1px solid rgba(57,208,255,.35);border-radius:12px;margin-bottom:8px">' +
+      '<div style="font-size:44px;line-height:1">' + state.avatar + '</div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="font-size:15px;font-weight:900;color:#fff">' + escapeHtml(state.name) +
+          (isAdmin ? ' <span class="admin-badge">ADMIN</span>' : '') + '</div>' +
+        '<div style="font-size:10.5px;color:var(--neon);font-weight:800;margin-top:3px">' + REALMS[state.realm].n + '</div>' +
+        '<div style="font-size:9.5px;color:#8bb8d8;margin-top:2px">' +
+          (s ? s.icon+' '+s.name+' • Lv'+state.sectLevel : 'Chưa gia nhập tông môn') + '</div>' +
+      '</div>' +
+      '<button style="padding:8px 12px;border-radius:8px;border:none;background:linear-gradient(180deg,#7fe8ff,#39d0ff);' +
+        'color:#031018;font-weight:900;font-family:inherit;font-size:10px;cursor:pointer"' +
+        ' data-act="edit-profile">SỬA</button>' +
+    '</div>' +
+  '</div>';
 
-  h += `<div class="info-section"><h3>🌟 HỆ ĐANG SỞ HỮU</h3>`;
+  h += '<div class="info-section"><h3>🌟 HỆ ĐANG SỞ HỮU</h3>';
   if (state.classes.length){
     for (const cid of state.classes){
       const c = CLASS_MAP[cid];
       if (!c) continue;
-      h += `<div class="inv-item active" style="margin-bottom:6px">
-        <div class="iv-icon">${c.icon}</div>
-        <div class="iv-info"><div class="iv-name">${c.name}</div>
-        <div class="iv-stat">${c.desc}</div></div></div>`;
+      h += '<div class="inv-item active" style="margin-bottom:6px">' +
+        '<div class="iv-icon">' + c.icon + '</div>' +
+        '<div class="iv-info"><div class="iv-name">' + c.name + '</div>' +
+        '<div class="iv-stat">' + c.desc + '</div></div></div>';
     }
-  } else h += `<div class="inv-empty">Chưa có hệ</div>`;
-  h += `</div>`;
+  } else h += '<div class="inv-empty">Chưa có hệ</div>';
+  h += '</div>';
 
   const stats = [
     ['CẢNH GIỚI', REALMS[state.realm].n, 'neon', true],
     ['LỰC CHIẾN', fmt(playerBP()), 'neon'],
-    ['HP', `${fmt(state.hp)}/${fmt(maxHP())}`, 'green'],
+    ['HP', fmt(state.hp) + '/' + fmt(maxHP()), 'green'],
     ['COOLDOWN ĐÁNH', attackCooldown().toFixed(0) + 'ms', 'neon'],
     ['VÀNG', fmt(state.gold), 'gold'],
     ['TINH THẠCH', fmt(state.crystals), 'cry'],
     ['ĐÁ TÔNG MÔN', fmt(state.sectStones), 'stone'],
-    ['KHU VỰC', `${state.zone + 1}/${state.realm + 1}`, 'neon'],
-    ['GIẢM THƯƠNG', `${Math.round(damageReduction()*100)}%`, 'green'],
+    ['KHU VỰC', (state.zone + 1) + '/' + (state.realm + 1), 'neon'],
+    ['GIẢM THƯƠNG', Math.round(damageReduction()*100) + '%', 'green'],
     ['SỐ HỆ', state.classes.length + '/' + CLASSES.length, 'manual'],
     ['TỔNG QUÁI HẠ', fmt(state.kills), ''],
     ['BOSS HẠ', fmt(state.killsBoss), 'red'],
     ['BÍ CẢNH CLEAR', fmt(state.realmClears), 'neon'],
-    ['ĐỘT PHÁ', `${state.breaks}✓ ${state.breaksFailed}✗`, 'gold'],
+    ['ĐỘT PHÁ', state.breaks + '✓ ' + state.breaksFailed + '✗', 'gold'],
     ['PHIÊN CHƠI', fmtDuration(sess), 'green'],
     ['TỔNG THỜI GIAN', fmtDuration(tot), 'gold', true]
   ];
-  h += `<div class="info-section"><h3>📊 CHỈ SỐ</h3><div class="info-grid">`;
-  for (const [label, val, cls, full] of stats){
-    h += `<div class="info-stat ${full?'full':''}">
-      <div class="is-label">${label}</div>
-      <div class="is-value ${cls}">${val}</div>
-    </div>`;
+  h += '<div class="info-section"><h3>📊 CHỈ SỐ</h3><div class="info-grid">';
+  for (const st of stats){
+    const label = st[0], val = st[1], cls = st[2], full = st[3];
+    h += '<div class="info-stat ' + (full?'full':'') + '">' +
+      '<div class="is-label">' + label + '</div>' +
+      '<div class="is-value ' + cls + '">' + val + '</div>' +
+    '</div>';
   }
-  h += `</div></div>`;
+  h += '</div></div>';
 
   if (state.bpBuffUntil > Date.now()){
     const remain = Math.ceil((state.bpBuffUntil - Date.now()) / 1000);
-    h += `<div class="info-stat full" style="margin-bottom:14px;border-color:rgba(255,210,74,.6);background:rgba(255,210,74,.1)">
-      <div class="is-label">BUFF</div>
-      <div class="is-value gold">${state.bpBuffName} ×${state.bpBuff} (${remain}s)</div>
-    </div>`;
+    h += '<div class="info-stat full" style="margin-bottom:14px;border-color:rgba(255,210,74,.6);background:rgba(255,210,74,.1)">' +
+      '<div class="is-label">BUFF</div>' +
+      '<div class="is-value gold">' + state.bpBuffName + ' ×' + state.bpBuff + ' (' + remain + 's)</div>' +
+    '</div>';
   }
 
-  h += `<div class="info-section"><h3>⚙️ CÀI ĐẶT</h3>
-    <div class="sys-card">
-      <h4>💾 LƯU TRỮ</h4>
-      <p>Game tự lưu mỗi 5 giây.</p>
-      <button class="gold" data-sys="save">💾 LƯU NGAY</button>
-      <button class="ghost" data-sys="export">📋 XUẤT SAVE</button>
-      <button class="ghost" data-sys="import">📥 NHẬP SAVE</button>
-    </div>
-    <div class="sys-card">
-      <h4>⚙️ AUTO-ATTACK</h4>
-      <p>Bật/tắt tự đánh (chỉ trong Combat).</p>
-      <button class="ghost" data-sys="toggle-auto">${state.auto ? '🛑 TẮT AUTO' : '▶️ BẬT AUTO'}</button>
-    </div>
-    ${!isAdmin ? `<div class="sys-card">
-      <h4>⚠️ NGUY HIỂM</h4>
-      <p>Reset tài khoản này về ban đầu. Không thể hoàn tác!</p>
-      <button class="danger" data-sys="reset">🗑️ RESET TÀI KHOẢN</button>
-    </div>` : ''}
-  </div>`;
+  h += '<div class="info-section"><h3>⚙️ CÀI ĐẶT</h3>' +
+    '<div class="sys-card">' +
+      '<h4>💾 LƯU TRỮ</h4>' +
+      '<p>Game tự lưu mỗi 5 giây.</p>' +
+      '<button class="gold" data-sys="save">💾 LƯU NGAY</button>' +
+      '<button class="ghost" data-sys="export">📋 XUẤT SAVE</button>' +
+      '<button class="ghost" data-sys="import">📥 NHẬP SAVE</button>' +
+    '</div>' +
+    '<div class="sys-card">' +
+      '<h4>⚙️ AUTO-ATTACK</h4>' +
+      '<p>Bật/tắt tự đánh (chỉ trong Combat).</p>' +
+      '<button class="ghost" data-sys="toggle-auto">' + (state.auto ? '🛑 TẮT AUTO' : '▶️ BẬT AUTO') + '</button>' +
+    '</div>' +
+    (!isAdmin ? '<div class="sys-card">' +
+      '<h4>⚠️ NGUY HIỂM</h4>' +
+      '<p>Reset tài khoản này về ban đầu. Không thể hoàn tác!</p>' +
+      '<button class="danger" data-sys="reset">🗑️ RESET TÀI KHOẢN</button>' +
+    '</div>' : '') +
+  '</div>';
 
-  h += `<div class="sys-card">
-    <h4>ℹ️ THÔNG TIN GAME</h4>
-    <p style="line-height:1.7">
-      <b style="color:#39d0ff">THÔN PHỆ TINH KHÔNG</b> — v2.0 Local<br>
-      Idle / Tu Chân / Multi-Class / Market<br>
-      Cảm hứng: "Thôn Phệ Tinh Không" — Ngã Cật Tây Hồng Thị
-    </p>
-  </div>`;
+  h += '<div class="sys-card">' +
+    '<h4>ℹ️ THÔNG TIN GAME</h4>' +
+    '<p style="line-height:1.7">' +
+      '<b style="color:#39d0ff">THÔN PHỆ TINH KHÔNG</b> — v2.0 Local<br>' +
+      'Idle / Tu Chân / Multi-Class / Market<br>' +
+      'Cảm hứng: "Thôn Phệ Tinh Không" — Ngã Cật Tây Hồng Thị' +
+    '</p>' +
+  '</div>';
 
   b.innerHTML = h;
 }
@@ -2106,7 +2097,7 @@ function renderRank(){
     if (st.weapon >= 0) bp += WEAPONS[st.weapon].bp;
     if (st.armor >= 0) bp += ARMORS[st.armor].bp;
     rows.push({
-      name: st.name || uname, uname,
+      name: st.name || uname, uname: uname,
       avt: st.avatar || '🧙‍♂️',
       realm: REALMS[Math.min(REALMS.length-1, Math.max(0, st.realm|0))].n,
       bp: Math.floor(bp),
@@ -2114,15 +2105,15 @@ function renderRank(){
       me: uname === getCurrentUser()
     });
   }
-  rows.sort((a, b) => b.bp - a.bp);
+  rows.sort(function(a, b){ return b.bp - a.bp; });
 
-  let h = `<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px;text-align:center;
-    letter-spacing:1px">Bảng xếp hạng tài khoản trên thiết bị này</div>`;
+  let h = '<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px;text-align:center;' +
+    'letter-spacing:1px">Bảng xếp hạng tài khoản trên thiết bị này</div>';
   if (!rows.length){
-    h += `<div class="market-empty">Chưa có tài khoản nào.</div>`;
+    h += '<div class="market-empty">Chưa có tài khoản nào.</div>';
   } else {
     let myPos = -1;
-    rows.forEach((r, idx) => {
+    rows.forEach(function(r, idx){
       const pos = idx + 1;
       if (r.me) myPos = pos;
       let cls = r.me ? ' me' : '';
@@ -2133,24 +2124,24 @@ function renderRank(){
       if (pos === 1) posIcon = '🥇';
       else if (pos === 2) posIcon = '🥈';
       else if (pos === 3) posIcon = '🥉';
-      h += `<div class="rank-row${cls}">
-        <div class="rank-pos">${posIcon}</div>
-        <div class="rank-avt">${r.avt}</div>
-        <div class="rank-info">
-          <div class="rank-name">${escapeHtml(r.name)}
-            ${r.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}
-            ${r.me ? ' <span style="color:#ffd24a">(Bạn)</span>' : ''}</div>
-          <div class="rank-sub">${r.realm}</div>
-        </div>
-        <div class="rank-bp">${fmt(r.bp)}</div>
-      </div>`;
+      h += '<div class="rank-row' + cls + '">' +
+        '<div class="rank-pos">' + posIcon + '</div>' +
+        '<div class="rank-avt">' + r.avt + '</div>' +
+        '<div class="rank-info">' +
+          '<div class="rank-name">' + escapeHtml(r.name) +
+            (r.isAdmin ? '<span class="admin-badge">ADMIN</span>' : '') +
+            (r.me ? ' <span style="color:#ffd24a">(Bạn)</span>' : '') + '</div>' +
+          '<div class="rank-sub">' + r.realm + '</div>' +
+        '</div>' +
+        '<div class="rank-bp">' + fmt(r.bp) + '</div>' +
+      '</div>';
     });
     if (myPos > 0){
-      h += `<div style="margin-top:12px;padding:10px;border-radius:10px;text-align:center;
-        background:linear-gradient(180deg,rgba(255,210,74,.15),rgba(255,210,74,.03));
-        border:1px solid rgba(255,210,74,.5);font-size:11.5px;color:#ffe9a8;font-weight:800">
-        🏆 Xếp hạng: <span style="color:#ffd24a">#${myPos}/${rows.length}</span>
-      </div>`;
+      h += '<div style="margin-top:12px;padding:10px;border-radius:10px;text-align:center;' +
+        'background:linear-gradient(180deg,rgba(255,210,74,.15),rgba(255,210,74,.03));' +
+        'border:1px solid rgba(255,210,74,.5);font-size:11.5px;color:#ffe9a8;font-weight:800">' +
+        '🏆 Xếp hạng: <span style="color:#ffd24a">#' + myPos + '/' + rows.length + '</span>' +
+      '</div>';
     }
   }
   b.innerHTML = h;
@@ -2177,7 +2168,7 @@ function generateNpcListings(n){
     { type:'pill',    qty:1, minPrice:1500000, maxPrice:2500000 },
     { type:'pill',    qty:3, minPrice:4200000, maxPrice:6800000 }
   ];
-  const cls = CLASSES.map(c => c.id);
+  const cls = CLASSES.map(function(c){ return c.id; });
   const out = [];
   for (let i = 0; i < n; i++){
     const roll = Math.random();
@@ -2193,8 +2184,8 @@ function generateNpcListings(n){
     const price = Math.floor(item.minPrice + Math.random()*(item.maxPrice - item.minPrice));
     out.push({
       id: 'npc_' + Date.now() + '_' + i + '_' + Math.floor(Math.random()*1000),
-      seller, isPlayer: false,
-      itemType: item.type, classId: item.classId, qty: item.qty, price
+      seller: seller, isPlayer: false,
+      itemType: item.type, classId: item.classId, qty: item.qty, price: price
     });
   }
   return out;
@@ -2202,11 +2193,11 @@ function generateNpcListings(n){
 function refreshNpcListings(){
   let list = getMarket();
   const now = Date.now();
-  list = list.filter(l => l.isPlayer || (now - (l.createdAt||0)) < 600000);
-  const npcCount = list.filter(l => !l.isPlayer).length;
+  list = list.filter(function(l){ return l.isPlayer || (now - (l.createdAt||0)) < 600000; });
+  const npcCount = list.filter(function(l){ return !l.isPlayer; }).length;
   if (npcCount < 25){
     const add = generateNpcListings(Math.min(5, 25 - npcCount));
-    add.forEach(l => { l.createdAt = now; list.push(l); });
+    add.forEach(function(l){ l.createdAt = now; list.push(l); });
   }
   setMarket(list);
 }
@@ -2224,64 +2215,64 @@ function renderMarket(){
   refreshNpcListings();
   const b = $('marketBody');
   if (marketTab === 'buy'){
-    const list = getMarket().filter(l => !l.isPlayer);
-    list.sort((a, b) => a.price - b.price);
-    let h = `<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px;
-      padding:8px 10px;background:rgba(57,208,255,.06);border-radius:8px;border:1px solid rgba(57,208,255,.2)">
-      💡 Chợ làm mới mỗi ~10 phút. Mua từ NPC hoặc người chơi khác trên cùng máy.
-    </div>`;
+    const list = getMarket().filter(function(l){ return !l.isPlayer; });
+    list.sort(function(a, b){ return a.price - b.price; });
+    let h = '<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px;' +
+      'padding:8px 10px;background:rgba(57,208,255,.06);border-radius:8px;border:1px solid rgba(57,208,255,.2)">' +
+      '💡 Chợ làm mới mỗi ~10 phút. Mua từ NPC hoặc người chơi khác trên cùng máy.' +
+    '</div>';
     if (!list.length){
-      h += `<div class="market-empty">Chợ trống!</div>`;
+      h += '<div class="market-empty">Chợ trống!</div>';
     } else {
       for (const l of list){
         const info = itemInfo(l);
         const canBuy = state.gold >= l.price;
-        h += `<div class="market-listing">
-          <div class="ml-icon">${info.icon}</div>
-          <div class="ml-info">
-            <div class="ml-name">${info.name} ×${l.qty}</div>
-            <div class="ml-seller">Người bán: ${escapeHtml(l.seller)}</div>
-          </div>
-          <div class="ml-price">
-            <div class="p-total">${fmt(l.price)}💰</div>
-            <div class="p-unit">${fmt(info.unit)}/cái</div>
-          </div>
-          <button class="buy ${canBuy?'':'no'}" data-buy="${l.id}" ${canBuy?'':'disabled'}>
-            ${canBuy ? 'MUA' : 'THIẾU'}</button>
-        </div>`;
+        h += '<div class="market-listing">' +
+          '<div class="ml-icon">' + info.icon + '</div>' +
+          '<div class="ml-info">' +
+            '<div class="ml-name">' + info.name + ' ×' + l.qty + '</div>' +
+            '<div class="ml-seller">Người bán: ' + escapeHtml(l.seller) + '</div>' +
+          '</div>' +
+          '<div class="ml-price">' +
+            '<div class="p-total">' + fmt(l.price) + '💰</div>' +
+            '<div class="p-unit">' + fmt(info.unit) + '/cái</div>' +
+          '</div>' +
+          '<button class="buy ' + (canBuy?'':'no') + '" data-buy="' + l.id + '" ' + (canBuy?'':'disabled') + '>' +
+            (canBuy ? 'MUA' : 'THIẾU') + '</button>' +
+        '</div>';
       }
     }
     b.innerHTML = h;
   } else {
-    const list = getMarket().filter(l => l.isPlayer);
+    const list = getMarket().filter(function(l){ return l.isPlayer; });
     const myUser = getCurrentUser();
-    let h = `<div class="sell-form">
-      <div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:10px;letter-spacing:1px">
-        📤 ĐĂNG BÁN VẬT PHẨM</div>
-      <div style="font-size:10px;color:#8bb8d8;margin-bottom:8px">Chọn loại vật phẩm muốn bán:</div>
-      <div id="sellItemList"></div>
-      <div class="sell-row"><label>Số lượng</label><input type="number" id="sellQty" min="1" value="1" /></div>
-      <div class="sell-row"><label>Giá / 1 đv</label><input type="number" id="sellUnitPrice" min="1" placeholder="Ví dụ: 1000000" /></div>
-      <button class="buy" id="btnPostSell" style="width:100%;padding:10px;font-size:11px">
-        📤 ĐĂNG LÊN CHỢ</button>
-    </div>`;
+    let h = '<div class="sell-form">' +
+      '<div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:10px;letter-spacing:1px">' +
+        '📤 ĐĂNG BÁN VẬT PHẨM</div>' +
+      '<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px">Chọn loại vật phẩm muốn bán:</div>' +
+      '<div id="sellItemList"></div>' +
+      '<div class="sell-row"><label>Số lượng</label><input type="number" id="sellQty" min="1" value="1" /></div>' +
+      '<div class="sell-row"><label>Giá / 1 đv</label><input type="number" id="sellUnitPrice" min="1" placeholder="Ví dụ: 1000000" /></div>' +
+      '<button class="buy" id="btnPostSell" style="width:100%;padding:10px;font-size:11px">' +
+        '📤 ĐĂNG LÊN CHỢ</button>' +
+    '</div>';
 
-    h += `<div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:1px">
-      📋 TIN ĐANG BÁN</div>`;
-    const myListings = list.filter(l => l.sellerUser === myUser);
+    h += '<div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:1px">' +
+      '📋 TIN ĐANG BÁN</div>';
+    const myListings = list.filter(function(l){ return l.sellerUser === myUser; });
     if (!myListings.length){
-      h += `<div class="market-empty" style="padding:14px">Bạn chưa có tin đăng nào.</div>`;
+      h += '<div class="market-empty" style="padding:14px">Bạn chưa có tin đăng nào.</div>';
     } else {
       for (const l of myListings){
         const info = itemInfo(l);
-        h += `<div class="market-listing mine">
-          <div class="ml-icon">${info.icon}</div>
-          <div class="ml-info">
-            <div class="ml-name">${info.name} ×${l.qty}</div>
-            <div class="ml-seller">Giá: ${fmt(l.price)}💰</div>
-          </div>
-          <button class="cancel" data-cancel="${l.id}">HỦY TIN</button>
-        </div>`;
+        h += '<div class="market-listing mine">' +
+          '<div class="ml-icon">' + info.icon + '</div>' +
+          '<div class="ml-info">' +
+            '<div class="ml-name">' + info.name + ' ×' + l.qty + '</div>' +
+            '<div class="ml-seller">Giá: ' + fmt(l.price) + '💰</div>' +
+          '</div>' +
+          '<button class="cancel" data-cancel="' + l.id + '">HỦY TIN</button>' +
+        '</div>';
       }
     }
     b.innerHTML = h;
@@ -2298,7 +2289,8 @@ function renderSellItemList(){
     { type:'stone',   icon:'🪨', name:'Đá Tông Môn', qty: state.sectStones },
     { type:'pill',    icon:'💊', name:'Đan Dược', qty: state.pills }
   ];
-  for (const [cid, cnt] of Object.entries(state.manuals || {})){
+  for (const cid in (state.manuals || {})){
+    const cnt = state.manuals[cid];
     if (cnt > 0){
       const m = MANUALS[cid];
       if (m) items.push({ type:'manual', classId:cid, icon:'📕', name: m.name, qty: cnt });
@@ -2308,17 +2300,17 @@ function renderSellItemList(){
   for (const it of items){
     const key = it.type === 'manual' ? ('manual_' + it.classId) : it.type;
     const sel = (sellItemSel === key);
-    h += `<div class="sell-item ${sel?'active':''}" data-sell-key="${key}">
-      <div class="si-icon">${it.icon}</div>
-      <div class="si-info">
-        <div class="si-name">${it.name}</div>
-        <div class="si-qty">Số lượng có: ${it.qty}</div>
-      </div>
-    </div>`;
+    h += '<div class="sell-item ' + (sel?'active':'') + '" data-sell-key="' + key + '">' +
+      '<div class="si-icon">' + it.icon + '</div>' +
+      '<div class="si-info">' +
+        '<div class="si-name">' + it.name + '</div>' +
+        '<div class="si-qty">Số lượng có: ' + it.qty + '</div>' +
+      '</div>' +
+    '</div>';
   }
   wrap.innerHTML = h;
-  wrap.querySelectorAll('[data-sell-key]').forEach(el => {
-    el.addEventListener('click', ()=>{
+  wrap.querySelectorAll('[data-sell-key]').forEach(function(el){
+    el.addEventListener('click', function(){
       sellItemSel = el.dataset.sellKey;
       renderSellItemList();
     });
@@ -2327,7 +2319,7 @@ function renderSellItemList(){
 
 function buyListing(id){
   const list = getMarket();
-  const idx = list.findIndex(l => l.id === id);
+  const idx = list.findIndex(function(l){ return l.id === id; });
   if (idx < 0) return;
   const l = list[idx];
   if (state.gold < l.price){ log('Không đủ vàng!', 'bad'); return; }
@@ -2339,8 +2331,8 @@ function buyListing(id){
     state.manuals[l.classId] = (state.manuals[l.classId] || 0) + l.qty;
   }
   const info = itemInfo(l);
-  log(`🏪 Mua ${info.name} ×${l.qty} — ${fmt(l.price)}💰`, 'good');
-  popup(`+${info.icon} ×${l.qty}`, 'gold', false, 0, -50);
+  log('🏪 Mua ' + info.name + ' ×' + l.qty + ' — ' + fmt(l.price) + '💰', 'good');
+  popup('+' + info.icon + ' ×' + l.qty, 'gold', false, 0, -50);
   if (l.isPlayer && l.sellerUser){
     const accounts = getAccounts();
     const sellerAcc = accounts[l.sellerUser];
@@ -2356,7 +2348,7 @@ function buyListing(id){
 }
 function cancelListing(id){
   const list = getMarket();
-  const idx = list.findIndex(l => l.id === id);
+  const idx = list.findIndex(function(l){ return l.id === id; });
   if (idx < 0) return;
   const l = list[idx];
   if (l.sellerUser !== getCurrentUser()) return;
@@ -2378,7 +2370,7 @@ function postSell(){
   if (!unitPrice || unitPrice < 1){ log('Giá không hợp lệ!', 'bad'); return; }
 
   let type = sellItemSel, classId = null;
-  if (sellItemSel.startsWith('manual_')){
+  if (sellItemSel.indexOf('manual_') === 0){
     type = 'manual';
     classId = sellItemSel.slice(7);
   }
@@ -2401,24 +2393,24 @@ function postSell(){
   const list = getMarket();
   const id = 'pl_' + Date.now() + '_' + Math.floor(Math.random()*1000);
   list.push({
-    id, seller: state.name, sellerUser: getCurrentUser(),
-    isPlayer: true, itemType: type, classId, qty, price: unitPrice * qty,
+    id: id, seller: state.name, sellerUser: getCurrentUser(),
+    isPlayer: true, itemType: type, classId: classId, qty: qty, price: unitPrice * qty,
     createdAt: Date.now()
   });
   setMarket(list);
-  log(`📤 Đã đăng bán ${qty} ${type} giá ${fmt(unitPrice)}/đv`, 'good');
+  log('📤 Đã đăng bán ' + qty + ' ' + type + ' giá ' + fmt(unitPrice) + '/đv', 'good');
   screenFlash('gold');
   renderMarket(); saveAccountState();
 }
 
 /* ===== FX ===== */
 function shake(){ const a=$('app'); a.classList.remove('shake'); void a.offsetWidth; a.classList.add('shake');
-  setTimeout(()=>a.classList.remove('shake'), 280); }
+  setTimeout(function(){a.classList.remove('shake');}, 280); }
 function bigShake(){ const a=$('app'); a.classList.remove('shake'); void a.offsetWidth; a.classList.add('shake');
   const i=$('shakeInner'); i.style.animationDuration='.55s';
-  setTimeout(()=>{ a.classList.remove('shake'); i.style.animationDuration=''; }, 560); }
+  setTimeout(function(){ a.classList.remove('shake'); i.style.animationDuration=''; }, 560); }
 function screenFlash(type){ const f=$('flashLayer'); f.className=''; void f.offsetWidth;
-  f.classList.add(type); setTimeout(()=>f.className='', 600); }
+  f.classList.add(type); setTimeout(function(){f.className='';}, 600); }
 function throwKnife(){
   const arena=$('arena'), sprite=$('enemySprite');
   const ar=arena.getBoundingClientRect(), sr=sprite.getBoundingClientRect();
@@ -2430,7 +2422,7 @@ function throwKnife(){
     k.style.setProperty('--dx', (ex-sx+(Math.random()*30-15))+'px');
     k.style.setProperty('--dy', (ey-sy+(Math.random()*20-10))+'px');
     k.style.animationDelay=(i*55)+'ms'; k.style.opacity=i===2?'.7':'1';
-    $('floatLayer').appendChild(k); setTimeout(()=>k.remove(), 600);
+    $('floatLayer').appendChild(k); setTimeout(function(){k.remove();}, 600);
   }
 }
 function particleBurst(x,y,color,count){
@@ -2441,21 +2433,21 @@ function particleBurst(x,y,color,count){
     p.style.left=x+'px'; p.style.top=y+'px';
     p.style.setProperty('--px', Math.cos(ang)*dist+'px');
     p.style.setProperty('--py', Math.sin(ang)*dist+'px');
-    p.style.background=color||'#39d0ff'; p.style.boxShadow=`0 0 10px ${color||'#39d0ff'}`;
+    p.style.background=color||'#39d0ff'; p.style.boxShadow='0 0 10px ' + (color||'#39d0ff');
     const s=4+Math.random()*5; p.style.width=s+'px'; p.style.height=s+'px';
-    layer.appendChild(p); setTimeout(()=>p.remove(), 750);
+    layer.appendChild(p); setTimeout(function(){p.remove();}, 750);
   }
 }
 function hitRing(x,y,color){
   const r=document.createElement('div'); r.className='hitRing';
   r.style.left=x+'px'; r.style.top=y+'px';
-  if(color){ r.style.borderColor=color; r.style.boxShadow=`0 0 14px ${color}`; }
-  $('floatLayer').appendChild(r); setTimeout(()=>r.remove(), 450);
+  if(color){ r.style.borderColor=color; r.style.boxShadow='0 0 14px ' + color; }
+  $('floatLayer').appendChild(r); setTimeout(function(){r.remove();}, 450);
 }
 function shockwave(x,y,cls){
   const s=document.createElement('div'); s.className='shockwave '+(cls||'');
   s.style.left=x+'px'; s.style.top=y+'px';
-  $('floatLayer').appendChild(s); setTimeout(()=>s.remove(), 600);
+  $('floatLayer').appendChild(s); setTimeout(function(){s.remove();}, 600);
 }
 function popup(text, cls, fromEnemy, offsetX, offsetY){
   const layer=$('floatLayer'), arena=$('arena');
@@ -2471,25 +2463,26 @@ function popup(text, cls, fromEnemy, offsetX, offsetY){
     y=ar.height-24+(offsetY||0);
   }
   el.style.left=x+'px'; el.style.top=y+'px';
-  layer.appendChild(el); setTimeout(()=>el.remove(), 1000);
+  layer.appendChild(el); setTimeout(function(){el.remove();}, 1000);
 }
 function flashEnemy(){ const s=$('enemySprite'); s.classList.remove('flash'); void s.offsetWidth;
-  s.classList.add('flash'); setTimeout(()=>s.classList.remove('flash'), 200); }
+  s.classList.add('flash'); setTimeout(function(){s.classList.remove('flash');}, 200); }
 function playerAttackAnim(){ const p=$('playerSprite'); p.classList.remove('attack'); void p.offsetWidth;
-  p.classList.add('attack'); setTimeout(()=>p.classList.remove('attack'), 320); }
+  p.classList.add('attack'); setTimeout(function(){p.classList.remove('attack');}, 320); }
 function playerHurtAnim(){ const p=$('playerSprite'); p.classList.remove('hurt'); void p.offsetWidth;
-  p.classList.add('hurt'); setTimeout(()=>p.classList.remove('hurt'), 380); }
+  p.classList.add('hurt'); setTimeout(function(){p.classList.remove('hurt');}, 380); }
 function enemyLungeAnim(){ const e=$('enemySprite'); e.classList.remove('lunge'); void e.offsetWidth;
-  e.classList.add('lunge'); setTimeout(()=>e.classList.remove('lunge'), 420); }
+  e.classList.add('lunge'); setTimeout(function(){e.classList.remove('lunge');}, 420); }
 function enemyDieAnim(cb){ const e=$('enemySprite'); e.classList.add('dying');
-  setTimeout(()=>{ e.classList.remove('dying'); cb && cb(); }, 620); }
+  setTimeout(function(){ e.classList.remove('dying'); cb && cb(); }, 620); }
 function hurtFlash(){ const a=$('arena'); a.classList.add('hurt');
-  setTimeout(()=>a.classList.remove('hurt'), 150); }
+  setTimeout(function(){a.classList.remove('hurt');}, 150); }
 function bumpCurrency(which){
-  const w = $({gold:'goldWrap', cry:'cryWrap', stone:'stoneWrap'}[which]);
+  const map = {gold:'goldWrap', cry:'cryWrap', stone:'stoneWrap'};
+  const w = $(map[which]);
   if (!w) return;
   w.classList.remove('bump'); void w.offsetWidth; w.classList.add('bump');
-  setTimeout(()=>w.classList.remove('bump'), 400);
+  setTimeout(function(){w.classList.remove('bump');}, 400);
 }
 function updateCombo(){ const c=$('combo');
   if(comboCount>=3){ c.classList.add('on'); c.innerHTML=comboCount+'<span> COMBO</span>';
@@ -2498,17 +2491,17 @@ function updateCombo(){ const c=$('combo');
 function lightningStrike(){
   const arena=$('arena'), ar=arena.getBoundingClientRect(), layer=$('floatLayer');
   const positions=[{x:ar.width*0.28,h:ar.height*0.7},{x:ar.width*0.5,h:ar.height*0.85},{x:ar.width*0.72,h:ar.height*0.75}];
-  positions.forEach((pos,i)=>{
-    setTimeout(()=>{
+  positions.forEach(function(pos,i){
+    setTimeout(function(){
       const b=document.createElement('div'); b.className='bolt';
       b.style.left=pos.x+'px'; b.style.top='0px'; b.style.height=pos.h+'px';
-      layer.appendChild(b); setTimeout(()=>b.remove(), 600);
+      layer.appendChild(b); setTimeout(function(){b.remove();}, 600);
       for (let s=0;s<6;s++){
         const sp=document.createElement('div'); sp.className='boltSpark';
         sp.style.left=pos.x+'px'; sp.style.top=pos.h+'px';
         sp.style.setProperty('--sx', (Math.random()*100-50)+'px');
         sp.style.setProperty('--sy', (Math.random()*50+20)+'px');
-        layer.appendChild(sp); setTimeout(()=>sp.remove(), 550);
+        layer.appendChild(sp); setTimeout(function(){sp.remove();}, 550);
       }
       bigShake();
     }, i*130);
@@ -2520,15 +2513,15 @@ function auraBurst(){
   const cx=ar.width/2, cy=ar.height/2;
   const a=document.createElement('div'); a.className='auraBurst';
   a.style.left=cx+'px'; a.style.top=cy+'px';
-  layer.appendChild(a); setTimeout(()=>a.remove(), 1200);
+  layer.appendChild(a); setTimeout(function(){a.remove();}, 1200);
   for (let i=0;i<8;i++){
     const ray=document.createElement('div'); ray.className='auraRay';
     ray.style.left='50%'; ray.style.top='50%';
-    ray.style.transform=`translate(-50%,-50%) rotate(${i*45}deg)`;
-    layer.appendChild(ray); setTimeout(()=>ray.remove(), 1000);
+    ray.style.transform='translate(-50%,-50%) rotate(' + (i*45) + 'deg)';
+    layer.appendChild(ray); setTimeout(function(){ray.remove();}, 1000);
   }
   for (let i=0;i<40;i++){
-    setTimeout(()=>particleBurst(cx+(Math.random()*200-100), cy+(Math.random()*200-100), '#ffd24a', 4), i*20);
+    setTimeout((function(idx){ return function(){ particleBurst(cx+(Math.random()*200-100), cy+(Math.random()*200-100), '#ffd24a', 4); }; })(i), i*20);
   }
   screenFlash('gold');
 }
@@ -2537,7 +2530,7 @@ function bossIntro(text, color){
   bi.querySelector('.introTxt').textContent = text || 'BOSS!!';
   bi.querySelector('.introTxt').style.color = color || '#ff3b5c';
   bi.classList.remove('on'); void bi.offsetWidth; bi.classList.add('on');
-  setTimeout(()=>bi.classList.remove('on'), 1700);
+  setTimeout(function(){bi.classList.remove('on');}, 1700);
   screenFlash('red');
 }
 
@@ -2547,21 +2540,21 @@ function makeQuest(){
   const id = Date.now() + Math.floor(Math.random()*10000);
   if (roll < 0.40){
     const target = 12 + Math.floor(Math.random()*18);
-    return { id, type:'kill', desc:`Diệt ${target} quái thú`, target, progress:0,
-      reward:{ gold: Math.floor(baseBP*4), crystals:0 }, rewardText:`${fmt(baseBP*4)}💰` };
+    return { id: id, type:'kill', desc:'Diệt ' + target + ' quái thú', target: target, progress:0, claimed:false,
+      reward:{ gold: Math.floor(baseBP*4), crystals:0 }, rewardText: fmt(baseBP*4)+'💰' };
   } else if (roll < 0.65){
     const target = Math.floor(baseBP * (25 + Math.random()*25));
-    return { id, type:'damage', desc:`Gây ${fmt(target)} sát thương`, target, progress:0,
-      reward:{ gold: Math.floor(baseBP*6), crystals:0 }, rewardText:`${fmt(baseBP*6)}💰` };
+    return { id: id, type:'damage', desc:'Gây ' + fmt(target) + ' sát thương', target: target, progress:0, claimed:false,
+      reward:{ gold: Math.floor(baseBP*6), crystals:0 }, rewardText: fmt(baseBP*6)+'💰' };
   } else if (roll < 0.82){
     const target = 1 + Math.floor(Math.random()*2);
-    return { id, type:'boss', desc:`Hạ ${target} Boss`, target, progress:0,
-      reward:{ gold: Math.floor(baseBP*2), crystals: target*3 }, rewardText:`${fmt(baseBP*2)}💰 + ${target*3}💎` };
+    return { id: id, type:'boss', desc:'Hạ ' + target + ' Boss', target: target, progress:0, claimed:false,
+      reward:{ gold: Math.floor(baseBP*2), crystals: target*3 }, rewardText: fmt(baseBP*2)+'💰 + '+(target*3)+'💎' };
   } else if (roll < 0.93){
-    return { id, type:'breakthrough', desc:'Đột phá cảnh giới', target:1, progress:0,
+    return { id: id, type:'breakthrough', desc:'Đột phá cảnh giới', target:1, progress:0, claimed:false,
       reward:{ gold:0, crystals:10 }, rewardText:'10💎' };
   } else {
-    return { id, type:'realm', desc:'Hoàn thành 1 Bí Cảnh', target:1, progress:0,
+    return { id: id, type:'realm', desc:'Hoàn thành 1 Bí Cảnh', target:1, progress:0, claimed:false,
       reward:{ gold:0, crystals:8 }, rewardText:'8💎' };
   }
 }
@@ -2577,7 +2570,7 @@ function trackQuest(type, amount){
     if (q.type === type && q.progress < q.target){
       q.progress = Math.min(q.target, q.progress + amount); changed = true;
       if (q.progress >= q.target && !q.claimed){
-        log(`📜 Nhiệm vụ hoàn thành: ${q.desc}!`, 'quest');
+        log('📜 Nhiệm vụ hoàn thành: ' + q.desc + '!', 'quest');
         popup('QUEST DONE!', 'epic', false, 0, -100);
         screenFlash('gold');
       }
@@ -2588,7 +2581,7 @@ function trackQuest(type, amount){
 function renderQuestMini(){
   const mini = $('questMini');
   if (!state.quests || !state.quests.length){ mini.classList.remove('on'); return; }
-  const active = state.quests.find(q => q.progress < q.target);
+  const active = state.quests.find(function(q){ return q.progress < q.target; });
   if (!active){ mini.classList.remove('on'); return; }
   mini.classList.add('on');
   $('qmText').textContent = active.desc;
@@ -2603,33 +2596,33 @@ function openQuests(){
 }
 function renderQuestPanel(){
   const b = $('questBody');
-  let h = `<div style="font-size:10.5px;color:#b8a8d0;margin-bottom:10px">Hoàn thành để nhận thưởng.</div>`;
+  let h = '<div style="font-size:10.5px;color:#b8a8d0;margin-bottom:10px">Hoàn thành để nhận thưởng.</div>';
   if (!state.quests) state.quests = [];
   for (const q of state.quests){
     const done = q.progress >= q.target;
     const pct = q.progress / q.target * 100;
-    h += `<div class="quest-card ${done && !q.claimed ? 'done' : ''}">
-      <h5>${q.desc}<span class="tag">${done ? (q.claimed ? 'ĐÃ NHẬN' : 'HOÀN THÀNH') : 'ĐANG LÀM'}</span></h5>
-      <div class="quest-progress-bar"><div class="fill" style="width:${pct}%"></div></div>
-      <div class="quest-progress-text">
-        <span>${fmt(q.progress)} / ${fmt(q.target)}</span><span>${Math.floor(pct)}%</span>
-      </div>
-      <div class="quest-reward">Thưởng: <b>${q.rewardText}</b></div>`;
-    if (done && !q.claimed) h += `<button class="claim-btn" data-claim="${q.id}">✓ NHẬN THƯỞNG</button>`;
-    h += `</div>`;
+    h += '<div class="quest-card ' + (done && !q.claimed ? 'done' : '') + '">' +
+      '<h5>' + q.desc + '<span class="tag">' + (done ? (q.claimed ? 'ĐÃ NHẬN' : 'HOÀN THÀNH') : 'ĐANG LÀM') + '</span></h5>' +
+      '<div class="quest-progress-bar"><div class="fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="quest-progress-text">' +
+        '<span>' + fmt(q.progress) + ' / ' + fmt(q.target) + '</span><span>' + Math.floor(pct) + '%</span>' +
+      '</div>' +
+      '<div class="quest-reward">Thưởng: <b>' + q.rewardText + '</b></div>';
+    if (done && !q.claimed) h += '<button class="claim-btn" data-claim="' + q.id + '">✓ NHẬN THƯỞNG</button>';
+    h += '</div>';
   }
   b.innerHTML = h;
 }
 function claimQuest(id){
   if (!state.quests) return;
-  const idx = state.quests.findIndex(q => q.id === id);
+  const idx = state.quests.findIndex(function(q){ return q.id === id; });
   if (idx < 0) return;
   const q = state.quests[idx];
   if (q.progress < q.target || q.claimed) return;
   state.gold += q.reward.gold; state.crystals += q.reward.crystals;
   if (q.reward.gold) bumpCurrency('gold');
   if (q.reward.crystals) bumpCurrency('cry');
-  log(`🎁 +${fmt(q.reward.gold)}💰 +${q.reward.crystals}💎`, 'quest');
+  log('🎁 +' + fmt(q.reward.gold) + '💰 +' + q.reward.crystals + '💎', 'quest');
   screenFlash('gold');
   state.quests[idx] = makeQuest();
   renderQuestPanel(); renderQuestMini(); saveAccountState();
@@ -2639,11 +2632,11 @@ function claimQuest(id){
 function spawnPortal(){
   if (state.portal) return;
   const tier = Math.min(REALM_TIERS.length - 1, Math.floor(state.zone/2) + Math.floor(Math.random()*2));
-  state.portal = { tier, endsAt: Date.now() + 15000 };
-  log(`🌀 BÍ CẢNH ${REALM_TIERS[tier].name} xuất hiện!`, 'epic');
+  state.portal = { tier: tier, endsAt: Date.now() + 15000 };
+  log('🌀 BÍ CẢNH ' + REALM_TIERS[tier].name + ' xuất hiện!', 'epic');
   $('portalBtn').classList.add('on');
   screenFlash('gold'); bigShake();
-  $('portalBtn').textContent = `${REALM_TIERS[tier].icon} ${REALM_TIERS[tier].name.toUpperCase()}`;
+  $('portalBtn').textContent = REALM_TIERS[tier].icon + ' ' + REALM_TIERS[tier].name.toUpperCase();
   renderLobby();
 }
 function enterRealm(tierOverride){
@@ -2659,7 +2652,7 @@ function enterRealm(tierOverride){
   const baseBP = REALMS[state.zone].bp;
   const bp = Math.floor(baseBP * T.bpMult);
   enemy = {
-    name:'Thủ Hộ Giả ' + T.name, bp, hp: bp*T.hpMult, maxHp: bp*T.hpMult,
+    name:'Thủ Hộ Giả ' + T.name, bp: bp, hp: bp*T.hpMult, maxHp: bp*T.hpMult,
     gold: Math.floor(baseBP*T.reward.gold), cry: T.reward.cry,
     isBoss:true, isRealm:true, atkAt: Date.now()+1500, atkInterval:1500,
     atkPct:0.08, atkFlat: bp*0.04, emoji:'🐉'
@@ -2669,7 +2662,7 @@ function enterRealm(tierOverride){
   $('enemyName').classList.add('realm');
   $('ehpBar').classList.add('realm');
   bossIntro('BÍ CẢNH!', '#b06bff');
-  log(`🌀 Tiến vào ${T.name}!`, 'epic');
+  log('🌀 Tiến vào ' + T.name + '!', 'epic');
   showScreen('combat');
   renderEnemy(); saveAccountState();
 }
@@ -2683,7 +2676,7 @@ function exitRealm(success){
     log('⏱️ Hết giờ! Bị đẩy ra khỏi bí cảnh.', 'bad');
     popup('HẾT GIỜ!', 'big', false);
     enemy = null;
-    setTimeout(()=>{ if (!enemy && !state.dead) spawnEnemy(false); }, 900);
+    setTimeout(function(){ if (!enemy && !state.dead) spawnEnemy(false); }, 900);
   }
   renderLobby();
 }
@@ -2697,14 +2690,14 @@ function triggerEncounter(){
   $('encTitle').textContent = enc.title;
   $('encDesc').textContent = enc.desc;
   const wrap = $('encChoices'); wrap.innerHTML = '';
-  enc.choices.forEach(ch => {
+  enc.choices.forEach(function(ch){
     const btn = document.createElement('button');
     const canPick = ch.check ? ch.check() : true;
     btn.className = 'enc-choice ' + (ch.cls || '');
     btn.disabled = !canPick;
     btn.style.opacity = canPick ? '1' : '0.45';
-    btn.innerHTML = `<span>${ch.text}</span><span class="cost">${ch.desc||''}</span>`;
-    btn.addEventListener('click', ()=>{
+    btn.innerHTML = '<span>' + ch.text + '</span><span class="cost">' + (ch.desc||'') + '</span>';
+    btn.addEventListener('click', function(){
       if (!canPick) return;
       state.encounterOpen = false;
       $('encModal').classList.remove('on');
@@ -2714,7 +2707,7 @@ function triggerEncounter(){
     wrap.appendChild(btn);
   });
   $('encModal').classList.add('on');
-  log(`🔮 KỲ NGỘ: ${enc.title}`, 'epic');
+  log('🔮 KỲ NGỘ: ' + enc.title, 'epic');
   screenFlash('gold');
 }
 
@@ -2724,7 +2717,7 @@ function spawnEnemy(isBoss){
   if (isBoss){
     const bp = Math.floor(baseBP * 1.9);
     enemy = {
-      name: BOSSES[z % BOSSES.length], bp, hp: bp*6, maxHp: bp*6,
+      name: BOSSES[z % BOSSES.length], bp: bp, hp: bp*6, maxHp: bp*6,
       gold: Math.floor(bp*2.5), cry: 1 + Math.floor(z/2),
       isBoss:true, atkAt: now+1500, atkInterval:1500,
       atkPct:0.10, atkFlat: bp*0.05, emoji:'👹'
@@ -2733,7 +2726,7 @@ function spawnEnemy(isBoss){
     const bp = Math.floor(baseBP * (0.9 + Math.random()*0.4));
     const b = BEASTS[Math.floor(Math.random()*BEASTS.length)];
     enemy = {
-      name: b[1], bp, hp: bp*4, maxHp: bp*4,
+      name: b[1], bp: bp, hp: bp*4, maxHp: bp*4,
       gold: Math.floor(bp*0.7), cry: 0,
       isBoss:false, atkAt: now+1800, atkInterval:2000,
       atkPct:0.06, atkFlat: bp*0.05, emoji: b[0]
@@ -2771,7 +2764,6 @@ function attack(){
   let dmg;
   let crit = false;
   if (isAdmin){
-    /* ADMIN: 1 HIT KILL */
     dmg = enemy.hp;
     crit = true;
   } else {
@@ -2826,7 +2818,7 @@ function killEnemy(){
 
   let droppedManual = null;
   if (!wasRealm && wasBoss && Math.random() < MANUAL_DROP_CHANCE * getEventMult('drop_mult')){
-    const notLearned = CLASSES.filter(c => !hasClass(c.id));
+    const notLearned = CLASSES.filter(function(c){ return !hasClass(c.id); });
     if (notLearned.length){
       const pick = notLearned[Math.floor(Math.random()*notLearned.length)];
       state.manuals[pick.id] = (state.manuals[pick.id] || 0) + 1;
@@ -2834,7 +2826,7 @@ function killEnemy(){
     }
   }
   if (wasRealm && Math.random() < MANUAL_REALM_DROP_CHANCE){
-    const notLearned = CLASSES.filter(c => !hasClass(c.id));
+    const notLearned = CLASSES.filter(function(c){ return !hasClass(c.id); });
     if (notLearned.length){
       const pick = notLearned[Math.floor(Math.random()*notLearned.length)];
       state.manuals[pick.id] = (state.manuals[pick.id] || 0) + 1;
@@ -2847,35 +2839,35 @@ function killEnemy(){
   trackQuest('kill', 1);
   if (wasBoss) trackQuest('boss', 1);
 
-  enemyDieAnim(()=>{
+  enemyDieAnim(function(){
     if (droppedManual){
-      log(`📕 NHẬN BÍ TỊCH: ${droppedManual.icon} ${droppedManual.name}!`, 'manual');
-      popup(`📕 ${droppedManual.name}!`, 'manual', true, 0, -60);
+      log('📕 NHẬN BÍ TỊCH: ' + droppedManual.icon + ' ' + droppedManual.name + '!', 'manual');
+      popup('📕 ' + droppedManual.name + '!', 'manual', true, 0, -60);
     }
     if (wasRealm){
       state.killsBoss++; state.realmClears++;
-      log(`🏆 HOÀN THÀNH BÍ CẢNH! +${fmt(g)}💰 +${c}💎`, 'epic');
+      log('🏆 HOÀN THÀNH BÍ CẢNH! +' + fmt(g) + '💰 +' + c + '💎', 'epic');
       popup('BÍ CẢNH CLEAR!', 'big', true, 0, -30);
       screenFlash('gold'); bigShake(); auraBurst();
       trackQuest('realm', 1);
       exitRealm(true);
-      setTimeout(()=>{ if (!enemy && !state.dead && !state.bossActive) spawnEnemy(false); }, 1000);
+      setTimeout(function(){ if (!enemy && !state.dead && !state.bossActive) spawnEnemy(false); }, 1000);
       saveAccountState();
       return;
     }
     if (wasBoss){
       state.bossActive = false;
       state.killsBoss++;
-      log(`👑 HẠ BOSS ${capturedName}! +${fmt(g)}💰 +${c}💎`, 'epic');
+      log('👑 HẠ BOSS ' + capturedName + '! +' + fmt(g) + '💰 +' + c + '💎', 'epic');
       popup('BOSS DOWN!', 'big', true, 0, -30);
       screenFlash('gold'); bigShake();
     } else {
-      log(`Hạ ${capturedName} — +${fmt(g)} vàng`);
+      log('Hạ ' + capturedName + ' — +' + fmt(g) + ' vàng');
     }
     enemy = null;
     if (Math.random() < 0.07) setTimeout(triggerEncounter, 400);
     else if (Math.random() < 0.05 && !state.portal && !state.bossActive) setTimeout(spawnPortal, 600);
-    setTimeout(()=>{ if (!enemy && !state.dead && !state.bossActive && !state.inRealm) spawnEnemy(false); }, 500);
+    setTimeout(function(){ if (!enemy && !state.dead && !state.bossActive && !state.inRealm) spawnEnemy(false); }, 500);
   });
 }
 
@@ -2887,10 +2879,10 @@ function die(){
   const lost = Math.floor(state.gold * 0.30);
   state.gold -= lost; enemy = null; comboCount = 0; updateCombo();
   $('playerSprite').classList.add('dead');
-  log(`☠️ TỬ VONG! Mất ${fmt(lost)} vàng.`, 'bad');
+  log('☠️ TỬ VONG! Mất ' + fmt(lost) + ' vàng.', 'bad');
   popup('TỬ VONG', 'big', false);
   screenFlash('red'); bigShake();
-  setTimeout(()=>{
+  setTimeout(function(){
     state.dead = false; state.hp = Math.floor(maxHP() * 0.4);
     $('playerSprite').classList.remove('dead');
     log('✨ Hồi sinh! HP 40%.', 'good');
@@ -2910,18 +2902,18 @@ function bossEnrage(){
       state.killsBoss++; state.kills++;
     }
     enemy = null;
-    setTimeout(()=>{ if (!enemy && !state.dead) spawnEnemy(false); }, 500);
+    setTimeout(function(){ if (!enemy && !state.dead) spawnEnemy(false); }, 500);
     return;
   }
   const lost = Math.floor(state.gold * 0.20);
   state.gold -= lost; state.hp = 1;
   state.lockUntil = Date.now() + 45000;
-  log(`💀 BOSS NỔI ĐIÊN! Mất ${fmt(lost)} vàng, khóa 45s!`, 'bad');
+  log('💀 BOSS NỔI ĐIÊN! Mất ' + fmt(lost) + ' vàng, khóa 45s!', 'bad');
   popup('INSTANT KILL', 'big', true, 0, -40);
   screenFlash('red'); bigShake();
   setTimeout(bigShake, 150); playerHurtAnim();
   enemy = null;
-  setTimeout(()=>{ if (!enemy && !state.dead) spawnEnemy(false); }, 900);
+  setTimeout(function(){ if (!enemy && !state.dead) spawnEnemy(false); }, 900);
 }
 
 function challengeBoss(){
@@ -2934,14 +2926,14 @@ function challengeBoss(){
   state.bossEnd = Date.now() + 15000;
   spawnEnemy(true);
   bossIntro('BOSS!!', '#ff3b5c');
-  log(`👑 KHIÊU CHIẾN BOSS: ${enemy.name}!`, 'epic');
+  log('👑 KHIÊU CHIẾN BOSS: ' + enemy.name + '!', 'epic');
   bigShake();
 }
 
 /* ===== THÔN PHỆ ===== */
 function activateDevour(){
   const now = Date.now();
-  if (now < state.devourCd){ log(`Thôn Phệ hồi: ${((state.devourCd-now)/1000).toFixed(1)}s`, 'bad'); return; }
+  if (now < state.devourCd){ log('Thôn Phệ hồi: ' + ((state.devourCd-now)/1000).toFixed(1) + 's', 'bad'); return; }
   if (state.dead){ log('Không thể Thôn Phệ khi đã tử vong.', 'bad'); return; }
   state.devourUntil = now + 12000;
   state.devourCd = now + 75000;
@@ -2954,7 +2946,7 @@ function activateDevour(){
   const ar = $('arena').getBoundingClientRect();
   shockwave(ar.width*0.15, ar.height*0.85, 'red');
   shockwave(ar.width*0.15, ar.height*0.85, 'red');
-  setTimeout(()=>shockwave(ar.width*0.15, ar.height*0.85, 'purple'), 200);
+  setTimeout(function(){shockwave(ar.width*0.15, ar.height*0.85, 'purple');}, 200);
   screenFlash('red'); bigShake();
 }
 
@@ -2967,40 +2959,38 @@ function openBreakthroughModal(){
   if (state.realm >= REALMS.length - 1){ log('Đã đạt Bất Hủ Chân Thần!', 'epic'); return; }
   if (state.dead){ log('Không thể đột phá khi đã tử vong.', 'bad'); return; }
   const cost = breakCost();
-  if (state.gold < cost){ log(`Không đủ vàng! Cần ${fmt(cost)} 💰`, 'bad'); return; }
+  if (state.gold < cost){ log('Không đủ vàng! Cần ' + fmt(cost) + ' 💰', 'bad'); return; }
   const curRealm = REALMS[state.realm].n;
   const nextRealm = REALMS[state.realm + 1].n;
   const baseRate = BREAK_RATE[state.realm] || 0.08;
   const boostedRate = Math.min(0.99, baseRate + PILL_BREAK_BONUS);
 
-  $('breakInfo').innerHTML = `
-    Cảnh giới hiện tại: <b>${curRealm}</b><br>
-    Tiếp theo: <b style="color:#7fffd4">${nextRealm}</b><br>
-    Chi phí: <b style="color:#ffd24a">${fmt(cost)} 💰</b><br>
-    Tỉ lệ cơ bản: <span class="${baseRate < 0.4 ? 'warn-rate' : 'good-rate'}">${Math.round(baseRate*100)}%</span>
-  `;
+  $('breakInfo').innerHTML =
+    'Cảnh giới hiện tại: <b>' + curRealm + '</b><br>' +
+    'Tiếp theo: <b style="color:#7fffd4">' + nextRealm + '</b><br>' +
+    'Chi phí: <b style="color:#ffd24a">' + fmt(cost) + ' 💰</b><br>' +
+    'Tỉ lệ cơ bản: <span class="' + (baseRate < 0.4 ? 'warn-rate' : 'good-rate') + '">' + Math.round(baseRate*100) + '%</span>';
   const choices = $('breakChoices');
   choices.innerHTML = '';
   if (state.pills > 0){
     $('breakPillInfo').style.display = 'block';
-    $('breakPillInfo').innerHTML = `
-      💊 Bạn có <b>${state.pills}</b> Đan Dược.<br>
-      Dùng: <b>+${Math.round(PILL_BREAK_BONUS*100)}% tỉ lệ</b> (→ ${Math.round(boostedRate*100)}%) và <b>hồi full HP</b>.
-    `;
+    $('breakPillInfo').innerHTML =
+      '💊 Bạn có <b>' + state.pills + '</b> Đan Dược.<br>' +
+      'Dùng: <b>+' + Math.round(PILL_BREAK_BONUS*100) + '% tỉ lệ</b> (→ ' + Math.round(boostedRate*100) + '%) và <b>hồi full HP</b>.';
     const btnPill = document.createElement('button');
     btnPill.className = 'break-choice pill';
-    btnPill.innerHTML = `<span>💊 DÙNG ĐAN (còn ${state.pills})</span>
-      <span class="sub">→ ${Math.round(boostedRate*100)}% • Full HP</span>`;
-    btnPill.addEventListener('click', ()=>{
+    btnPill.innerHTML = '<span>💊 DÙNG ĐAN (còn ' + state.pills + ')</span>' +
+      '<span class="sub">→ ' + Math.round(boostedRate*100) + '% • Full HP</span>';
+    btnPill.addEventListener('click', function(){
       $('breakModal').classList.remove('on');
       doBreakthrough(true);
     });
     choices.appendChild(btnPill);
     const btnNoPill = document.createElement('button');
     btnNoPill.className = 'break-choice nopill';
-    btnNoPill.innerHTML = `<span>⚡ KHÔNG DÙNG ĐAN</span>
-      <span class="sub">Tỉ lệ: ${Math.round(baseRate*100)}%</span>`;
-    btnNoPill.addEventListener('click', ()=>{
+    btnNoPill.innerHTML = '<span>⚡ KHÔNG DÙNG ĐAN</span>' +
+      '<span class="sub">Tỉ lệ: ' + Math.round(baseRate*100) + '%</span>';
+    btnNoPill.addEventListener('click', function(){
       $('breakModal').classList.remove('on');
       doBreakthrough(false);
     });
@@ -3009,9 +2999,9 @@ function openBreakthroughModal(){
     $('breakPillInfo').style.display = 'none';
     const btn = document.createElement('button');
     btn.className = 'break-choice nopill';
-    btn.innerHTML = `<span>⚡ XÁC NHẬN ĐỘT PHÁ</span>
-      <span class="sub">Tỉ lệ: ${Math.round(baseRate*100)}%</span>`;
-    btn.addEventListener('click', ()=>{
+    btn.innerHTML = '<span>⚡ XÁC NHẬN ĐỘT PHÁ</span>' +
+      '<span class="sub">Tỉ lệ: ' + Math.round(baseRate*100) + '%</span>';
+    btn.addEventListener('click', function(){
       $('breakModal').classList.remove('on');
       doBreakthrough(false);
     });
@@ -3019,8 +3009,8 @@ function openBreakthroughModal(){
   }
   const cancel = document.createElement('button');
   cancel.className = 'break-choice cancel';
-  cancel.innerHTML = `<span>✕ HỦY</span>`;
-  cancel.addEventListener('click', ()=>{ $('breakModal').classList.remove('on'); });
+  cancel.innerHTML = '<span>✕ HỦY</span>';
+  cancel.addEventListener('click', function(){ $('breakModal').classList.remove('on'); });
   choices.appendChild(cancel);
   $('breakModal').classList.add('on');
 }
@@ -3035,19 +3025,19 @@ function doBreakthrough(usePill){
     state.pills--;
     rate = Math.min(0.99, rate + PILL_BREAK_BONUS);
     state.hp = maxHP();
-    log(`💊 Dùng đan! Tỉ lệ: ${Math.round(rate*100)}%`, 'good');
+    log('💊 Dùng đan! Tỉ lệ: ' + Math.round(rate*100) + '%', 'good');
   }
   const success = Math.random() < rate;
   if (success){
     state.realm++; state.breaks++;
     state.hp = maxHP();
     if (state.zone > state.realm) state.zone = state.realm;
-    log(`⚡ ĐỘT PHÁ! ${REALMS[state.realm].n}!`, 'epic');
+    log('⚡ ĐỘT PHÁ! ' + REALMS[state.realm].n + '!', 'epic');
     popup('ĐỘT PHÁ!', 'big', false, 0, -50);
     auraBurst(); bigShake();
     const rn = $('realmName'); rn.textContent = REALMS[state.realm].n;
     rn.classList.remove('levelup'); void rn.offsetWidth; rn.classList.add('levelup');
-    setTimeout(()=>rn.classList.remove('levelup'), 1300);
+    setTimeout(function(){rn.classList.remove('levelup');}, 1300);
     trackQuest('breakthrough', 1);
   } else {
     state.breaksFailed++;
@@ -3058,9 +3048,9 @@ function doBreakthrough(usePill){
     if (Math.random() < 0.65 && state.realm > 0){
       state.realm--;
       if (state.zone > state.realm) state.zone = state.realm;
-      dropTxt = ` Tụt xuống ${REALMS[state.realm].n}!`;
+      dropTxt = ' Tụt xuống ' + REALMS[state.realm].n + '!';
     }
-    log(`🌩️ THẤT BẠI! Mất ${fmt(extra)} vàng.${dropTxt}`, 'bad');
+    log('🌩️ THẤT BẠI! Mất ' + fmt(extra) + ' vàng.' + dropTxt, 'bad');
     popup('LÔI KIẾP!', 'big', false, 0, -50);
     lightningStrike(); playerHurtAnim();
   }
@@ -3081,53 +3071,53 @@ function closeModal(){ $('modal').classList.remove('on'); }
 function canAfford(cost, cry){ return state.gold >= cost && state.crystals >= (cry||0); }
 function renderShop(){
   const b = $('shopBody');
-  let h = `<div class="shop-sec"><h4>⚔️ VŨ KHÍ</h4>`;
-  WEAPONS.forEach((w,i)=>{
+  let h = '<div class="shop-sec"><h4>⚔️ VŨ KHÍ</h4>';
+  WEAPONS.forEach(function(w,i){
     const owned = i <= state.weapon, next = i === state.weapon + 1;
     let btn;
-    if (i === state.weapon) btn = `<button class="buy equipped" disabled>ĐANG DÙNG</button>`;
-    else if (owned) btn = `<button class="buy owned" data-act="weapon" data-i="${i}">TRANG BỊ</button>`;
+    if (i === state.weapon) btn = '<button class="buy equipped" disabled>ĐANG DÙNG</button>';
+    else if (owned) btn = '<button class="buy owned" data-act="weapon" data-i="' + i + '">TRANG BỊ</button>';
     else if (next){ const ok = canAfford(w.cost, w.cry);
-      btn = `<button class="buy ${ok?'':'no'}" data-act="weapon" data-i="${i}">${fmt(w.cost)}💰${w.cry?' +'+w.cry+'💎':''}</button>`;
-    } else btn = `<button class="buy locked" disabled>🔒 KHÓA</button>`;
-    h += `<div class="shop-item"><div class="si-info2"><b>${w.n}</b>
-      <span class="bp">+${fmt(w.bp)} BP</span></div>${btn}</div>`;
+      btn = '<button class="buy ' + (ok?'':'no') + '" data-act="weapon" data-i="' + i + '">' + fmt(w.cost) + '💰' + (w.cry?' +'+w.cry+'💎':'') + '</button>';
+    } else btn = '<button class="buy locked" disabled>🔒 KHÓA</button>';
+    h += '<div class="shop-item"><div class="si-info2"><b>' + w.n + '</b>' +
+      '<span class="bp">+' + fmt(w.bp) + ' BP</span></div>' + btn + '</div>';
   });
-  h += `</div>`;
-  h += `<div class="shop-sec"><h4>🛡️ GIÁP</h4>`;
-  ARMORS.forEach((a,i)=>{
+  h += '</div>';
+  h += '<div class="shop-sec"><h4>🛡️ GIÁP</h4>';
+  ARMORS.forEach(function(a,i){
     const owned = i <= state.armor, next = i === state.armor + 1;
     let btn;
-    if (i === state.armor) btn = `<button class="buy equipped" disabled>ĐANG DÙNG</button>`;
-    else if (owned) btn = `<button class="buy owned" data-act="armor" data-i="${i}">TRANG BỊ</button>`;
+    if (i === state.armor) btn = '<button class="buy equipped" disabled>ĐANG DÙNG</button>';
+    else if (owned) btn = '<button class="buy owned" data-act="armor" data-i="' + i + '">TRANG BỊ</button>';
     else if (next){ const ok = canAfford(a.cost, a.cry);
-      const p = a.cry ? `${a.cry}💎` : `${fmt(a.cost)}💰`;
-      btn = `<button class="buy ${ok?'':'no'}" data-act="armor" data-i="${i}">${p}</button>`;
-    } else btn = `<button class="buy locked" disabled>🔒 KHÓA</button>`;
-    h += `<div class="shop-item"><div class="si-info2"><b>${a.n}</b>
-      <span class="bp">+${fmt(a.bp)} BP</span>
-      <span>DR: ${Math.round(a.dr*100)}%</span></div>${btn}</div>`;
+      const p = a.cry ? (a.cry + '💎') : (fmt(a.cost) + '💰');
+      btn = '<button class="buy ' + (ok?'':'no') + '" data-act="armor" data-i="' + i + '">' + p + '</button>';
+    } else btn = '<button class="buy locked" disabled>🔒 KHÓA</button>';
+    h += '<div class="shop-item"><div class="si-info2"><b>' + a.n + '</b>' +
+      '<span class="bp">+' + fmt(a.bp) + ' BP</span>' +
+      '<span>DR: ' + Math.round(a.dr*100) + '%</span></div>' + btn + '</div>';
   });
-  h += `</div>`;
-  h += `<div class="shop-sec"><h4>💊 ĐAN DƯỢC</h4>
-    <div class="shop-item"><div class="si-info2"><b>Đan Dược Bảo Mệnh</b>
-      <span>Full HP + ${Math.round(PILL_BREAK_BONUS*100)}% tỉ lệ đột phá</span>
-      <span class="bp">Có: ${state.pills}</span></div>
-      <button class="buy ${state.crystals>=5?'':'no'}" data-act="pill">5💎</button>
-    </div>
-    <div class="shop-item"><div class="si-info2"><b>Dùng đan</b>
-      <span>Dùng ngay 1 viên</span></div>
-      <button class="buy ${state.pills>0?'owned':'locked'}" data-act="usepill" ${state.pills>0?'':'disabled'}>DÙNG</button>
-    </div>
-  </div>`;
-  h += `<div class="shop-sec"><h4>💎 ĐỔI TINH THẠCH</h4>
-    <div class="shop-item"><div class="si-info2"><b>1 Tinh Thạch</b>
-      <span>1,000,000 💰</span></div>
-      <button class="buy ${state.gold>=1000000?'':'no'}" data-act="exchange">ĐỔI</button></div>
-    <div class="shop-item"><div class="si-info2"><b>10 Tinh Thạch</b>
-      <span>9,000,000 💰</span></div>
-      <button class="buy ${state.gold>=9000000?'':'no'}" data-act="exchange10">ĐỔI</button></div>
-  </div>`;
+  h += '</div>';
+  h += '<div class="shop-sec"><h4>💊 ĐAN DƯỢC</h4>' +
+    '<div class="shop-item"><div class="si-info2"><b>Đan Dược Bảo Mệnh</b>' +
+      '<span>Full HP + ' + Math.round(PILL_BREAK_BONUS*100) + '% tỉ lệ đột phá</span>' +
+      '<span class="bp">Có: ' + state.pills + '</span></div>' +
+      '<button class="buy ' + (state.crystals>=5?'':'no') + '" data-act="pill">5💎</button>' +
+    '</div>' +
+    '<div class="shop-item"><div class="si-info2"><b>Dùng đan</b>' +
+      '<span>Dùng ngay 1 viên</span></div>' +
+      '<button class="buy ' + (state.pills>0?'owned':'locked') + '" data-act="usepill" ' + (state.pills>0?'':'disabled') + '>DÙNG</button>' +
+    '</div>' +
+  '</div>';
+  h += '<div class="shop-sec"><h4>💎 ĐỔI TINH THẠCH</h4>' +
+    '<div class="shop-item"><div class="si-info2"><b>1 Tinh Thạch</b>' +
+      '<span>1,000,000 💰</span></div>' +
+      '<button class="buy ' + (state.gold>=1000000?'':'no') + '" data-act="exchange">ĐỔI</button></div>' +
+    '<div class="shop-item"><div class="si-info2"><b>10 Tinh Thạch</b>' +
+      '<span>9,000,000 💰</span></div>' +
+      '<button class="buy ' + (state.gold>=9000000?'':'no') + '" data-act="exchange10">ĐỔI</button></div>' +
+  '</div>';
   b.innerHTML = h;
 }
 function buyWeapon(i){
@@ -3138,7 +3128,7 @@ function buyWeapon(i){
   if (!canAfford(w.cost, w.cry)){ log('Không đủ!', 'bad'); return; }
   state.gold -= w.cost; if (w.cry) state.crystals -= w.cry;
   state.weapon = i;
-  log(`⚔️ Mua ${w.n}!`, 'epic');
+  log('⚔️ Mua ' + w.n + '!', 'epic');
   screenFlash('gold'); renderShop(); saveAccountState();
 }
 function buyArmor(i){
@@ -3150,7 +3140,7 @@ function buyArmor(i){
   state.gold -= a.cost; if (a.cry) state.crystals -= a.cry;
   state.armor = i;
   state.hp = Math.min(maxHP(), state.hp + a.bp * 0.2);
-  log(`🛡️ Mua ${a.n}!`, 'epic');
+  log('🛡️ Mua ' + a.n + '!', 'epic');
   screenFlash('gold'); renderShop(); saveAccountState();
 }
 function buyPill(){
@@ -3173,7 +3163,7 @@ function exchangeCrystal(amount){
   const gain = amount === 1 ? 1 : 10;
   if (state.gold < cost){ log('Không đủ vàng!', 'bad'); return; }
   state.gold -= cost; state.crystals += gain;
-  log(`💎 +${gain} Tinh Thạch`, 'good');
+  log('💎 +' + gain + ' Tinh Thạch', 'good');
   renderShop(); saveAccountState();
 }
 
@@ -3182,20 +3172,20 @@ function openNameModal(){
   $('nameInput').value = state.name;
   const grid = $('avatarGrid');
   grid.innerHTML = '';
-  AVATARS.forEach(av => {
+  AVATARS.forEach(function(av){
     const btn = document.createElement('button');
     btn.className = 'avatar-pick' + (av === state.avatar ? ' active' : '');
     btn.textContent = av;
     btn.type = 'button';
-    btn.addEventListener('click', ()=>{
+    btn.addEventListener('click', function(){
       state.avatar = av;
-      grid.querySelectorAll('.avatar-pick').forEach(b => b.classList.remove('active'));
+      grid.querySelectorAll('.avatar-pick').forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
     });
     grid.appendChild(btn);
   });
   $('nameModal').classList.add('on');
-  setTimeout(()=>$('nameInput').focus(), 150);
+  setTimeout(function(){$('nameInput').focus();}, 150);
 }
 function closeNameModal(){ $('nameModal').classList.remove('on'); }
 function saveName(){
@@ -3203,7 +3193,7 @@ function saveName(){
   if (!v){ log('Tên không được để trống!', 'bad'); return; }
   if (v.length > 16){ log('Tối đa 16 ký tự!', 'bad'); return; }
   state.name = v;
-  log(`✎ Đổi tên thành "${v}"`, 'good');
+  log('✎ Đổi tên thành "' + v + '"', 'good');
   closeNameModal();
   renderLobby();
   if (state.screen === 'info') renderInfo();
@@ -3227,7 +3217,7 @@ function renderHUD(){
   $('combatTag').classList.toggle('on', inCombat() && !state.dead);
   if (state.bpBuffUntil > Date.now()){
     const remain = Math.ceil((state.bpBuffUntil - Date.now())/1000);
-    $('buffTag').textContent = `${state.bpBuffName} ×${state.bpBuff} (${remain}s)`;
+    $('buffTag').textContent = state.bpBuffName + ' ×' + state.bpBuff + ' (' + remain + 's)';
   } else if (state.bpBuffUntil){
     state.bpBuffUntil = 0; state.bpBuff = 0; $('buffTag').textContent = '';
   }
@@ -3246,8 +3236,8 @@ function renderEnemy(){
   const pbp = playerBP();
   const notEnough = pbp < enemy.bp;
   $('enemyName').textContent = enemy.name;
-  $('enemyInfo').innerHTML = `BP: <b>${fmt(enemy.bp)}</b>` +
-    (notEnough ? ` <span class="warn">⚠️ THIẾU BP!</span>` : '');
+  $('enemyInfo').innerHTML = 'BP: <b>' + fmt(enemy.bp) + '</b>' +
+    (notEnough ? ' <span class="warn">⚠️ THIẾU BP!</span>' : '');
   const pct = Math.max(0, enemy.hp/enemy.maxHp*100);
   $('ehpFill').style.width = pct + '%';
   $('ehpText').textContent = fmt(Math.max(0, enemy.hp)) + ' / ' + fmt(enemy.maxHp);
@@ -3257,13 +3247,13 @@ function renderEnemy(){
     const remain = Math.max(0, state.realmEnd - now);
     const total = REALM_TIERS[state.realmTier].time * 1000;
     $('bossTimerFill').style.width = ((remain/total)*100) + '%';
-    $('bossTimerText').textContent = `⏱️ BÍ CẢNH: ${(remain/1000).toFixed(1)}s`;
+    $('bossTimerText').textContent = '⏱️ BÍ CẢNH: ' + (remain/1000).toFixed(1) + 's';
     tbar.classList.toggle('danger', remain < 8000);
   } else if (state.bossActive && enemy.isBoss){
     wrap.classList.add('on'); tbar.classList.remove('realm');
     const remain = Math.max(0, state.bossEnd - now);
     $('bossTimerFill').style.width = ((remain/15000)*100) + '%';
-    $('bossTimerText').textContent = `BOSS ENRAGE: ${(remain/1000).toFixed(1)}s`;
+    $('bossTimerText').textContent = 'BOSS ENRAGE: ' + (remain/1000).toFixed(1) + 's';
     tbar.classList.toggle('danger', remain < 5000);
   } else {
     wrap.classList.remove('on'); tbar.classList.remove('danger', 'realm');
@@ -3275,12 +3265,12 @@ function updateButtons(){
   autoBtn.textContent = state.auto ? 'AUTO: ON' : 'AUTO: OFF';
   autoBtn.style.color = state.auto ? '#00ffa3' : '#fff';
   const bd = $('btnDevour');
-  if (isDevour()){ bd.textContent = `🐉 (${((state.devourUntil-now)/1000).toFixed(1)}s)`; bd.disabled = false; bd.classList.add('active'); }
-  else if (now < state.devourCd){ bd.textContent = `🐉 HỒI: ${Math.ceil((state.devourCd-now)/1000)}s`; bd.disabled = true; bd.classList.remove('active'); }
+  if (isDevour()){ bd.textContent = '🐉 (' + ((state.devourUntil-now)/1000).toFixed(1) + 's)'; bd.disabled = false; bd.classList.add('active'); }
+  else if (now < state.devourCd){ bd.textContent = '🐉 HỒI: ' + Math.ceil((state.devourCd-now)/1000) + 's'; bd.disabled = true; bd.classList.remove('active'); }
   else { bd.textContent = '🐉 THÔN PHỆ'; bd.disabled = false; bd.classList.remove('active'); }
   const ba = $('btnAttack');
   if (now < state.lockUntil){
-    ba.textContent = `💀 KHÓA ${Math.ceil((state.lockUntil-now)/1000)}s`;
+    ba.textContent = '💀 KHÓA ' + Math.ceil((state.lockUntil-now)/1000) + 's';
     ba.disabled = true; ba.classList.remove('cd'); ba.style.setProperty('--cd', '0%');
   } else {
     ba.textContent = '⚔️ TẤN CÔNG'; ba.disabled = false;
@@ -3332,9 +3322,9 @@ function tick(){
       dmg = Math.max(1, Math.floor(dmg));
       state.hp -= dmg;
       enemyLungeAnim();
-      setTimeout(()=>{
+      setTimeout(function(){
         hurtFlash(); playerHurtAnim();
-        popup('-'+fmt(dmg), 'hurt', false, 0, -20);
+        popup('-' + fmt(dmg), 'hurt', false, 0, -20);
         const ar = $('arena').getBoundingClientRect();
         particleBurst(40, ar.height - 60, '#ff3b5c', 8);
       }, 200);
@@ -3369,143 +3359,143 @@ function renderAdmin(){
 }
 function renderAdminGift(){
   const accounts = getAccounts();
-  const others = Object.values(accounts).filter(a => a.username !== ADMIN_USER);
+  const others = Object.values(accounts).filter(function(a){ return a.username !== ADMIN_USER; });
   if (!others.length){
-    return `<div class="market-empty">Chưa có người chơi nào khác.</div>`;
+    return '<div class="market-empty">Chưa có người chơi nào khác.</div>';
   }
   let opts = '';
-  others.forEach(a => {
-    opts += `<option value="${a.username}">${escapeHtml(a.username)}${a.banned?' (BANNED)':''}</option>`;
+  others.forEach(function(a){
+    opts += '<option value="' + a.username + '">' + escapeHtml(a.username) + (a.banned?' (BANNED)':'') + '</option>';
   });
   let clsOpts = '';
-  CLASSES.forEach(c => { clsOpts += `<option value="${c.id}">${c.icon} ${c.name}</option>`; });
-  return `<div class="admin-form">
-    <h4>🎁 TẶNG VẬT PHẨM CHO NGƯỜI CHƠI</h4>
-    <label>Người nhận</label>
-    <select id="giftTarget">${opts}</select>
-    <label>Loại vật phẩm</label>
-    <select id="giftType">
-      <option value="gold">💰 Vàng</option>
-      <option value="crystal">💎 Tinh Thạch</option>
-      <option value="stone">🪨 Đá Tông Môn</option>
-      <option value="pill">💊 Đan Dược</option>
-      <option value="manual">📕 Bí Tịch</option>
-    </select>
-    <label>Số lượng</label>
-    <input type="number" id="giftAmount" value="10000" min="1" />
-    <div id="giftClassWrap" style="display:none">
-      <label>Chọn hệ (khi tặng bí tịch)</label>
-      <select id="giftClass">${clsOpts}</select>
-    </div>
-    <button class="admin-btn green" data-admin="gift">🎁 TẶNG NGAY</button>
-  </div>`;
+  CLASSES.forEach(function(c){ clsOpts += '<option value="' + c.id + '">' + c.icon + ' ' + c.name + '</option>'; });
+  return '<div class="admin-form">' +
+    '<h4>🎁 TẶNG VẬT PHẨM CHO NGƯỜI CHƠI</h4>' +
+    '<label>Người nhận</label>' +
+    '<select id="giftTarget">' + opts + '</select>' +
+    '<label>Loại vật phẩm</label>' +
+    '<select id="giftType">' +
+      '<option value="gold">💰 Vàng</option>' +
+      '<option value="crystal">💎 Tinh Thạch</option>' +
+      '<option value="stone">🪨 Đá Tông Môn</option>' +
+      '<option value="pill">💊 Đan Dược</option>' +
+      '<option value="manual">📕 Bí Tịch</option>' +
+    '</select>' +
+    '<label>Số lượng</label>' +
+    '<input type="number" id="giftAmount" value="10000" min="1" />' +
+    '<div id="giftClassWrap" style="display:none">' +
+      '<label>Chọn hệ (khi tặng bí tịch)</label>' +
+      '<select id="giftClass">' + clsOpts + '</select>' +
+    '</div>' +
+    '<button class="admin-btn green" data-admin="gift">🎁 TẶNG NGAY</button>' +
+  '</div>';
 }
 function renderAdminManage(){
   const accounts = getAccounts();
-  const others = Object.values(accounts).filter(a => a.username !== ADMIN_USER);
-  if (!others.length) return `<div class="market-empty">Chưa có người chơi nào khác.</div>`;
-  let h = `<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px;
-    padding:8px 10px;background:rgba(57,208,255,.06);border-radius:8px;
-    border:1px solid rgba(57,208,255,.2)">
-    👥 Tổng: <b style="color:#fff">${others.length}</b> tài khoản
-  </div>`;
+  const others = Object.values(accounts).filter(function(a){ return a.username !== ADMIN_USER; });
+  if (!others.length) return '<div class="market-empty">Chưa có người chơi nào khác.</div>';
+  let h = '<div style="font-size:10px;color:#8bb8d8;margin-bottom:8px;' +
+    'padding:8px 10px;background:rgba(57,208,255,.06);border-radius:8px;' +
+    'border:1px solid rgba(57,208,255,.2)">' +
+    '👥 Tổng: <b style="color:#fff">' + others.length + '</b> tài khoản' +
+  '</div>';
   for (const a of others){
     const s = a.save || {};
     const realmName = REALMS[Math.min(REALMS.length-1, Math.max(0, s.realm|0))].n;
     const gold = s.gold || 0;
     const avt = s.avatar || '🧙‍♂️';
     const banned = !!a.banned;
-    h += `<div class="admin-user ${banned?'banned':''}">
-      <div class="au-avt">${avt}</div>
-      <div class="au-info">
-        <div class="au-name">${escapeHtml(a.username)}${banned?' 🚫':''}</div>
-        <div class="au-sub">${realmName} • ${fmt(gold)}💰</div>
-        ${banned ? `<div class="au-sub" style="color:#ff8fa3">Lý do: ${escapeHtml(a.banReason||'—')}</div>` : ''}
-      </div>
-      <div class="au-actions">
-        <button class="edit" data-admin="setrealm" data-user="${a.username}">📈 CẤP</button>
-        ${banned
-          ? `<button class="unban" data-admin="unban" data-user="${a.username}">✓ MỞ KHÓA</button>`
-          : `<button class="ban" data-admin="ban" data-user="${a.username}">🚫 BAN</button>`}
-        <button class="del" data-admin="delete" data-user="${a.username}">🗑️ XÓA</button>
-      </div>
-    </div>`;
+    h += '<div class="admin-user ' + (banned?'banned':'') + '">' +
+      '<div class="au-avt">' + avt + '</div>' +
+      '<div class="au-info">' +
+        '<div class="au-name">' + escapeHtml(a.username) + (banned?' 🚫':'') + '</div>' +
+        '<div class="au-sub">' + realmName + ' • ' + fmt(gold) + '💰</div>' +
+        (banned ? '<div class="au-sub" style="color:#ff8fa3">Lý do: ' + escapeHtml(a.banReason||'—') + '</div>' : '') +
+      '</div>' +
+      '<div class="au-actions">' +
+        '<button class="edit" data-admin="setrealm" data-user="' + a.username + '">📈 CẤP</button>' +
+        (banned
+          ? '<button class="unban" data-admin="unban" data-user="' + a.username + '">✓ MỞ KHÓA</button>'
+          : '<button class="ban" data-admin="ban" data-user="' + a.username + '">🚫 BAN</button>') +
+        '<button class="del" data-admin="delete" data-user="' + a.username + '">🗑️ XÓA</button>' +
+      '</div>' +
+    '</div>';
   }
   return h;
 }
 function renderAdminBroadcast(){
   const g = getGlobal();
   const b = g.broadcast;
-  let h = `<div class="admin-form">
-    <h4>📢 GỬI THÔNG BÁO</h4>
-    <label>Nội dung thông báo</label>
-    <textarea id="bcInput" placeholder="Nhập nội dung..." maxlength="500"></textarea>
-    <button class="admin-btn" data-admin="broadcast">📢 GỬI NGAY</button>
-  </div>`;
+  let h = '<div class="admin-form">' +
+    '<h4>📢 GỬI THÔNG BÁO</h4>' +
+    '<label>Nội dung thông báo</label>' +
+    '<textarea id="bcInput" placeholder="Nhập nội dung..." maxlength="500"></textarea>' +
+    '<button class="admin-btn" data-admin="broadcast">📢 GỬI NGAY</button>' +
+  '</div>';
   if (b){
-    h += `<div class="admin-form">
-      <h4>📜 Thông báo hiện tại</h4>
-      <div style="background:rgba(0,0,0,.35);border:1px solid rgba(255,59,92,.35);
-        border-radius:8px;padding:10px;font-size:12px;color:#fff;line-height:1.6;
-        white-space:pre-wrap;word-break:break-word">${escapeHtml(b.msg)}</div>
-      <div style="font-size:9px;color:#8bb8d8;margin-top:6px">
-        Gửi lúc: ${new Date(b.createdAt).toLocaleString('vi-VN')} • ID #${b.id}
-      </div>
-      <button class="admin-btn" data-admin="clearbroadcast">🗑️ XÓA THÔNG BÁO</button>
-    </div>`;
+    h += '<div class="admin-form">' +
+      '<h4>📜 Thông báo hiện tại</h4>' +
+      '<div style="background:rgba(0,0,0,.35);border:1px solid rgba(255,59,92,.35);' +
+        'border-radius:8px;padding:10px;font-size:12px;color:#fff;line-height:1.6;' +
+        'white-space:pre-wrap;word-break:break-word">' + escapeHtml(b.msg) + '</div>' +
+      '<div style="font-size:9px;color:#8bb8d8;margin-top:6px">' +
+        'Gửi lúc: ' + new Date(b.createdAt).toLocaleString('vi-VN') + ' • ID #' + b.id +
+      '</div>' +
+      '<button class="admin-btn" data-admin="clearbroadcast">🗑️ XÓA THÔNG BÁO</button>' +
+    '</div>';
   }
   return h;
 }
 function renderAdminEvents(){
   let typeOpts = '';
-  EVENT_TYPES.forEach(t => {
-    typeOpts += `<option value="${t.id}">${t.icon} ${t.name} — ${t.desc}</option>`;
+  EVENT_TYPES.forEach(function(t){
+    typeOpts += '<option value="' + t.id + '">' + t.icon + ' ' + t.name + ' — ' + t.desc + '</option>';
   });
-  let h = `<div class="admin-form">
-    <h4>🎉 TẠO EVENT MỚI</h4>
-    <label>Tên event</label>
-    <input type="text" id="evName" placeholder="VD: Lễ Hội Mùa Xuân" maxlength="40" />
-    <label>Loại event</label>
-    <select id="evType">${typeOpts}</select>
-    <label>Hệ số (multiplier)</label>
-    <input type="number" id="evMult" value="2" step="0.1" min="1" max="100" />
-    <label>Thời gian (phút)</label>
-    <input type="number" id="evDuration" value="30" min="1" max="10080" />
-    <button class="admin-btn purple" data-admin="createevent">🎉 TẠO EVENT</button>
-  </div>`;
-  const evs = getGlobal().events.filter(e => e.endsAt > Date.now());
-  h += `<div class="admin-form">
-    <h4>🎊 Event đang chạy (${evs.length})</h4>`;
+  let h = '<div class="admin-form">' +
+    '<h4>🎉 TẠO EVENT MỚI</h4>' +
+    '<label>Tên event</label>' +
+    '<input type="text" id="evName" placeholder="VD: Lễ Hội Mùa Xuân" maxlength="40" />' +
+    '<label>Loại event</label>' +
+    '<select id="evType">' + typeOpts + '</select>' +
+    '<label>Hệ số (multiplier)</label>' +
+    '<input type="number" id="evMult" value="2" step="0.1" min="1" max="100" />' +
+    '<label>Thời gian (phút)</label>' +
+    '<input type="number" id="evDuration" value="30" min="1" max="10080" />' +
+    '<button class="admin-btn purple" data-admin="createevent">🎉 TẠO EVENT</button>' +
+  '</div>';
+  const evs = getGlobal().events.filter(function(e){ return e.endsAt > Date.now(); });
+  h += '<div class="admin-form">' +
+    '<h4>🎊 Event đang chạy (' + evs.length + ')</h4>';
   if (!evs.length){
-    h += `<div style="font-size:10px;color:#8bb8d8;font-style:italic;text-align:center;padding:10px">
-      Chưa có event nào.</div>`;
+    h += '<div style="font-size:10px;color:#8bb8d8;font-style:italic;text-align:center;padding:10px">' +
+      'Chưa có event nào.</div>';
   } else {
     for (const e of evs){
-      const et = EVENT_TYPES.find(t => t.id === e.type);
+      const et = EVENT_TYPES.find(function(t){ return t.id === e.type; });
       const remain = Math.max(0, e.endsAt - Date.now());
       const m = Math.floor(remain / 60000), s = Math.floor((remain % 60000)/1000);
-      h += `<div class="event-card">
-        <h5>${et ? et.icon : '🎉'} ${escapeHtml(e.name)}</h5>
-        <div class="ev-info">Loại: ${et ? et.name : e.type} • Hệ số: ×${e.mult}</div>
-        <div class="ev-time">⏱️ Còn: ${m}p ${s}s</div>
-        <button data-admin="endevent" data-evid="${e.id}">🛑 KẾT THÚC SỚM</button>
-      </div>`;
+      h += '<div class="event-card">' +
+        '<h5>' + (et ? et.icon : '🎉') + ' ' + escapeHtml(e.name) + '</h5>' +
+        '<div class="ev-info">Loại: ' + (et ? et.name : e.type) + ' • Hệ số: ×' + e.mult + '</div>' +
+        '<div class="ev-time">⏱️ Còn: ' + m + 'p ' + s + 's</div>' +
+        '<button data-admin="endevent" data-evid="' + e.id + '">🛑 KẾT THÚC SỚM</button>' +
+      '</div>';
     }
   }
-  h += `</div>`;
+  h += '</div>';
   return h;
 }
 function bindAdminEvents(){
   const body = $('adminBody');
   const gt = body.querySelector('#giftType');
   if (gt){
-    gt.addEventListener('change', ()=>{
+    gt.addEventListener('change', function(){
       const wrap = body.querySelector('#giftClassWrap');
       if (wrap) wrap.style.display = gt.value === 'manual' ? 'block' : 'none';
     });
   }
-  body.querySelectorAll('[data-admin]').forEach(btn => {
-    btn.addEventListener('click', ()=>handleAdminAction(btn.dataset.admin, btn));
+  body.querySelectorAll('[data-admin]').forEach(function(btn){
+    btn.addEventListener('click', function(){ handleAdminAction(btn.dataset.admin, btn); });
   });
 }
 function handleAdminAction(action, btn){
@@ -3531,16 +3521,16 @@ function handleAdminAction(action, btn){
       s.manuals[cid] = (s.manuals[cid] || 0) + amount;
     }
     setAccounts(accounts);
-    log(`🎁 Đã tặng ${fmt(amount)} ${type} cho ${target}`, 'good');
+    log('🎁 Đã tặng ' + fmt(amount) + ' ' + type + ' cho ' + target, 'good');
     screenFlash('gold');
-    alert(`✓ Đã tặng ${fmt(amount)} ${type} cho "${target}"!`);
+    alert('✓ Đã tặng ' + fmt(amount) + ' ' + type + ' cho "' + target + '"!');
   }
   else if (action === 'setrealm'){
     const user = btn.dataset.user;
     const acc = accounts[user];
     if (!acc) return;
     const cur = acc.save ? (acc.save.realm | 0) : 0;
-    const input = prompt(`Nhập cấp cảnh giới cho "${user}" (0-${REALMS.length-1})\nHiện tại: ${cur} (${REALMS[cur].n})`, String(cur));
+    const input = prompt('Nhập cấp cảnh giới cho "' + user + '" (0-' + (REALMS.length-1) + ')\nHiện tại: ' + cur + ' (' + REALMS[cur].n + ')', String(cur));
     if (input === null) return;
     const v = parseInt(input, 10);
     if (isNaN(v) || v < 0 || v > REALMS.length-1){ alert('Cấp không hợp lệ!'); return; }
@@ -3548,20 +3538,20 @@ function handleAdminAction(action, btn){
     acc.save.realm = v;
     if ((acc.save.zone|0) > v) acc.save.zone = v;
     setAccounts(accounts);
-    log(`📈 Đã set ${user} lên ${REALMS[v].n}`, 'good');
+    log('📈 Đã set ' + user + ' lên ' + REALMS[v].n, 'good');
     renderAdmin();
-    alert(`✓ Đã set "${user}" → ${REALMS[v].n}`);
+    alert('✓ Đã set "' + user + '" → ' + REALMS[v].n);
   }
   else if (action === 'ban'){
     const user = btn.dataset.user;
     const acc = accounts[user];
     if (!acc) return;
-    const reason = prompt(`Lý do ban "${user}"?`, 'Vi phạm quy định');
+    const reason = prompt('Lý do ban "' + user + '"?', 'Vi phạm quy định');
     if (reason === null) return;
     acc.banned = true;
     acc.banReason = reason || 'Vi phạm quy định';
     setAccounts(accounts);
-    log(`🚫 Đã ban ${user}`, 'bad');
+    log('🚫 Đã ban ' + user, 'bad');
     renderAdmin();
   }
   else if (action === 'unban'){
@@ -3571,15 +3561,15 @@ function handleAdminAction(action, btn){
     acc.banned = false;
     acc.banReason = '';
     setAccounts(accounts);
-    log(`✓ Đã mở khóa ${user}`, 'good');
+    log('✓ Đã mở khóa ' + user, 'good');
     renderAdmin();
   }
   else if (action === 'delete'){
     const user = btn.dataset.user;
-    if (!confirm(`⚠️ XÓA "${user}"? Không thể khôi phục!`)) return;
+    if (!confirm('⚠️ XÓA "' + user + '"? Không thể khôi phục!')) return;
     delete accounts[user];
     setAccounts(accounts);
-    log(`🗑️ Đã xóa tài khoản ${user}`, 'bad');
+    log('🗑️ Đã xóa tài khoản ' + user, 'bad');
     screenFlash('red');
     renderAdmin();
   }
@@ -3588,9 +3578,9 @@ function handleAdminAction(action, btn){
     if (!msg){ alert('Nội dung không được để trống!'); return; }
     const g = getGlobal();
     g.broadcastIdCounter = (g.broadcastIdCounter || 0) + 1;
-    g.broadcast = { id: g.broadcastIdCounter, msg, from: 'ADMIN', createdAt: Date.now() };
+    g.broadcast = { id: g.broadcastIdCounter, msg: msg, from: 'ADMIN', createdAt: Date.now() };
     setGlobal(g);
-    log(`📢 Đã gửi thông báo`, 'epic');
+    log('📢 Đã gửi thông báo', 'epic');
     screenFlash('red');
     alert('✓ Đã gửi thông báo!');
     renderAdmin();
@@ -3613,31 +3603,31 @@ function handleAdminAction(action, btn){
     const g = getGlobal();
     g.events.push({
       id: 'ev_' + Date.now(),
-      name, type, mult,
+      name: name, type: type, mult: mult,
       createdAt: Date.now(),
       endsAt: Date.now() + dur * 60000
     });
     setGlobal(g);
-    log(`🎉 Đã tạo event "${name}" ×${mult}`, 'epic');
+    log('🎉 Đã tạo event "' + name + '" ×' + mult, 'epic');
     screenFlash('gold'); auraBurst();
-    alert(`✓ Đã tạo event "${name}" ×${mult} trong ${dur} phút!`);
+    alert('✓ Đã tạo event "' + name + '" ×' + mult + ' trong ' + dur + ' phút!');
     renderAdmin();
   }
   else if (action === 'endevent'){
     const evId = btn.dataset.evid;
     if (!confirm('Kết thúc event ngay?')) return;
     const g = getGlobal();
-    g.events = g.events.filter(e => e.id !== evId);
+    g.events = g.events.filter(function(e){ return e.id !== evId; });
     setGlobal(g);
-    log(`🛑 Đã kết thúc event`, 'bad');
+    log('🛑 Đã kết thúc event', 'bad');
     renderAdmin();
   }
 }
 
 /* ===== EVENT BINDINGS ===== */
 function bindEvents(){
-  document.querySelectorAll('[data-auth]').forEach(b => {
-    b.addEventListener('click', ()=>{
+  document.querySelectorAll('[data-auth]').forEach(function(b){
+    b.addEventListener('click', function(){
       authTab = b.dataset.auth;
       clearAuthMsg();
       renderAuth();
@@ -3646,27 +3636,27 @@ function bindEvents(){
 
   $('btnAttack').addEventListener('click', attack);
   $('enemySprite').addEventListener('click', attack);
-  $('btnAuto').addEventListener('click', ()=>{
+  $('btnAuto').addEventListener('click', function(){
     state.auto = !state.auto;
     log(state.auto ? '🤖 AUTO: BẬT' : '🤖 AUTO: TẮT');
     saveAccountState();
   });
   $('btnDevour').addEventListener('click', activateDevour);
   $('btnBoss').addEventListener('click', challengeBoss);
-  $('btnHome').addEventListener('click', ()=>showScreen('lobby'));
-  $('portalBtn').addEventListener('click', ()=>{ if (state.portal) enterRealm(); });
-  $('zonePrev').addEventListener('click', ()=>{ if (state.zone > 0 && !state.inRealm){ state.zone--; onZoneChange(); } });
-  $('zoneNext').addEventListener('click', ()=>{ if (state.zone < state.realm && !state.inRealm){ state.zone++; onZoneChange(); } });
+  $('btnHome').addEventListener('click', function(){ showScreen('lobby'); });
+  $('portalBtn').addEventListener('click', function(){ if (state.portal) enterRealm(); });
+  $('zonePrev').addEventListener('click', function(){ if (state.zone > 0 && !state.inRealm){ state.zone--; onZoneChange(); } });
+  $('zoneNext').addEventListener('click', function(){ if (state.zone < state.realm && !state.inRealm){ state.zone++; onZoneChange(); } });
 
-  document.querySelectorAll('#screenLobby [data-screen]').forEach(btn => {
-    btn.addEventListener('click', ()=>{
+  document.querySelectorAll('#screenLobby [data-screen]').forEach(function(btn){
+    btn.addEventListener('click', function(){
       const dest = btn.dataset.screen;
       if (dest === 'combat') showScreen('combat');
       else showScreen(dest);
     });
   });
-  document.querySelectorAll('#screenLobby [data-action]').forEach(btn => {
-    btn.addEventListener('click', ()=>{
+  document.querySelectorAll('#screenLobby [data-action]').forEach(function(btn){
+    btn.addEventListener('click', function(){
       const act = btn.dataset.action;
       if (act === 'shop') openShop();
       else if (act === 'quest') openQuests();
@@ -3678,15 +3668,15 @@ function bindEvents(){
       }
     });
   });
-  document.querySelectorAll('.screen [data-close]').forEach(btn => {
-    btn.addEventListener('click', ()=>showScreen('lobby'));
+  document.querySelectorAll('.screen [data-close]').forEach(function(btn){
+    btn.addEventListener('click', function(){ showScreen('lobby'); });
   });
-  document.addEventListener('click', e => {
+  document.addEventListener('click', function(e){
     const t = e.target.closest('[data-act="edit-profile"]');
     if (t) openNameModal();
   });
 
-  $('sectBody').addEventListener('click', e=>{
+  $('sectBody').addEventListener('click', function(e){
     const btn = e.target.closest('button[data-act]');
     if (!btn || btn.disabled) return;
     const act = btn.dataset.act;
@@ -3695,7 +3685,7 @@ function bindEvents(){
     else if (act === 'leave') leaveSect();
   });
 
-  $('invBody').addEventListener('click', e=>{
+  $('invBody').addEventListener('click', function(e){
     const wBtn = e.target.closest('button[data-inv-w]');
     if (wBtn){ state.weapon = parseInt(wBtn.dataset.invW, 10); renderInventory(); saveAccountState(); return; }
     const aBtn = e.target.closest('button[data-inv-a]');
@@ -3705,7 +3695,7 @@ function bindEvents(){
     if (mBtn){ useManual(mBtn.dataset.useManual); }
   });
 
-  $('infoBody').addEventListener('click', e=>{
+  $('infoBody').addEventListener('click', function(e){
     const btn = e.target.closest('button[data-sys]');
     if (!btn) return;
     const act = btn.dataset.sys;
@@ -3728,8 +3718,8 @@ function bindEvents(){
       const accounts = getAccounts();
       const data = JSON.stringify(accounts[u]);
       if (navigator.clipboard){
-        navigator.clipboard.writeText(data).then(()=>log('📋 Đã copy save!','good'))
-          .catch(()=>prompt('Copy save:', data));
+        navigator.clipboard.writeText(data).then(function(){ log('📋 Đã copy save!','good'); })
+          .catch(function(){ prompt('Copy save:', data); });
       } else prompt('Copy save:', data);
     }
     else if (act === 'import'){
@@ -3746,16 +3736,16 @@ function bindEvents(){
     }
   });
 
-  $('marketBody').addEventListener('click', e=>{
+  $('marketBody').addEventListener('click', function(e){
     const bBtn = e.target.closest('button[data-buy]');
     if (bBtn){ buyListing(bBtn.dataset.buy); return; }
     const cBtn = e.target.closest('button[data-cancel]');
     if (cBtn){ cancelListing(cBtn.dataset.cancel); return; }
     if (e.target.closest('#btnPostSell')){ postSell(); return; }
   });
-  document.querySelectorAll('[data-mtab]').forEach(t => {
-    t.addEventListener('click', ()=>{
-      document.querySelectorAll('[data-mtab]').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('[data-mtab]').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('[data-mtab]').forEach(function(x){ x.classList.remove('active'); });
       t.classList.add('active');
       marketTab = t.dataset.mtab;
       renderMarket();
@@ -3763,8 +3753,8 @@ function bindEvents(){
   });
 
   $('closeModal').addEventListener('click', closeModal);
-  $('modal').addEventListener('click', e=>{ if (e.target === $('modal')) closeModal(); });
-  $('shopBody').addEventListener('click', e=>{
+  $('modal').addEventListener('click', function(e){ if (e.target === $('modal')) closeModal(); });
+  $('shopBody').addEventListener('click', function(e){
     const btn = e.target.closest('button[data-act]');
     if (!btn || btn.disabled) return;
     const act = btn.dataset.act;
@@ -3776,24 +3766,24 @@ function bindEvents(){
     else if (act === 'exchange') exchangeCrystal(1);
     else if (act === 'exchange10') exchangeCrystal(10);
   });
-  $('questBody').addEventListener('click', e=>{
+  $('questBody').addEventListener('click', function(e){
     const btn = e.target.closest('button[data-claim]');
     if (!btn) return;
     claimQuest(parseInt(btn.dataset.claim, 10));
   });
 
-  document.querySelectorAll('[data-name]').forEach(btn => {
-    btn.addEventListener('click', ()=>{
+  document.querySelectorAll('[data-name]').forEach(function(btn){
+    btn.addEventListener('click', function(){
       if (btn.dataset.name === 'save') saveName();
       else closeNameModal();
     });
   });
-  $('nameModal').addEventListener('click', e=>{ if (e.target === $('nameModal')) closeNameModal(); });
-  $('nameInput').addEventListener('keypress', e=>{ if (e.key === 'Enter') saveName(); });
+  $('nameModal').addEventListener('click', function(e){ if (e.target === $('nameModal')) closeNameModal(); });
+  $('nameInput').addEventListener('keypress', function(e){ if (e.key === 'Enter') saveName(); });
 
-  document.querySelectorAll('[data-atab]').forEach(t => {
-    t.addEventListener('click', ()=>{
-      document.querySelectorAll('[data-atab]').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('[data-atab]').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('[data-atab]').forEach(function(x){ x.classList.remove('active'); });
       t.classList.add('active');
       adminTab = t.dataset.atab;
       renderAdmin();
@@ -3801,10 +3791,10 @@ function bindEvents(){
   });
 
   const bcBtn = $('closeBroadcast');
-  if (bcBtn) bcBtn.addEventListener('click', ()=>{ $('broadcastModal').classList.remove('on'); });
+  if (bcBtn) bcBtn.addEventListener('click', function(){ $('broadcastModal').classList.remove('on'); });
 
   window.addEventListener('beforeunload', saveAccountState);
-  document.addEventListener('visibilitychange', ()=>{ if (document.hidden) saveAccountState(); });
+  document.addEventListener('visibilitychange', function(){ if (document.hidden) saveAccountState(); });
 }
 
 function onZoneChange(){
@@ -3815,10 +3805,10 @@ function onZoneChange(){
   const zn = $('zoneName');
   zn.textContent = 'KHU VỰC ' + (state.zone + 1);
   zn.classList.remove('warp'); void zn.offsetWidth; zn.classList.add('warp');
-  setTimeout(()=>zn.classList.remove('warp'), 600);
+  setTimeout(function(){zn.classList.remove('warp');}, 600);
   const ar = $('arena').getBoundingClientRect();
   for (let i = 0; i < 15; i++){
-    setTimeout(()=>particleBurst(Math.random()*ar.width, Math.random()*ar.height*0.7, '#39d0ff', 3), i * 30);
+    setTimeout((function(idx){ return function(){ particleBurst(Math.random()*ar.width, Math.random()*ar.height*0.7, '#39d0ff', 3); }; })(i), i * 30);
   }
   saveAccountState();
 }
@@ -3843,7 +3833,7 @@ function startGame(){
   ensureQuests();
   $('zoneName').textContent = 'KHU VỰC ' + (state.zone + 1);
   $('realmName').textContent = REALMS[state.realm].n;
-  log(`🌌 Chào mừng ${state.name}!`, 'epic');
+  log('🌌 Chào mừng ' + state.name + '!', 'epic');
   if (isAdmin) log('👑 Chế độ ADMIN!', 'epic');
   spawnEnemy(false);
   showScreen('lobby');
@@ -3856,29 +3846,30 @@ function startGame(){
 }
 
 function init(){
-  buildStars();
-  bindEvents();
+  /* FIX: bọc try/catch để dù có lỗi vẫn hiện được auth overlay */
+  try { buildStars(); } catch(e){ console.error('buildStars:', e); }
+  try { bindEvents(); } catch(e){ console.error('bindEvents:', e); }
 
-  /* Kiểm tra đăng nhập tự động */
-  const currentUser = getCurrentUser();
-  if (currentUser){
-    const accounts = getAccounts();
-    if (accounts[currentUser]){
-      /* Auto login nếu chưa bị ban */
-      if (accounts[currentUser].banned){
-        setCurrentUser(null);
-        showAuth();
-      } else {
+  let started = false;
+  try {
+    const currentUser = getCurrentUser();
+    if (currentUser){
+      const accounts = getAccounts();
+      if (accounts[currentUser] && !accounts[currentUser].banned){
         isAdmin = !!accounts[currentUser].isAdmin;
         loadAccountState(currentUser);
         startGame();
+        started = true;
+      } else {
+        setCurrentUser(null);
       }
-    } else {
-      setCurrentUser(null);
-      showAuth();
     }
-  } else {
-    showAuth();
+  } catch(e){
+    console.error('auto-login:', e);
+  }
+
+  if (!started){
+    try { showAuth(); } catch(e){ console.error('showAuth:', e); }
   }
 
   setInterval(tick, 200);
